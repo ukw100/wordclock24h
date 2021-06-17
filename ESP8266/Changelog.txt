@@ -1,0 +1,120 @@
+ESP Version 2.8.3:
+
+   - Overlays: Display-Button wieder eingebaut.
+
+ESP Version 2.8.2:
+
+   - Änderungen der Brightness Tabellen wirken sich nun unmittelbar auf die Anzeige aus.
+
+ESP Version 2.8.1:
+
+   - Bugfix: Fehler bei Local Update behoben.
+
+ESP Version 2.8.0:
+
+   - Neue Konfigurationsseiten im Webinterface: Overlays und SPIFFS.
+   - Neu: Geänderte Menüanordnung der Weboberfläche.
+   - Auslagerung der Overlay-Icons ins SPIFFS des ESP8266.
+   - Einige kleinere Bugfixes.
+
+ESP Version 2.7.3:
+
+   - Neu: Web-Interface: Abspielen eines Tracks per Button "Play".
+   - Neu: Neue API-Funktion über UDP: Abspielen eines Tracks.
+   - Neu: Einblenden eines Overlays per Button "Display".
+   - Neu: Neue API-Funktion über UDP: Einblenden eines Overlays.
+
+ESP Version 2.7.2:
+
+    Bugfix: Wetterdaten wurden nicht mehr ausgegeben.
+
+ESP Version 2.7.1:
+
+   Bugfix: Formatieren des Flashs resultierte in Endlosschleife der Weboberfläche
+
+ESP Version 2.7.0:
+
+   Neue Web-Seite: "DFPlayer" zum Abspielen von MP3-Tracks bei vordefinierten Ereignissen.
+   Webinterface: Neu: Power-Status Anzeige
+   Webinterface: Neu: DFPlayer-Status-Anzeige
+   Webinterface: Neu: Formatieren des ESP8266-SPIFFS Dateisystems
+   Mehrere Bugfixes und mehr Fehlerbehandlungen im Source-Code.
+
+ESP Version 2.6.6:
+
+   OTA-Flash des STM32: Der Flash-Inhalt wird nun erst unmittelbar vor dem eigentlichen Flash-Vorgang gelöscht, d.h. nach allen Konsistenzprüfungen.
+
+ESP Version 2.6.4:
+
+   Bugfix in Local Update über OTA: Es wurde in 2.6.3 immer diejenige Datei geflasht, die zuletzt über das Remote Update heruntergeladen wurde.
+
+ESP Version 2.6.3:
+
+   Diverse Korrekturen in den STM32-OTA-Flash-Routinen.
+
+ESP Version 2.6.2:
+
+   Anpassung des Bootloaders an Nucleo STM32F4xx
+   Ambilight-Mode Clock: 5 Sekunden Marker nun an- und abschaltbar
+
+ESP Version 2.6.1:
+
+   Bugfix: Das aktuelle Datum/Uhrzeit wurde im Webinterface nicht angezeigt.
+
+ESP Version 2.6.0:
+
+   Neu: WPS Button im Webinterface
+   Neu: Liste der verfügbaren Access-Points im Webinterface.
+   Neu: Abschaltbares Ambilight per WebInterface - ungetestet.
+   Neu: Ein-/Ausschalten des Ambilights über Timer - ungetestet.
+   Neu: Konfigurierbare Helligkeitskurve bei automatischer oder manueller Regelung.
+   Neu: Geschwindigkeitsregelung der Ticker-Texte
+   Neu: OTA-Update des STM32 nun auch mit Upload vom lokalen PC aus möglich.
+   Neu: Konfigurierbarer Host und Pfad für OTA-Updates - geplant für die zukünftige Herausgabe von Pre-Testversionen im neuen Pfad "test".
+
+ESP Version 2.5.1:
+
+   Bugfix: Temperaturkorrekturwert für DS18xxx wurde in V2.5.0 nicht übernommen.
+   Neu: Verbindung von ESP8266 zu BOOT0 des STM32 ist nun GPIO4 statt GPIO16.
+   Neu: Verbinden des ESP8266 per WPS-Button oder über Web-Interface (im AP-Modus).
+   OTA-Update des STM32 nun auch mit Upload vom lokalen PC aus möglich.
+
+ESP Version 2.5.0:
+
+    Neu: Unterstützung des ESP8266 ESP-12F
+    Neu: Einspielen von Updates für ES8266 und STM32 über OTA ("over the air").
+    Bugfix: Eingabe einer negativen Temperatur-Korrektur wird in einen positiven Wert geändert.
+
+ESP Version 2.4.0:
+
+    Neue Animation "Flicker"
+    Neues Piktogramm "Fireworks"
+
+ESP Version 2.3.0:
+
+    Auswahl der Piktogramme "Heart" und "Xmas Tree".
+
+ESP Version 2.2.0:
+
+    Diverse Verbesserungen bei der Kommunikation zwischen STM32 und ESP8266
+
+ESP Version 2.1.0b:
+
+    Bugfix - Umlaute in Wettertexten wurden nicht korrekt gezeigt. Konvertierung der Umlaute von openweathermap-Inhalten von UTF8 nach ISO8859 nachgeholt.
+
+ESP Version 2.1.0a:
+
+    Bugfix - beim Wechseln in den AP-Modus wurde fälschlicherweise "0.0.0.0" als IP-Adresse statt 192.168.4.1 ausgegeben.
+
+ESP Version 2.1.0:
+
+    Auslagerung des HTML-Codegenerators auf den ESP8266
+    Auslagerung der Schnittstelle zu Android-Geräten (Kommando-Interpreter) auf den ESP8266
+
+ESP Version 1.2.0:
+
+    Neu: Ausgabe des WLAN-Modus: WLAN-Client oder AP
+
+ESP Version 1.1.0:
+
+    Fehler im NTP-Client behoben: Bei vorherigen Timeouts kann eine alte Uhrzeit ausgegeben werden

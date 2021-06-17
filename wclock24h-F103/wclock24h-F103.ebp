@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<EmBitz_project_file>
+	<EmBitzVersion release="1.11" revision="0" />
+	<FileVersion major="1" minor="0" />
+	<Project>
+		<Option title="wclock24h-F103" />
+		<Option pch_mode="2" />
+		<Option compiler="armgcc_eb" />
+		<Build>
+			<Target title="WC24h-STM32F103-Debug">
+				<Option output="bin\Debug\wc24h-STM32F103.elf" />
+				<Option object_output="obj\wc24h-STM32F103-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Option projectDeviceOptionsRelation="0" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DSTM32F10X" />
+					<Add option="-DSTM32F103" />
+					<Add option="-DSTM32F103C8" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DDEBUG" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-fno-strict-aliasing" />
+					<Add directory=".\inc" />
+					<Add directory=".\src" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-STM32F103-Release">
+				<Option output="bin\Release\wc24h-STM32F103.elf" />
+				<Option object_output="obj\wc24h-STM32F103-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Option projectDeviceOptionsRelation="0" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DSTM32F10X" />
+					<Add option="-DSTM32F103" />
+					<Add option="-DSTM32F103C8" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--no-warn" />
+				</Assembler>
+				<Linker>
+					<Add option="-Wl,--gc-sections" />
+					<Add option="-flto" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-STM32F103-Debug">
+				<Option output="bin\Debug\wc12h-STM32F103.elf" />
+				<Option object_output="obj\wc12h-STM32F103-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Option projectDeviceOptionsRelation="0" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DSTM32F10X" />
+					<Add option="-DSTM32F103" />
+					<Add option="-DSTM32F103C8" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DDEBUG" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-fno-strict-aliasing" />
+					<Add directory=".\inc" />
+					<Add directory=".\src" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-STM32F103-Release">
+				<Option output="bin\Release\wc12h-STM32F103.elf" />
+				<Option object_output="obj\wc12h-STM32F103-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Option projectDeviceOptionsRelation="0" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DSTM32F10X" />
+					<Add option="-DSTM32F103" />
+					<Add option="-DSTM32F103C8" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--no-warn" />
+				</Assembler>
+				<Linker>
+					<Add option="-Wl,--gc-sections" />
+					<Add option="-flto" />
+				</Linker>
+			</Target>
+		</Build>
+		<Device>
+			<Add option="$device=cortex-m3" />
+			<Add option="$lscript=./stm32f103c8_flash.ld" />
+			<Add option="$stack=0x0100" />
+			<Add option="$heap=0x0000" />
+		</Device>
+		<Compiler>
+			<Add option="-mfloat-abi=soft" />
+			<Add option="-Wextra" />
+			<Add option="-Wall" />
+			<Add option="-DSTM32F103C8" />
+			<Add option="-DSTM32F10X_MD" />
+			<Add option="-DUSE_STDPERIPH_DRIVER" />
+			<Add option="-fno-strict-aliasing" />
+			<Add directory=".\inc" />
+			<Add directory=".\src" />
+			<Add directory=".\cmsis" />
+			<Add directory=".\SPL\inc" />
+			<Add directory=".\SPL\src" />
+		</Compiler>
+		<Linker>
+			<Add option="-eb_start_files" />
+			<Add option="-eb_lib=n" />
+		</Linker>
+		<Unit filename="..\src\adc\adc-config.h" />
+		<Unit filename="..\src\adc\adc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\adc\adc.h" />
+		<Unit filename="..\src\alarm\alarm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\alarm\alarm.h" />
+		<Unit filename="..\src\apa102\apa102-config.h" />
+		<Unit filename="..\src\apa102\apa102.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\apa102\apa102.h" />
+		<Unit filename="..\src\base\base.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\base\base.h" />
+		<Unit filename="..\src\beeper\beeper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\beeper\beeper.h" />
+		<Unit filename="..\src\board-led\board-led.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\board-led\board-led.h" />
+		<Unit filename="..\src\button\button.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\button\button.h" />
+		<Unit filename="..\src\dcf77\dcf77.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\dcf77\dcf77.h" />
+		<Unit filename="..\src\delay\delay.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\delay\delay.h" />
+		<Unit filename="..\src\dfplayer\dfplayer-uart.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\dfplayer\dfplayer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\dfplayer\dfplayer.h" />
+		<Unit filename="..\src\display\display-config.h" />
+		<Unit filename="..\src\display\display.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\display\display.h" />
+		<Unit filename="..\src\ds18xx\ds18xx-config.h" />
+		<Unit filename="..\src\ds18xx\ds18xx.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\ds18xx\ds18xx.h" />
+		<Unit filename="..\src\eeprom\eeprom-data.h" />
+		<Unit filename="..\src\eeprom\eeprom.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\eeprom\eeprom.h" />
+		<Unit filename="..\src\esp-spiffs\esp-spiffs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\esp-spiffs\esp-spiffs.h" />
+		<Unit filename="..\src\esp8266\esp8266-config.h" />
+		<Unit filename="..\src\esp8266\esp8266-uart.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\esp8266\esp8266.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\esp8266\esp8266.h" />
+		<Unit filename="..\src\i2c\i2c.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\i2c\i2c.h" />
+		<Unit filename="..\src\i2c\softi2c.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\i2c\softi2c.h" />
+		<Unit filename="..\src\io\io.h" />
+		<Unit filename="..\src\irmp\irmp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\irmp\irmp.h" />
+		<Unit filename="..\src\irmp\irmpconfig.h" />
+		<Unit filename="..\src\irmp\irmpprotocols.h" />
+		<Unit filename="..\src\irmp\irmpsystem.h" />
+		<Unit filename="..\src\ldr\ldr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\ldr\ldr.h" />
+		<Unit filename="..\src\log\log-uart.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\log\log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\log\log.h" />
+		<Unit filename="..\src\main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\main.h" />
+		<Unit filename="..\src\night\night.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\night\night.h" />
+		<Unit filename="..\src\onewire\onewire-config.h" />
+		<Unit filename="..\src\onewire\onewire.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\onewire\onewire.h" />
+		<Unit filename="..\src\overlay\overlay.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\overlay\overlay.h" />
+		<Unit filename="..\src\power\power.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\power\power.h" />
+		<Unit filename="..\src\remote-ir\remote-ir.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\remote-ir\remote-ir.h" />
+		<Unit filename="..\src\rtc\rtc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\rtc\rtc.h" />
+		<Unit filename="..\src\sk6812\sk6812-config.h" />
+		<Unit filename="..\src\sk6812\sk6812.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\sk6812\sk6812.h" />
+		<Unit filename="..\src\tables\tables.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\tables\tables.h" />
+		<Unit filename="..\src\tempsensor\tempsensor.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\tempsensor\tempsensor.h" />
+		<Unit filename="..\src\tetris\snake.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\tetris\snake.h" />
+		<Unit filename="..\src\tetris\tetris.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\tetris\tetris.h" />
+		<Unit filename="..\src\timeserver\timeserver.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\timeserver\timeserver.h" />
+		<Unit filename="..\src\uart\uart-driver.h" />
+		<Unit filename="..\src\uart\uart.h" />
+		<Unit filename="..\src\vars\vars.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\vars\vars.h" />
+		<Unit filename="..\src\wclock24h-config.h" />
+		<Unit filename="..\src\weather\weather.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\weather\weather.h" />
+		<Unit filename="..\src\wpsbutton\wpsbutton.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\wpsbutton\wpsbutton.h" />
+		<Unit filename="..\src\ws2812\ws2812-config.h" />
+		<Unit filename="..\src\ws2812\ws2812.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\ws2812\ws2812.h" />
+		<Unit filename="cmsis\core_cm3.h" />
+		<Unit filename="cmsis\core_cmFunc.h" />
+		<Unit filename="cmsis\core_cmInstr.h" />
+		<Unit filename="inc\stm32f10x.h" />
+		<Unit filename="inc\stm32f10x_conf.h" />
+		<Unit filename="inc\system_stm32f10x.h" />
+		<Unit filename="readme.txt" />
+		<Unit filename="SPL\inc\misc.h" />
+		<Unit filename="SPL\inc\stm32f10x_adc.h" />
+		<Unit filename="SPL\inc\stm32f10x_bkp.h" />
+		<Unit filename="SPL\inc\stm32f10x_can.h" />
+		<Unit filename="SPL\inc\stm32f10x_cec.h" />
+		<Unit filename="SPL\inc\stm32f10x_crc.h" />
+		<Unit filename="SPL\inc\stm32f10x_dac.h" />
+		<Unit filename="SPL\inc\stm32f10x_dbgmcu.h" />
+		<Unit filename="SPL\inc\stm32f10x_dma.h" />
+		<Unit filename="SPL\inc\stm32f10x_exti.h" />
+		<Unit filename="SPL\inc\stm32f10x_flash.h" />
+		<Unit filename="SPL\inc\stm32f10x_fsmc.h" />
+		<Unit filename="SPL\inc\stm32f10x_gpio.h" />
+		<Unit filename="SPL\inc\stm32f10x_i2c.h" />
+		<Unit filename="SPL\inc\stm32f10x_iwdg.h" />
+		<Unit filename="SPL\inc\stm32f10x_pwr.h" />
+		<Unit filename="SPL\inc\stm32f10x_rcc.h" />
+		<Unit filename="SPL\inc\stm32f10x_rtc.h" />
+		<Unit filename="SPL\inc\stm32f10x_sdio.h" />
+		<Unit filename="SPL\inc\stm32f10x_spi.h" />
+		<Unit filename="SPL\inc\stm32f10x_tim.h" />
+		<Unit filename="SPL\inc\stm32f10x_usart.h" />
+		<Unit filename="SPL\inc\stm32f10x_wwdg.h" />
+		<Unit filename="SPL\src\misc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_adc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_bkp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_can.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_cec.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_crc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_dac.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_dbgmcu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_dma.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_exti.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_flash.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_fsmc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_gpio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_i2c.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_iwdg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_pwr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_rcc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_rtc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_sdio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_spi.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_tim.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_usart.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f10x_wwdg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\startup_stm32f10x_md.S">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\system_stm32f10x.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="stm32f103c8_flash.ld" />
+		<Unit filename="stm32f103c8_sram.ld" />
+		<Extensions>
+			<code_completion />
+			<debugger>
+				<target_debugging_settings target="WC12h-STM32F103-Release" active_interface="ST-link">
+					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="STMicroelectronics">
+							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
+							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
+							<option opt_id="ID_RESET_TYPE" opt_value="System" />
+							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
+							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
+							<option opt_id="ID_RAM_EXEC" opt_value="0" />
+							<option opt_id="ID_VEC_TABLE" opt_value="1" />
+							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
+							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
+							<option opt_id="ID_DEV_ADDR" opt_value="" />
+							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
+						</family_options>
+					</debug_interface>
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-STM32F103-Debug" active_interface="ST-link">
+					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="STMicroelectronics">
+							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
+							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
+							<option opt_id="ID_RESET_TYPE" opt_value="System" />
+							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
+							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
+							<option opt_id="ID_RAM_EXEC" opt_value="0" />
+							<option opt_id="ID_VEC_TABLE" opt_value="1" />
+							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
+							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
+							<option opt_id="ID_DEV_ADDR" opt_value="" />
+							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
+						</family_options>
+					</debug_interface>
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-STM32F103-Debug" active_interface="ST-link">
+					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="STMicroelectronics">
+							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
+							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
+							<option opt_id="ID_RESET_TYPE" opt_value="System" />
+							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
+							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
+							<option opt_id="ID_RAM_EXEC" opt_value="0" />
+							<option opt_id="ID_VEC_TABLE" opt_value="1" />
+							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
+							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
+							<option opt_id="ID_DEV_ADDR" opt_value="" />
+							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
+						</family_options>
+					</debug_interface>
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-STM32F103-Release" active_interface="ST-link">
+					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="STMicroelectronics">
+							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
+							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
+							<option opt_id="ID_RESET_TYPE" opt_value="System" />
+							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
+							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
+							<option opt_id="ID_RAM_EXEC" opt_value="0" />
+							<option opt_id="ID_VEC_TABLE" opt_value="1" />
+							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
+							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
+							<option opt_id="ID_DEV_ADDR" opt_value="" />
+							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
+						</family_options>
+					</debug_interface>
+				</target_debugging_settings>
+			</debugger>
+			<envvars />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
+		</Extensions>
+	</Project>
+</EmBitz_project_file>
