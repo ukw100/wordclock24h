@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * eeprom-data.h - data structure of EEPROM
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@
  *      Ambilight offset sec=0             1 Byte    (  1 *  1)         221     1
  *      RTC temperature correction         1 Byte    (  1 *  1)         222     1
  *      DS18xx temperature correction      1 Byte    (  1 *  1)         223     1
- *      Not used (old: temp interval)      1 Byte    (  1 *  1)         224     1
+ *      SSD196 flags                       1 Byte    (  1 *  1)         224     1
  *      LDR minimum value                  2 Bytes   (  1 *  2)         225     2
  *      LDR maximum value                  2 Bytes   (  1 *  2)         227     2
  *      Animation values                  64 Bytes   ( 64 *  1)         229    64
@@ -139,7 +139,7 @@
 #define EEPROM_DATA_SIZE_AMBI_OFFSET_SEC0           sizeof (uint8_t)        // ambilight offset of second 0
 #define EEPROM_DATA_SIZE_RTC_TEMP_CORR              sizeof (uint8_t)        // RTC temperature correction
 #define EEPROM_DATA_SIZE_DS18XX_TEMP_CORR           sizeof (uint8_t)        // DS18xx temperature correction
-#define EEPROM_DATA_SIZE_NOT_USED_01                sizeof (uint8_t)        // not used anymore, obsolete: show temperature every n minutes
+#define EEPROM_DATA_SIZE_SSD1963_FLAGS              sizeof (uint8_t)        // SSD196 flags
 #define EEPROM_DATA_SIZE_LDR_MIN_VALUE              sizeof (uint16_t)       // minimum LDR value
 #define EEPROM_DATA_SIZE_LDR_MAX_VALUE              sizeof (uint16_t)       // maximum LDR value
 #define EEPROM_DATA_SIZE_ANIMATION_VALUES           (EEPROM_MAX_ANIMATION_MODES * sizeof (uint8_t))
@@ -190,8 +190,8 @@
 #define EEPROM_DATA_OFFSET_AMBI_OFFSET_SEC0         (EEPROM_DATA_OFFSET_AMBI_LEDS               + EEPROM_DATA_SIZE_AMBI_LEDS)
 #define EEPROM_DATA_OFFSET_RTC_TEMP_CORR            (EEPROM_DATA_OFFSET_AMBI_OFFSET_SEC0        + EEPROM_DATA_SIZE_AMBI_OFFSET_SEC0)
 #define EEPROM_DATA_OFFSET_DS18XX_TEMP_CORR         (EEPROM_DATA_OFFSET_RTC_TEMP_CORR           + EEPROM_DATA_SIZE_RTC_TEMP_CORR)
-#define EEPROM_DATA_OFFSET_NOT_USED_01              (EEPROM_DATA_OFFSET_DS18XX_TEMP_CORR        + EEPROM_DATA_SIZE_DS18XX_TEMP_CORR)
-#define EEPROM_DATA_OFFSET_LDR_MIN_VALUE            (EEPROM_DATA_OFFSET_NOT_USED_01             + EEPROM_DATA_SIZE_NOT_USED_01)
+#define EEPROM_DATA_OFFSET_SSD1963_FLAGS            (EEPROM_DATA_OFFSET_DS18XX_TEMP_CORR        + EEPROM_DATA_SIZE_DS18XX_TEMP_CORR)
+#define EEPROM_DATA_OFFSET_LDR_MIN_VALUE            (EEPROM_DATA_OFFSET_SSD1963_FLAGS           + EEPROM_DATA_SIZE_SSD1963_FLAGS)
 #define EEPROM_DATA_OFFSET_LDR_MAX_VALUE            (EEPROM_DATA_OFFSET_LDR_MIN_VALUE           + EEPROM_DATA_SIZE_LDR_MIN_VALUE)
 #define EEPROM_DATA_OFFSET_ANIMATION_VALUES         (EEPROM_DATA_OFFSET_LDR_MAX_VALUE           + EEPROM_DATA_SIZE_LDR_MAX_VALUE)
 #define EEPROM_DATA_OFFSET_COLOR_ANIMATION_VALUES   (EEPROM_DATA_OFFSET_ANIMATION_VALUES        + EEPROM_DATA_SIZE_ANIMATION_VALUES)

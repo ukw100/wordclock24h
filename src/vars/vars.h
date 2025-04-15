@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * vars.h - synchronisation of variables/parameters between STM32 and ESP8266
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ typedef enum
     RTC_IS_UP_NUM_VAR,
     DISPLAY_POWER_NUM_VAR,
     DISPLAY_MODE_NUM_VAR,
-    OBSOLETE_1_NUMVAR,                                                      // obsolete: MAX_DISPLAY_MODES_NUM_VAR
+    SSD1963_FLAGS_NUM_VAR,
     DISPLAY_BRIGHTNESS_NUM_VAR,
     DISPLAY_FLAGS_NUM_VAR,
     DISPLAY_AUTOMATIC_BRIGHTNESS_ACTIVE_NUM_VAR,
@@ -254,7 +254,7 @@ extern void         var_send_ambilight_mode (void);
 extern void         var_send_display_power (void);
 
 extern void         var_send_version (void);
-extern void         var_send_eeprom_version (void);
+extern void         var_send_eep_version (void);
 extern void         var_send_timeserver (void);
 extern void         var_send_weather_appid (void);
 extern void         var_send_weather_city (void);
@@ -269,6 +269,11 @@ extern void         var_send_color_animations (void);
 extern void         var_send_ambilight_modes (void);
 extern void         var_send_overlays (void);
 extern void         var_send_use_rgbw (void);
+
+#if defined (BLACK_BOARD)
+extern void         var_send_ssd1963_flags (void);
+#endif
+
 extern void         var_send_all_variables (void);
 
 #endif

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * esp8266.h - declarations of ESP8266 routines
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@
 #define ESP8266_WEATHER_FC              21
 #define ESP8266_WEATHER_FC_ICON         22
 #define ESP8266_TABLES                  23
+#define ESP8266_DISP                    24
 
 #define ESP8266_UNSPECIFIED             0xFF
 
@@ -67,12 +68,13 @@
 #define ESP8266_MAX_CMD_LEN             63
 #define ESP8266_MAX_TIME_LEN            15
 #define ESP8266_MAX_WEATHER_LEN         63
-#define ESP8266_MAX_FILEDATA_LEN        (2+32)          // 2 bytes for length, max 2x16 characters in HEX
+#define ESP8266_MAX_FILEDATA_LEN        (2+ESP8266_MAX_CMD_LEN)          // 2 bytes for length, max 2x16 characters in HEX
 #define ESP8266_TABINFO_LEN             20
 #define ESP8266_TABILLU_LEN             8
 #define ESP8266_TABT_LEN                16
 #define ESP8266_TABH_LEN                16
 #define ESP8266_TABM_LEN                16
+#define ESP8266_DISP_LEN                24
 
 typedef struct
 {
@@ -94,6 +96,7 @@ typedef struct
         char                            tabt[ESP8266_TABT_LEN + 1];
         char                            tabh[ESP8266_TABH_LEN + 1];
         char                            tabm[ESP8266_TABM_LEN + 1];
+        char                            disp[ESP8266_DISP_LEN + 1];
     } u;
 } ESP8266_GLOBALS;
 

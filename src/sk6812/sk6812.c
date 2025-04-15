@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * sk6812.c - SK6812 RGBW driver
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * Timings:
  *          SK6812
@@ -55,13 +55,15 @@
  *  SK6812_TIM_PERIOD       = ((SK6812_TIM_CLK / (1 + SK6812_TIM_PRESCALER)) * 12)  / 10000000 - 1
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
-#if defined (STM32F401RE)                                       // STM32F401 Nucleo Board
+#if defined (STM32F401)                                         // STM32F401 Nucleo or BlackPill Board
 #define SK6812_TIM_CLK               84L                        // 84 MHz = 11.90ns
-#elif defined (STM32F411RE)                                     // STM32F411 Nucleo Board
+#elif defined (STM32F411)                                       // STM32F411 Nucleo or BlackPill Board 100MHz
 #define SK6812_TIM_CLK              100L                        // 100 MHz = 10.00ns
-#elif defined (STM32F446RE)                                     // STM32F446 Nucleo Board
+#elif defined (STM32F446RE)                                     // STM32F446 Nucleo Board 180MHz
 #define SK6812_TIM_CLK              180L                        // 180 MHz = 5.55ns
-#elif defined (STM32F103)                                       // STM32F103 Mini Development Board
+#elif defined (STM32F407VE)                                     // STM32F407VE Black Board 168MHz
+#define SK6812_TIM_CLK              168L                        // 168 MHz =  5.95ns
+#elif defined (STM32F103)                                       // STM32F103 BluePill Board 72MHz
 #define SK6812_TIM_CLK               72L                        // 72 MHz = 13.89ns
 #else
 #error STM32 unknown
@@ -132,14 +134,14 @@ static volatile DMA_BUFFER_TYPE     dma_buf[DMA_BUF_LEN];                       
  * Timer for data: TIM3 for STM32F4xx, TIM1 for STM32F10X
  *-----------------------------------------------------------------------------------------------------------------------------------------------
  */
-#if defined (STM32F4XX)
+#if defined (NUCLEO_BOARD) || defined (BLACK_BOARD)
 // Timer:
 #  define SK6812_TIM_CLOCK_CMD          RCC_APB1PeriphClockCmd
 #  define SK6812_TIM_CLOCK              RCC_APB1Periph_TIM3
 #  define SK6812_TIM                    TIM3
 #  define SK6812_TIM_AF                 GPIO_AF_TIM3
-#  define SK6812_TIM_CCR_REG1           TIM3->CCR1
-#  define SK6812_TIM_DMA_TRG1           TIM_DMA_CC1
+#  define SK6812_TIM_CCR_REG            TIM3->CCR1
+#  define SK6812_TIM_DMA_TRG            TIM_DMA_CC1
 // GPIO:
 #  define SK6812_GPIO_CLOCK_CMD         RCC_AHB1PeriphClockCmd
 #  define SK6812_GPIO_CLOCK             RCC_AHB1Periph_GPIOC
@@ -157,14 +159,41 @@ static volatile DMA_BUFFER_TYPE     dma_buf[DMA_BUF_LEN];                       
 #  define SK6812_DMA_CHANNEL_IRQ_TC     DMA_IT_TCIF4                    // transfer complete interrupt
 #  define SK6812_DMA_CHANNEL_IRQ_HT     DMA_IT_HTIF4                    // half-transfer interrupt
 
-#elif defined (STM32F10X)
+#elif defined (BLACKPILL_BOARD)
+// Timer:
+#define SK6812_TIM_CLOCK_CMD            RCC_APB1PeriphClockCmd
+#define SK6812_TIM_CLOCK                RCC_APB1Periph_TIM3             // clock for peripheral timer 3
+#define SK6812_TIM                      TIM3                            // timer 3
+#define SK6812_TIM_AF                   GPIO_AF_TIM3                    // GPIO for timer 3
+#define SK6812_TIM_CCR_REG              TIM3->CCR4                      // timer 3 CC4
+#define SK6812_TIM_DMA_TRG              TIM_DMA_CC4                     // timer 3 CC4
+#define SK6812_TIM_OCINIT               TIM_OC4Init                     // timer 3 CC4
+#define SK6812_TIM_OCPRELOADCONFIG      TIM_OC4PreloadConfig            // timer 3 CC4
+// GPIO:
+#define SK6812_GPIO_CLOCK_CMD           RCC_AHB1PeriphClockCmd
+#define SK6812_GPIO_CLOCK               RCC_AHB1Periph_GPIOB            // peripheral port B
+#define SK6812_GPIO_PORT                GPIOB                           // use PB1
+#define SK6812_GPIO_PIN                 GPIO_Pin_1                      // pin is 1
+#define SK6812_GPIO_SOURCE              GPIO_PinSource1                 // pin is 1
+// DMA TIM3 - DMA1, Channel5, Stream2
+#define SK6812_DMA_CLOCK_CMD            RCC_AHB1PeriphClockCmd
+#define SK6812_DMA_CLOCK                RCC_AHB1Periph_DMA1             // use DMA1
+#define SK6812_DMA_STREAM               DMA1_Stream2                    // DMA1 stream 2
+#define SK6812_DMA_CHANNEL              DMA_Channel_5                   // DMA1 channel 5
+// transfer complete interrupt - DMA1, Stream2
+#define SK6812_DMA_CHANNEL_IRQn         DMA1_Stream2_IRQn               // IRQ for stream 2
+#define SK6812_DMA_CHANNEL_ISR          DMA1_Stream2_IRQHandler         // IRQ handler for stream 2
+#define SK6812_DMA_CHANNEL_IRQ_TC       DMA_IT_TCIF2                    // transfer complete interrupt
+#define SK6812_DMA_CHANNEL_IRQ_HT       DMA_IT_HTIF2                    // half-transfer interrupt
+
+#elif defined (BLUEPILL_BOARD)
 // Timer:
 #  define SK6812_TIM_CLOCK_CMD          RCC_APB2PeriphClockCmd
 #  define SK6812_TIM_CLOCK              RCC_APB2Periph_TIM1
 #  define SK6812_TIM                    TIM1
 #  define SK6812_TIM_AF                 GPIO_AF_TIM1
-#  define SK6812_TIM_CCR_REG1           TIM1->CCR1
-#  define SK6812_TIM_DMA_TRG1           TIM_DMA_CC1
+#  define SK6812_TIM_CCR_REG            TIM1->CCR1
+#  define SK6812_TIM_DMA_TRG            TIM_DMA_CC1
 // GPIO:
 #  define SK6812_GPIO_CLOCK_CMD         RCC_APB2PeriphClockCmd
 #  define SK6812_GPIO_CLOCK             RCC_APB2Periph_GPIOA
@@ -197,7 +226,7 @@ sk6812_dma_init (void)
     DMA_DeInit(SK6812_DMA_STREAM);
 
     dma.DMA_Mode                = DMA_Mode_Circular;
-    dma.DMA_PeripheralBaseAddr  = (uint32_t) &SK6812_TIM_CCR_REG1;
+    dma.DMA_PeripheralBaseAddr  = (uint32_t) &SK6812_TIM_CCR_REG;
 #if defined(STM32F4XX)                                                      // STM32F4xx
     dma.DMA_PeripheralDataSize  = DMA_PeripheralDataSize_HalfWord;          // 16bit
     dma.DMA_MemoryDataSize      = DMA_MemoryDataSize_HalfWord;              // 16bit
@@ -493,63 +522,34 @@ sk6812_init (void)
      * initialize gpio
      *-------------------------------------------------------------------------------------------------------------------------------------------
      */
-    GPIO_StructInit (&gpio);
     SK6812_GPIO_CLOCK_CMD (SK6812_GPIO_CLOCK, ENABLE);          // clock enable
 
-    gpio.GPIO_Pin     = SK6812_GPIO_PIN;
-
-#if defined (STM32F4XX)
-
     // 1st path: set data pin to input with pulldown, then check if external pullup connected:
-    gpio.GPIO_Mode    = GPIO_Mode_IN;                                           // set as input
-    gpio.GPIO_PuPd    = GPIO_PuPd_DOWN;                                         // with internal pulldown
-    gpio.GPIO_Speed   = GPIO_Speed_100MHz;
-    GPIO_Init(SK6812_GPIO_PORT, &gpio);
+    GPIO_SET_PIN_IN_DOWN(SK6812_GPIO_PORT, SK6812_GPIO_PIN, GPIO_Speed_100MHz);
     delay_msec (1);                                                             // wait a moment
 
     // 2nd path: if external pullup detected, use open-drain, else use push-pull
-    if (GPIO_ReadInputDataBit(SK6812_GPIO_PORT, SK6812_GPIO_PIN) == Bit_SET)    // external 4k7 pullup connected?
+
+    if (GPIO_GET_BIT(SK6812_GPIO_PORT, SK6812_GPIO_PIN) == Bit_SET)             // external 4k7 pullup connected?
     {
         log_message ("sk6812: external pullup detected");
-        gpio.GPIO_OType   = GPIO_OType_OD;                                      // yes, set output type to open-drain
-    }
-    else
-    {
-        log_message ("sk6812: no external pullup detected");
-        gpio.GPIO_OType   = GPIO_OType_PP;                                      // no, set output type to push-pull
-    }
 
-    gpio.GPIO_Mode    = GPIO_Mode_AF;                                           // set as alternate output
-    gpio.GPIO_PuPd    = GPIO_PuPd_NOPULL;
-    gpio.GPIO_Speed   = GPIO_Speed_100MHz;
-
-    GPIO_Init(SK6812_GPIO_PORT, &gpio);
-    GPIO_RESET_BIT(SK6812_GPIO_PORT, SK6812_GPIO_PIN);                           // set pin to Low
-    GPIO_PinAFConfig(SK6812_GPIO_PORT, SK6812_GPIO_SOURCE, SK6812_TIM_AF);
-
-#elif defined (STM32F10X)
-
-    gpio.GPIO_Mode  = GPIO_Mode_IPD;                                            // set as input with internal pulldown
-    gpio.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(SK6812_GPIO_PORT, &gpio);
-    delay_msec (1);                                                             // wait a moment
-
-    if (GPIO_ReadInputDataBit(SK6812_GPIO_PORT, SK6812_GPIO_PIN) == Bit_SET)    // external 4k7 pullup connected?
-    {
-        log_message ("sk6812: external pullup detected");
-        gpio.GPIO_Mode    = GPIO_Mode_AF_OD;                                    // yes, use open-drain
-    }
-    else
-    {
-        log_message ("sk6812: no external pullup detected");
-        gpio.GPIO_Mode    = GPIO_Mode_AF_PP;                                    // no, use push-pull
-    }
-
-    gpio.GPIO_Speed   = GPIO_Speed_50MHz;
-    GPIO_Init(SK6812_GPIO_PORT, &gpio);
-    GPIO_RESET_BIT(SK6812_GPIO_PORT, SK6812_GPIO_PIN);                          // set pin to Low
-
+#if defined (STM32F4XX)
+        GPIO_PinAFConfig(SK6812_GPIO_PORT, SK6812_GPIO_SOURCE, SK6812_TIM_AF);
 #endif
+        GPIO_SET_PIN_AF_OD(SK6812_GPIO_PORT, SK6812_GPIO_PIN, GPIO_Speed_100MHz);
+    }
+    else
+    {
+        log_message ("sk6812: no external pullup detected");
+
+#if defined (STM32F4XX)
+        GPIO_PinAFConfig(SK6812_GPIO_PORT, SK6812_GPIO_SOURCE, SK6812_TIM_AF);
+#endif
+        GPIO_SET_PIN_AF_PP(SK6812_GPIO_PORT, SK6812_GPIO_PIN, GPIO_Speed_100MHz);
+    }
+
+    GPIO_RESET_BIT(SK6812_GPIO_PORT, SK6812_GPIO_PIN);                           // set pin to Low
 
     /*-------------------------------------------------------------------------------------------------------------------------------------------
      * initialize TIMER
@@ -576,7 +576,7 @@ sk6812_init (void)
     TIM_OC1PreloadConfig (SK6812_TIM, TIM_OCPreload_Enable);    // fm: necessary on STM32F1xx?
     TIM_ARRPreloadConfig (SK6812_TIM, ENABLE);                  // timer enable, fm: necessary on STM32F1xx?
     TIM_CtrlPWMOutputs(SK6812_TIM, ENABLE);
-    TIM_DMACmd (SK6812_TIM, SK6812_TIM_DMA_TRG1, ENABLE);
+    TIM_DMACmd (SK6812_TIM, SK6812_TIM_DMA_TRG, ENABLE);
 
     /*-------------------------------------------------------------------------------------------------------------------------------------------
      * initialize NVIC

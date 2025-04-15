@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * overlay.h - handle overlays
  *
- * Copyright (c) 2017-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2017-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #define OVERLAY_TYPE_MP3                            7                   // mp3
 #define OVERLAY_TYPE_WEATHER_FC_ICON                8                   // weather forecast icon
 #define OVERLAY_TYPE_WEATHER_FC                     9                   // weather forecast
+#define OVERLAY_TYPE_TEMPERATURE_DIGITS             10                  // temperature as digits
 
 #define OVERLAY_TYPE_LEN                            1                   // 1 byte
 #define OVERLAY_INTERVAL_LEN                        1                   // 1 byte
@@ -71,8 +72,8 @@ typedef struct
 
 extern OVERLAY_GLOBALS  overlay;
 
-extern uint_fast8_t     overlay_read_config_from_eeprom (uint32_t);
-extern uint_fast8_t     overlay_write_config_to_eeprom (void);
+extern uint_fast8_t     overlay_read_config_from_eep (uint32_t);
+extern uint_fast8_t     overlay_write_config_to_eep (void);
 
 extern void             overlay_set_type (uint_fast8_t, uint_fast8_t);
 extern void             overlay_set_interval (uint_fast8_t, uint_fast8_t);

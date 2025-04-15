@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * ds18xx.c - DS18xx routines
  *
- * Copyright (c) 2015-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
  *
  * This library supports the following temperature sensors:
  *
@@ -21,8 +21,6 @@
 #include "onewire.h"
 #include "ds18xx.h"
 #include "ds18xx-config.h"
-#include "eeprom.h"
-#include "eeprom-data.h"
 
 #define ONEWIRE_CONVERT_CMD         0x44                                        // start temperature conversion
 #define ONEWIRE_RD_SCRATCH_CMD      0xBE                                        // read temperature

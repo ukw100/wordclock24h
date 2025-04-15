@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * base.c - base routines
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -236,11 +236,11 @@ init_date_codes (int year)
         date_codes[DATE_CODE_PENTECOST_MONDAY]  = add_days (mmdd, year,  50);
         date_codes[DATE_CODE_CORPUS_CHRISTI]    = add_days (mmdd, year,  60);
 
-        day_of_xmas = dayofweek (25, 12, year);
-        date_codes[DATE_CODE_ADVENT1] = add_days (TO_MMDD(12, 25), year, -day_of_xmas - 21);
-        date_codes[DATE_CODE_ADVENT2] = add_days (TO_MMDD(12, 25), year, -day_of_xmas - 14);
-        date_codes[DATE_CODE_ADVENT3] = add_days (TO_MMDD(12, 25), year, -day_of_xmas -  7);
-        date_codes[DATE_CODE_ADVENT4] = add_days (TO_MMDD(12, 25), year, -day_of_xmas);
+        day_of_xmas = dayofweek (24, 12, year);
+        date_codes[DATE_CODE_ADVENT1] = add_days (TO_MMDD(12, 24), year, -day_of_xmas - 21);
+        date_codes[DATE_CODE_ADVENT2] = add_days (TO_MMDD(12, 24), year, -day_of_xmas - 14);
+        date_codes[DATE_CODE_ADVENT3] = add_days (TO_MMDD(12, 24), year, -day_of_xmas -  7);
+        date_codes[DATE_CODE_ADVENT4] = add_days (TO_MMDD(12, 24), year, -day_of_xmas);
 
         debug_log_printf ("new year            %2d %04d-%02u-%02u\r\n", DATE_CODE_NEW_YEAR, year, date_codes[DATE_CODE_NEW_YEAR] >> 8, date_codes[DATE_CODE_NEW_YEAR] & 0xFF);
         debug_log_printf ("three magi          %2d %04d-%02u-%02u\r\n", DATE_CODE_THREE_MAGI, year, date_codes[DATE_CODE_THREE_MAGI] >> 8, date_codes[DATE_CODE_THREE_MAGI] & 0xFF);
@@ -367,4 +367,127 @@ strsubst (char * s, int old, int new)
 
         s++;
     }
+}
+
+static uint32_t z1 = 12345;
+static uint32_t z2 = 12345;
+static uint32_t z3 = 12345;
+static uint32_t z4 = 12345;
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------
+ * my_srand (void) - see rand
+ *-------------------------------------------------------------------------------------------------------------------------------------------
+ */
+void
+my_srand (unsigned int z)
+{
+    z &= 0xFFFF;
+
+    z1 = z;
+    z2 = z;
+    z3 = z;
+    z4 = z;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------
+ * my_rand (void) - rand() runs on error in newer arm-none-eabi libs
+ *-------------------------------------------------------------------------------------------------------------------------------------------
+ */
+uint32_t
+my_rand (void)
+{
+    uint32_t    b;
+    uint32_t    z5;
+
+    b  = ((z1 << 6) ^ z1) >> 13;
+    z1 = ((z1 & 4294967294U) << 18) ^ b;
+    b  = ((z2 << 2) ^ z2) >> 27;
+    z2 = ((z2 & 4294967288U) << 2) ^ b;
+    b  = ((z3 << 13) ^ z3) >> 21;
+    z3 = ((z3 & 4294967280U) << 7) ^ b;
+    b  = ((z4 << 3) ^ z4) >> 12;
+    z4 = ((z4 & 4294967168U) << 13) ^ b;
+    z5 = (z1 ^ z2 ^ z3 ^ z4) & 0x7FFFFFFF;          // don't return negative values!
+    return (z5);
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------------------
+ * my_gmtime () - gmtime runs on error for newer arm_none_eabi libraries
+ *--------------------------------------------------------------------------------------------------------------------------------------
+ */
+struct tm *
+my_gmtime (time_t * tvp)
+{
+    static struct tm    tm;
+    int                 year;
+    int                 mon;
+    int                 day;
+    int                 hour;
+    int                 min;
+    int                 sec;
+
+    time_t              tv = *tvp;
+
+    year = 1970;
+
+    for (;;)
+    {
+        day = (IS_LEAP_YEAR(year) ? 366 : 365);
+
+        sec = day * 24 * 3600;
+
+        if (tv >= sec)
+        {
+            tv -= sec;
+        }
+        else
+        {
+            break;
+        }
+
+        year++;
+    }
+
+    for (mon = 0; mon < 12; mon++)
+    {
+        if (mon == 1 && IS_LEAP_YEAR(year))
+        {
+            day = 29;
+        }
+        else
+        {
+            day = g_days_per_month[mon];
+        }
+
+        sec = day * 24 * 3600;
+
+        if (tv >= sec)
+        {
+            tv -= sec;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    day = tv / (24 * 3600);
+    tv -= day * (24 * 3600);
+
+    hour = tv / 3600;
+    tv -= hour * 3600;
+
+    min = tv / 60;
+    tv -= min * 60;
+
+    sec = tv;
+
+    tm.tm_year  = year - 1900;
+    tm.tm_mon   = mon;
+    tm.tm_mday  = day + 1;
+    tm.tm_hour  = hour;
+    tm.tm_min   = min;
+    tm.tm_sec   = sec;
+
+    return (&tm);
 }

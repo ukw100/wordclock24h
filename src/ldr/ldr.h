@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * ldr.h - adc functions
  *
- * Copyright (c) 2015-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@ extern LDR_GLOBALS      ldr;
 
 extern void             ldr_start_conversion (void);
 extern uint_fast8_t     ldr_poll_brightness (void);
-extern void             ldr_read_config_from_eeprom (uint32_t);
-extern uint_fast8_t     ldr_write_config_to_eeprom (void);
+extern void             ldr_read_config_from_eep (uint32_t);
+extern uint_fast8_t     ldr_write_config_to_eep (void);
 extern uint_fast16_t    ldr_set_min_value (void);
 extern uint_fast16_t    ldr_set_max_value (void);
 extern void             ldr_init (void);

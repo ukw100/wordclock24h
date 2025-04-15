@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * ws2812.c - WS2812 driver
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * Timings:
  *          WS2812         WS2812B         WS2812S          WS2813              Common symmetric(!) values
@@ -47,14 +47,16 @@
  *    freq = 72000000 / (0 + 1) / ( 91 + 1) = 783 kHz = 1.277 us
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
-#if   defined (STM32F401RE)                                     // STM32F401RE 84MHz
+#if   defined (STM32F401)                                       // STM32F401 Nucleo or BlackPill Board 84MHz
 #define WS2812_TIM_CLK               84L                        // 84 MHz = 11.90ns
-#elif defined (STM32F411RE)                                     // STM32F411RE 100MHz
+#elif defined (STM32F411)                                       // STM32F411 Nucleo or BlackPill Board 100MHz
 #define WS2812_TIM_CLK              100L                        // 100 MHz = 10.00ns
-#elif defined (STM32F446RE)                                     // STM32F446RE 180MHz
+#elif defined (STM32F446RE)                                     // STM32F446RE Nucleo Board 180MHz
 #define WS2812_TIM_CLK              180L                        // 180 MHz =  5.55ns
-#elif defined (STM32F103)                                       // STM32F103 Mini Development Board
-#define WS2812_TIM_CLK              72L                         // 72 MHz = 13.89ns
+#elif defined (STM32F407VE)                                     // STM32F407VE Black Board 168MHz
+#define WS2812_TIM_CLK              168L                        // 168 MHz =  5.95ns
+#elif defined (STM32F103)                                       // STM32F103 BluePill Board 72MHz
+#define WS2812_TIM_CLK               72L                        // 72 MHz = 13.89ns
 #else
 #error STM32 unknown
 #endif
@@ -104,57 +106,99 @@ static volatile DMA_BUFFER_TYPE     dma_buf[DMA_BUF_LEN];                       
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * Timer for data: TIM3 for STM32F4xx, TIM1 for STM32F10X
+ *
+ * Possible output pins for timer 3:
+ *
+ *   Timer Channel  Pins              DMA   Channel        Stream
+ *   ------------------------------------------------------------------
+ *   TIM3  CC1      PA6, PB4, PC6     DMA1  DMA_Channel_5  DMA1_Stream4
+ *   TIM3  CC2      PA7, PB5, PC7     DMA1  DMA_Channel_5  DMA1_Stream5
+ *   TIM3  CC3      PB0, PC8          DMA1  DMA_Channel_5  DMA1_Stream7
+ *   TIM3  CC4      PB1, PC9          DMA1  DMA_Channel_5  DMA1_Stream2
  *-----------------------------------------------------------------------------------------------------------------------------------------------
  */
-#if defined (STM32F4XX)
+#if defined (NUCLEO_BOARD) || defined (BLACK_BOARD)
 // Timer:
 #  define WS2812_TIM_CLOCK_CMD          RCC_APB1PeriphClockCmd
-#  define WS2812_TIM_CLOCK              RCC_APB1Periph_TIM3
-#  define WS2812_TIM                    TIM3
-#  define WS2812_TIM_AF                 GPIO_AF_TIM3
-#  define WS2812_TIM_CCR_REG1           TIM3->CCR1
-#  define WS2812_TIM_DMA_TRG1           TIM_DMA_CC1
+#  define WS2812_TIM_CLOCK              RCC_APB1Periph_TIM3             // clock for peripheral timer 3
+#  define WS2812_TIM                    TIM3                            // timer 3
+#  define WS2812_TIM_AF                 GPIO_AF_TIM3                    // GPIO for timer 3
+#  define WS2812_TIM_CCR_REG            TIM3->CCR1                      // timer 3 CC1
+#  define WS2812_TIM_DMA_TRG            TIM_DMA_CC1                     // timer 3 CC1
+#  define WS2812_TIM_OCINIT             TIM_OC1Init                     // timer 3 CC1
+#  define WS2812_TIM_OCPRELOADCONFIG    TIM_OC1PreloadConfig            // timer 3 CC1
 // GPIO:
 #  define WS2812_GPIO_CLOCK_CMD         RCC_AHB1PeriphClockCmd
-#  define WS2812_GPIO_CLOCK             RCC_AHB1Periph_GPIOC
-#  define WS2812_GPIO_PORT              GPIOC
-#  define WS2812_GPIO_PIN               GPIO_Pin_6
-#  define WS2812_GPIO_SOURCE            GPIO_PinSource6
+#  define WS2812_GPIO_CLOCK             RCC_AHB1Periph_GPIOC            // peripheral port C
+#  define WS2812_GPIO_PORT              GPIOC                           // use PC6
+#  define WS2812_GPIO_PIN               GPIO_Pin_6                      // pin is 6
+#  define WS2812_GPIO_SOURCE            GPIO_PinSource6                 // pin is 1
 // DMA TIM3 - DMA1, Channel5, Stream4
 #  define WS2812_DMA_CLOCK_CMD          RCC_AHB1PeriphClockCmd
-#  define WS2812_DMA_CLOCK              RCC_AHB1Periph_DMA1
-#  define WS2812_DMA_STREAM             DMA1_Stream4
-#  define WS2812_DMA_CHANNEL            DMA_Channel_5
+#  define WS2812_DMA_CLOCK              RCC_AHB1Periph_DMA1             // use DMA1
+#  define WS2812_DMA_STREAM             DMA1_Stream4                    // DMA1 stream 4
+#  define WS2812_DMA_CHANNEL            DMA_Channel_5                   // DMA1 channel 5
 // transfer complete interrupt - DMA1, Stream4
-#  define WS2812_DMA_CHANNEL_IRQn       DMA1_Stream4_IRQn
-#  define WS2812_DMA_CHANNEL_ISR        DMA1_Stream4_IRQHandler
+#  define WS2812_DMA_CHANNEL_IRQn       DMA1_Stream4_IRQn               // IRQ for stream 4
+#  define WS2812_DMA_CHANNEL_ISR        DMA1_Stream4_IRQHandler         // IRQ handler for stream 4
 #  define WS2812_DMA_CHANNEL_IRQ_TC     DMA_IT_TCIF4                    // transfer complete interrupt
 #  define WS2812_DMA_CHANNEL_IRQ_HT     DMA_IT_HTIF4                    // half-transfer interrupt
 
-#elif defined (STM32F10X)
+#elif defined (BLACKPILL_BOARD)
 // Timer:
-#  define WS2812_TIM_CLOCK_CMD          RCC_APB2PeriphClockCmd
-#  define WS2812_TIM_CLOCK              RCC_APB2Periph_TIM1
-#  define WS2812_TIM                    TIM1
-#  define WS2812_TIM_AF                 GPIO_AF_TIM1
-#  define WS2812_TIM_CCR_REG1           TIM1->CCR1
-#  define WS2812_TIM_DMA_TRG1           TIM_DMA_CC1
+#define WS2812_TIM_CLOCK_CMD          RCC_APB1PeriphClockCmd
+#define WS2812_TIM_CLOCK              RCC_APB1Periph_TIM3             // clock for peripheral timer 3
+#define WS2812_TIM                    TIM3                            // timer 3
+#define WS2812_TIM_AF                 GPIO_AF_TIM3                    // GPIO for timer 3
+#define WS2812_TIM_CCR_REG            TIM3->CCR4                      // timer 3 CC4
+#define WS2812_TIM_DMA_TRG            TIM_DMA_CC4                     // timer 3 CC4
+#define WS2812_TIM_OCINIT             TIM_OC4Init                     // timer 3 CC4
+#define WS2812_TIM_OCPRELOADCONFIG    TIM_OC4PreloadConfig            // timer 3 CC4
 // GPIO:
-#  define WS2812_GPIO_CLOCK_CMD         RCC_APB2PeriphClockCmd
-#  define WS2812_GPIO_CLOCK             RCC_APB2Periph_GPIOA
-#  define WS2812_GPIO_PORT              GPIOA
-#  define WS2812_GPIO_PIN               GPIO_Pin_8
-#  define WS2812_GPIO_SOURCE            GPIO_PinSource8
-// DMA TIM1 - DMA1, Channel2
-#  define WS2812_DMA_CLOCK_CMD          RCC_AHBPeriphClockCmd
-#  define WS2812_DMA_CLOCK              RCC_AHBPeriph_DMA1
-#  define WS2812_DMA_STREAM             DMA1_Channel2
-// transfer complete interrupt - DMA1, Channel2
-#  define WS2812_DMA_CHANNEL_IRQn       DMA1_Channel2_IRQn
-#  define WS2812_DMA_CHANNEL_ISR        DMA1_Channel2_IRQHandler
-#  define WS2812_DMA_CHANNEL_IRQ_TC     DMA1_IT_TC2                    // transfer complete interrupt
-#  define WS2812_DMA_CHANNEL_IRQ_HT     DMA1_IT_HT2                    // half-transfer interrupt
+#define WS2812_GPIO_CLOCK_CMD         RCC_AHB1PeriphClockCmd
+#define WS2812_GPIO_CLOCK             RCC_AHB1Periph_GPIOB            // peripheral port B
+#define WS2812_GPIO_PORT              GPIOB                           // use PB1
+#define WS2812_GPIO_PIN               GPIO_Pin_1                      // pin is 1
+#define WS2812_GPIO_SOURCE            GPIO_PinSource1                 // pin is 1
+// DMA TIM3 - DMA1, Channel5, Stream2
+#define WS2812_DMA_CLOCK_CMD          RCC_AHB1PeriphClockCmd
+#define WS2812_DMA_CLOCK              RCC_AHB1Periph_DMA1             // use DMA1
+#define WS2812_DMA_STREAM             DMA1_Stream2                    // DMA1 stream 2
+#define WS2812_DMA_CHANNEL            DMA_Channel_5                   // DMA1 channel 5
+// transfer complete interrupt - DMA1, Stream2
+#define WS2812_DMA_CHANNEL_IRQn       DMA1_Stream2_IRQn               // IRQ for stream 2
+#define WS2812_DMA_CHANNEL_ISR        DMA1_Stream2_IRQHandler         // IRQ handler for stream 2
+#define WS2812_DMA_CHANNEL_IRQ_TC     DMA_IT_TCIF2                    // transfer complete interrupt
+#define WS2812_DMA_CHANNEL_IRQ_HT     DMA_IT_HTIF2                    // half-transfer interrupt
 
+#elif defined (BLUEPILL_BOARD)
+// Timer:
+#  define WS2812_TIM_CLOCK_CMD        RCC_APB2PeriphClockCmd
+#  define WS2812_TIM_CLOCK            RCC_APB2Periph_TIM1             // clock for peripheral timer 3
+#  define WS2812_TIM                  TIM1                            // timer 1
+#  define WS2812_TIM_AF               GPIO_AF_TIM1                    // GPIO for timer 1
+#  define WS2812_TIM_CCR_REG          TIM1->CCR1                      // timer 1 CC1
+#  define WS2812_TIM_DMA_TRG          TIM_DMA_CC1                     // timer 1 CC1
+#  define WS2812_TIM_OCINIT           TIM_OC1Init                     // timer 1 CC1
+#  define WS2812_TIM_OCPRELOADCONFIG  TIM_OC1PreloadConfig            // timer 1 CC1
+// GPIO:
+#  define WS2812_GPIO_CLOCK_CMD       RCC_APB2PeriphClockCmd
+#  define WS2812_GPIO_CLOCK           RCC_APB2Periph_GPIOA            // peripheral port B
+#  define WS2812_GPIO_PORT            GPIOA                           // use PA8
+#  define WS2812_GPIO_PIN             GPIO_Pin_8                      // pin is 8
+#  define WS2812_GPIO_SOURCE          GPIO_PinSource8                 // pin is 8
+// DMA TIM1 - DMA1, Channel2
+#  define WS2812_DMA_CLOCK_CMD        RCC_AHBPeriphClockCmd
+#  define WS2812_DMA_CLOCK            RCC_AHBPeriph_DMA1              // use DMA1
+#  define WS2812_DMA_STREAM           DMA1_Channel2                   // DMA1 channel 2
+// transfer complete interrupt - DMA1, Channel2
+#  define WS2812_DMA_CHANNEL_IRQn     DMA1_Channel2_IRQn              // IRQ for channel 2
+#  define WS2812_DMA_CHANNEL_ISR      DMA1_Channel2_IRQHandler        // IRQ handler for stream 2
+#  define WS2812_DMA_CHANNEL_IRQ_TC   DMA1_IT_TC2                     // transfer complete interrupt
+#  define WS2812_DMA_CHANNEL_IRQ_HT   DMA1_IT_HT2                     // half-transfer interrupt
+
+#else
+#error unknown STM32
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -171,7 +215,7 @@ ws2812_dma_init (void)
     DMA_DeInit(WS2812_DMA_STREAM);
 
     dma.DMA_Mode                = DMA_Mode_Circular;
-    dma.DMA_PeripheralBaseAddr  = (uint32_t) &WS2812_TIM_CCR_REG1;
+    dma.DMA_PeripheralBaseAddr  = (uint32_t) &WS2812_TIM_CCR_REG;
 #if defined(STM32F4XX)                                                      // STM32F4xx
     dma.DMA_PeripheralDataSize  = DMA_PeripheralDataSize_HalfWord;          // 16bit
     dma.DMA_MemoryDataSize      = DMA_MemoryDataSize_HalfWord;              // 16bit
@@ -450,7 +494,6 @@ ws2812_set_all_leds (WS2812_RGB * rgb, uint_fast16_t n_leds, uint_fast8_t refres
 void
 ws2812_init (void)
 {
-    GPIO_InitTypeDef        gpio;
     TIM_TimeBaseInitTypeDef tb;
     TIM_OCInitTypeDef       toc;
     NVIC_InitTypeDef        nvic;
@@ -461,64 +504,34 @@ ws2812_init (void)
      * initialize gpio
      *-------------------------------------------------------------------------------------------------------------------------------------------
      */
-    GPIO_StructInit (&gpio);
     WS2812_GPIO_CLOCK_CMD (WS2812_GPIO_CLOCK, ENABLE);                          // clock enable
 
-    gpio.GPIO_Pin     = WS2812_GPIO_PIN;
+    // 1st pass: set data pin to input with pulldown, then check if external pullup connected:
+    GPIO_SET_PIN_IN_DOWN(WS2812_GPIO_PORT, WS2812_GPIO_PIN, GPIO_Speed_100MHz);
+    delay_msec (1);                                                             // wait a moment
+
+    // 2nd pass: if external pullup detected, use open-drain, else use push-pull
+
+    if (GPIO_GET_BIT(WS2812_GPIO_PORT, WS2812_GPIO_PIN) == Bit_SET)             // external 4k7 pullup connected?
+    {
+        log_message ("ws2812: external pullup detected");
 
 #if defined (STM32F4XX)
-
-    // 1st path: set data pin to input with pulldown, then check if external pullup connected:
-    gpio.GPIO_Mode    = GPIO_Mode_IN;                                           // set as input
-    gpio.GPIO_PuPd    = GPIO_PuPd_DOWN;                                         // with internal pulldown
-    gpio.GPIO_Speed   = GPIO_Speed_100MHz;
-    GPIO_Init(WS2812_GPIO_PORT, &gpio);
-    delay_msec (1);                                                             // wait a moment
-
-    // 2nd path: if external pullup detected, use open-drain, else use push-pull
-    if (GPIO_ReadInputDataBit(WS2812_GPIO_PORT, WS2812_GPIO_PIN) == Bit_SET)    // external 4k7 pullup connected?
-    {
-        log_message ("ws2812: external pullup detected");
-        gpio.GPIO_OType   = GPIO_OType_OD;                                      // yes, set output type to open-drain
-    }
-    else
-    {
-        log_message ("ws2812: no external pullup detected");
-        gpio.GPIO_OType   = GPIO_OType_PP;                                      // no, set output type to push-pull
-    }
-
-    gpio.GPIO_Mode    = GPIO_Mode_AF;                                           // set as alternate output
-    gpio.GPIO_PuPd    = GPIO_PuPd_NOPULL;
-    gpio.GPIO_Speed   = GPIO_Speed_100MHz;
-    GPIO_Init(WS2812_GPIO_PORT, &gpio);
-    GPIO_RESET_BIT(WS2812_GPIO_PORT, WS2812_GPIO_PIN);                          // set pin to Low
-    GPIO_PinAFConfig(WS2812_GPIO_PORT, WS2812_GPIO_SOURCE, WS2812_TIM_AF);
-
-#elif defined (STM32F10X)
-
-    // 1st path: set data pin to input with pulldown, then check if external pullup connected:
-    gpio.GPIO_Mode  = GPIO_Mode_IPD;                                            // set as input with internal pulldown
-    gpio.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(WS2812_GPIO_PORT, &gpio);
-    delay_msec (1);                                                             // wait a moment
-
-    // 2nd path: if external pullup detected, use open-drain, else use push-pull
-    if (GPIO_ReadInputDataBit(WS2812_GPIO_PORT, WS2812_GPIO_PIN) == Bit_SET)    // external 4k7 pullup connected?
-    {
-        log_message ("ws2812: external pullup detected");
-        gpio.GPIO_Mode    = GPIO_Mode_AF_OD;                                    // yes, use open-drain
-    }
-    else
-    {
-        log_message ("ws2812: no external pullup detected");
-        gpio.GPIO_Mode    = GPIO_Mode_AF_PP;                                    // no, use push-pull
-    }
-
-    gpio.GPIO_Speed   = GPIO_Speed_50MHz;
-    GPIO_Init(WS2812_GPIO_PORT, &gpio);
-    GPIO_RESET_BIT(WS2812_GPIO_PORT, WS2812_GPIO_PIN);                          // set pin to Low
-
+        GPIO_PinAFConfig(WS2812_GPIO_PORT, WS2812_GPIO_SOURCE, WS2812_TIM_AF);
 #endif
+        GPIO_SET_PIN_AF_OD(WS2812_GPIO_PORT, WS2812_GPIO_PIN, GPIO_Speed_100MHz);
+    }
+    else
+    {
+        log_message ("ws2812: no external pullup detected");
+
+#if defined (STM32F4XX)
+        GPIO_PinAFConfig(WS2812_GPIO_PORT, WS2812_GPIO_SOURCE, WS2812_TIM_AF);
+#endif
+        GPIO_SET_PIN_AF_PP(WS2812_GPIO_PORT, WS2812_GPIO_PIN, GPIO_Speed_100MHz);
+    }
+
+    GPIO_RESET_BIT(WS2812_GPIO_PORT, WS2812_GPIO_PIN);                          // set pin to Low
 
     /*-------------------------------------------------------------------------------------------------------------------------------------------
      * initialize TIMER
@@ -541,11 +554,11 @@ ws2812_init (void)
     toc.TIM_Pulse           = 0;
     toc.TIM_OCPolarity      = TIM_OCPolarity_High;
 
-    TIM_OC1Init(WS2812_TIM, &toc);
-    TIM_OC1PreloadConfig (WS2812_TIM, TIM_OCPreload_Enable);    // fm: necessary on STM32F1xx?
+    WS2812_TIM_OCINIT(WS2812_TIM, &toc);
+    WS2812_TIM_OCPRELOADCONFIG (WS2812_TIM, TIM_OCPreload_Enable);    // fm: necessary on STM32F1xx?
     TIM_ARRPreloadConfig (WS2812_TIM, ENABLE);                  // timer enable, fm: necessary on STM32F1xx?
     TIM_CtrlPWMOutputs(WS2812_TIM, ENABLE);
-    TIM_DMACmd (WS2812_TIM, WS2812_TIM_DMA_TRG1, ENABLE);
+    TIM_DMACmd (WS2812_TIM, WS2812_TIM_DMA_TRG, ENABLE);
 
     /*-------------------------------------------------------------------------------------------------------------------------------------------
      * initialize NVIC

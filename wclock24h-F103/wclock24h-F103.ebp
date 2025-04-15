@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <EmBitz_project_file>
-	<EmBitzVersion release="1.11" revision="0" />
-	<FileVersion major="1" minor="0" />
+	<EmBitzVersion release="2.60" revision="0" />
+	<FileVersion major="2" minor="0" />
 	<Project>
 		<Option title="wclock24h-F103" />
 		<Option pch_mode="2" />
@@ -23,6 +23,7 @@
 					<Add option="-DSTM32F10X" />
 					<Add option="-DSTM32F103" />
 					<Add option="-DSTM32F103C8" />
+					<Add option="-DBLUEPILL_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DDEBUG" />
@@ -54,6 +55,7 @@
 					<Add option="-DSTM32F10X" />
 					<Add option="-DSTM32F103" />
 					<Add option="-DSTM32F103C8" />
+					<Add option="-DBLUEPILL_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=1" />
@@ -64,7 +66,6 @@
 				</Assembler>
 				<Linker>
 					<Add option="-Wl,--gc-sections" />
-					<Add option="-flto" />
 				</Linker>
 			</Target>
 			<Target title="WC12h-STM32F103-Debug">
@@ -83,6 +84,7 @@
 					<Add option="-DSTM32F10X" />
 					<Add option="-DSTM32F103" />
 					<Add option="-DSTM32F103C8" />
+					<Add option="-DBLUEPILL_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DDEBUG" />
@@ -114,6 +116,7 @@
 					<Add option="-DSTM32F10X" />
 					<Add option="-DSTM32F103" />
 					<Add option="-DSTM32F103C8" />
+					<Add option="-DBLUEPILL_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=0" />
@@ -124,7 +127,6 @@
 				</Assembler>
 				<Linker>
 					<Add option="-Wl,--gc-sections" />
-					<Add option="-flto" />
 				</Linker>
 			</Target>
 		</Build>
@@ -170,10 +172,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\src\base\base.h" />
-		<Unit filename="..\src\beeper\beeper.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\src\beeper\beeper.h" />
 		<Unit filename="..\src\board-led\board-led.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -207,6 +205,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\src\ds18xx\ds18xx.h" />
+		<Unit filename="..\src\eep\eep.h" />
 		<Unit filename="..\src\eeprom\eeprom-data.h" />
 		<Unit filename="..\src\eeprom\eeprom.c">
 			<Option compilerVar="CC" />
@@ -228,9 +227,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\src\i2c\i2c.h" />
-		<Unit filename="..\src\i2c\softi2c.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\src\i2c\softi2c.h" />
 		<Unit filename="..\src\io\io.h" />
 		<Unit filename="..\src\irmp\irmp.c">
@@ -285,6 +281,11 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\src\sk6812\sk6812.h" />
+		<Unit filename="..\src\ssd1963\ssd1963-config.h" />
+		<Unit filename="..\src\ssd1963\ssd1963.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\ssd1963\ssd1963.h" />
 		<Unit filename="..\src\tables\tables.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -301,10 +302,18 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\src\tetris\tetris.h" />
+		<Unit filename="..\src\tft\tft.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\tft\tft.h" />
 		<Unit filename="..\src\timeserver\timeserver.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\src\timeserver\timeserver.h" />
+		<Unit filename="..\src\touch\touch.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\touch\touch.h" />
 		<Unit filename="..\src\uart\uart-driver.h" />
 		<Unit filename="..\src\uart\uart.h" />
 		<Unit filename="..\src\vars\vars.c">
@@ -424,7 +433,7 @@
 		<Unit filename="SPL\src\stm32f10x_wwdg.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src\startup_stm32f10x_md.S">
+		<Unit filename="src\startup_stm32f103xb.S">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\system_stm32f10x.c">
@@ -435,73 +444,17 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="WC12h-STM32F103-Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC24h-STM32F103-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="44879328" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC12h-STM32F103-Debug" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC12h-STM32F103-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="44879328" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC24h-STM32F103-Debug" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC12h-STM32F103-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="44879328" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC24h-STM32F103-Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC24h-STM32F103-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="44879328" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
 			</debugger>
 			<envvars />

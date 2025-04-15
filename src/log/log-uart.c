@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * log-uart.c - definitions of uart driver routines
  *
- * Copyright (c) 2015-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
  *
  * Possible UARTs of STM32F10x:
  *           ALTERNATE=0    ALTERNATE=1    ALTERNATE=2
@@ -45,10 +45,19 @@
 
 #define UART_PREFIX             log                     // see also uart-driver.h
 
-#if defined (STM32F4XX)                                 // STM32F4xx Nucleo Board: we use USART2
+#if defined (BLACK_BOARD)                               // STM32F407VE Black Board: we use USART2
 #  define UART_NUMBER           2                       // UART number on STM32F4xx (1-6 for UART)
 #  define UART_ALTERNATE        0                       // ALTERNATE number
-#elif defined (STM32F103)                               // STM32F103C8T6 Mini Development Board: we use USART1
+
+#elif defined (NUCLEO_BOARD)                            // STM32F4xx Nucleo Board: we use USART2
+#  define UART_NUMBER           2                       // UART number on STM32F4xx (1-6 for UART)
+#  define UART_ALTERNATE        0                       // ALTERNATE number
+
+#elif defined (BLACKPILL_BOARD)                         // STM32F401 BlackPill Board: we use USART1
+#  define UART_NUMBER           1                       // UART number on STM32F1xx (1-3 for UART)
+#  define UART_ALTERNATE        0                       // ALTERNATE number
+
+#elif defined (BLUEPILL_BOARD)                          // STM32F103C8T6 BluePill Board: we use USART1
 #  define UART_NUMBER           1                       // UART number on STM32F1xx (1-3 for UART)
 #  define UART_ALTERNATE        0                       // ALTERNATE number
 #else

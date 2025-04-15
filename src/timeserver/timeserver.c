@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * timeserver.c - timeserver routines
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 #include "base.h"
 #include "timeserver.h"
 #include "esp8266.h"
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 #include "log.h"
 
@@ -41,6 +41,7 @@ TIMESERVER_GLOBALS   timeserver =
 {
     NET_TIME_HOST,                      // timeserver[MAX_IPADDR_LEN + 1]
     NET_TIME_GMT_OFFSET,                // timezone from -12 to +12
+    1                                   // observe summertime
 };
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -48,20 +49,43 @@ TIMESERVER_GLOBALS   timeserver =
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-timeserver_read_data_from_eeprom (void)
+timeserver_read_data_from_eep (void)
 {
     uint_fast8_t    rtc = 0;
     uint8_t         tz[EEPROM_DATA_SIZE_TIMEZONE];
 
-    if (eeprom_is_up &&
-        eeprom_read (EEPROM_DATA_OFFSET_TIMESERVER, (uint8_t *) timeserver.timeserver, MAX_IPADDR_LEN) &&
-        eeprom_read (EEPROM_DATA_OFFSET_TIMEZONE, tz, EEPROM_DATA_SIZE_TIMEZONE))
+    if (eep_is_up &&
+        eep_read (EEPROM_DATA_OFFSET_TIMESERVER, (uint8_t *) timeserver.timeserver, MAX_IPADDR_LEN) &&
+        eep_read (EEPROM_DATA_OFFSET_TIMEZONE, tz, EEPROM_DATA_SIZE_TIMEZONE))
     {
         timeserver.timezone = tz[1];
 
-        if (tz[0] == '-')
+        if (tz[0] == '-')       // old format: '-' or '+'
         {
             timeserver.timezone = -timeserver.timezone;
+        }
+        else if (tz[0] == '+')  // old format: '+'
+        {
+            if (timeserver.timezone == 1)   // MESZ
+            {
+                timeserver.observe_summertime = 1;
+            }
+        }
+        else                    // new flags as bits: 0x01 = negative, 0x02 = observe summertime;
+        {
+             if (tz[0] & 0x01)
+             {
+                 timeserver.timezone = -timeserver.timezone;
+             }
+
+             if (tz[0] & 0x01)
+             {
+                 timeserver.observe_summertime = 1;
+             }
+             else
+             {
+                 timeserver.observe_summertime = 0;
+             }
         }
 
         rtc = 1;
@@ -84,8 +108,8 @@ timeserver_save_timeserver (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up &&
-        eeprom_write (EEPROM_DATA_OFFSET_TIMESERVER, (uint8_t *) timeserver.timeserver, EEPROM_DATA_SIZE_TIMESERVER))
+    if (eep_is_up &&
+        eep_write (EEPROM_DATA_OFFSET_TIMESERVER, (uint8_t *) timeserver.timeserver, EEPROM_DATA_SIZE_TIMESERVER))
     {
         rtc = 1;
     }
@@ -105,17 +129,22 @@ timeserver_save_timezone (void)
 
     if (timeserver.timezone >= 0)
     {
-        tz[0] = '+';
+        tz[0] = 0x00;
         tz[1] = timeserver.timezone;
     }
     else
     {
-        tz[0] = '-';
+        tz[0] = 0x01;
         tz[1] = -timeserver.timezone;
     }
 
-    if (eeprom_is_up &&
-        eeprom_write (EEPROM_DATA_OFFSET_TIMEZONE, tz, EEPROM_DATA_SIZE_TIMEZONE))
+    if (timeserver.observe_summertime)
+    {
+        tz[0] |= 0x02;
+    }
+
+    if (eep_is_up &&
+        eep_write (EEPROM_DATA_OFFSET_TIMEZONE, tz, EEPROM_DATA_SIZE_TIMEZONE))
     {
         rtc = 1;
     }
@@ -128,7 +157,7 @@ timeserver_save_timezone (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-timeserver_write_data_to_eeprom (void)
+timeserver_write_data_to_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
@@ -146,7 +175,7 @@ timeserver_write_data_to_eeprom (void)
  *--------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-timeserver_set_timezone (int_fast16_t newtimezone)
+timeserver_set_timezone (int_fast16_t newtimezone, uint_fast8_t observe_summertime)
 {
     uint_fast8_t rtc = 0;
 
@@ -154,9 +183,11 @@ timeserver_set_timezone (int_fast16_t newtimezone)
 
     if (newtimezone >= -12 && newtimezone <= 12)
     {
-        if (timeserver.timezone != newtimezone)
+        if (timeserver.timezone != newtimezone || timeserver.observe_summertime != observe_summertime)
         {
             timeserver.timezone = newtimezone;
+            timeserver.observe_summertime = observe_summertime;
+
             timeserver_save_timezone ();
         }
 
@@ -204,61 +235,64 @@ void
 timeserver_convert_time (struct tm * tmp, uint32_t seconds_since_1900)
 {
     time_t          curtime;
-
     struct tm *     mytm;
-    uint_fast8_t    summertime = 0;
 
     curtime = (time_t) (seconds_since_1900 - 2208988800U);
     curtime += 3600 * timeserver.timezone;                                  // add seconds for time zone (e.g. MEZ: +3600)
 
-    mytm = gmtime (&curtime);                                               // localtime() needs 4K more flash, but does return same as gmtime()
+    mytm = my_gmtime (&curtime);                                            // localtime() needs 4K more flash, but does return same as gmtime()
 
-    // calculate summer time:
-    if (mytm->tm_mon >= 3 && mytm->tm_mon <= 8)                             // april to september
+    if (timeserver.observe_summertime)
     {
-        summertime = 1;
-    }
-    else if (mytm->tm_mon == 2)                                             // march
-    {
-        if (mytm->tm_mday - mytm->tm_wday >= 25)                            // after or equal last sunday in march
+        uint_fast8_t    summertime = 0;
+
+        // calculate summer time:
+        if (mytm->tm_mon >= 3 && mytm->tm_mon <= 8)                         // april to september
         {
-            if (mytm->tm_wday == 0)                                         // today last sunday?
+            summertime = 1;
+        }
+        else if (mytm->tm_mon == 2)                                         // march
+        {
+            if (mytm->tm_mday - mytm->tm_wday >= 25)                        // after or equal last sunday in march
             {
-                if (mytm->tm_hour >= 2)                                     // after 02:00 we have summer time
+                if (mytm->tm_wday == 0)                                     // today last sunday?
+                {
+                    if (mytm->tm_hour >= 2)                                 // after 02:00 we have summer time
+                    {
+                        summertime = 1;
+                    }
+                }
+                else
                 {
                     summertime = 1;
                 }
             }
-            else
-            {
-                summertime = 1;
-            }
         }
-    }
-    else if (mytm->tm_mon == 9)                                             // it's october
-    {
-        summertime = 1;
-
-        if (mytm->tm_mday - mytm->tm_wday >= 25)                            // it's after or equal last sunday in october...
+        else if (mytm->tm_mon == 9)                                         // it's october
         {
-            if (mytm->tm_wday == 0)                                         // today last sunday?
+            summertime = 1;
+
+            if (mytm->tm_mday - mytm->tm_wday >= 25)                        // it's after or equal last sunday in october...
             {
-                if (mytm->tm_hour >= 3)                                     // after 03:00 we have winter time
+                if (mytm->tm_wday == 0)                                     // today last sunday?
+                {
+                    if (mytm->tm_hour >= 3)                                 // after 03:00 we have winter time
+                    {
+                        summertime = 0;
+                    }
+                }
+                else
                 {
                     summertime = 0;
                 }
             }
-            else
-            {
-                summertime = 0;
-            }
         }
-    }
 
-    if (summertime)
-    {
-        curtime += 3600;                                                    // add one hour more for MESZ
-        mytm = gmtime (&curtime);                                           // localtime() needs 4K more flash, but does return same as gmtime()
+        if (summertime)
+        {
+            curtime += 3600;                                                // add one hour more for MESZ
+            mytm = my_gmtime (&curtime);                                    // localtime() needs 4K more flash, but does return same as gmtime()
+        }
     }
 
     tmp->tm_year    = mytm->tm_year;

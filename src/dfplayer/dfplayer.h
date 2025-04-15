@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * dfplayer.h - declarations of DFPLAYER MINI routines
  *
- * Copyright (c) 2017-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2017-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,8 +148,8 @@ extern void             dfplayer_keep_on (void);
 extern void             dfplayer_query_current_file_number (uint8_t);
 extern void             dfplayer_query_file_counts_in_folder (uint8_t);
 
-extern uint_fast8_t     dfplayer_read_config_from_eeprom (uint32_t);
-extern uint_fast8_t     dfplayer_write_config_to_eeprom (void);
+extern uint_fast8_t     dfplayer_read_config_from_eep (uint32_t);
+extern uint_fast8_t     dfplayer_write_config_to_eep (void);
 
 extern void             dfplayer_set_new_volume (uint_fast8_t);
 extern void             dfplayer_set_silence_start (uint_fast16_t);

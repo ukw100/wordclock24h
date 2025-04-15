@@ -1,12 +1,408 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <EmBitz_project_file>
-	<EmBitzVersion release="1.11" revision="0" />
-	<FileVersion major="1" minor="0" />
+	<EmBitzVersion release="2.62" revision="0" />
+	<FileVersion major="2" minor="0" />
 	<Project>
 		<Option title="wclock24h" />
 		<Option pch_mode="2" />
 		<Option compiler="armgcc_eb" />
 		<Build>
+			<Target title="WC24h-Black401-25-Debug">
+				<Option output="bin\Debug\wc24h-black401-25.elf" />
+				<Option object_output="obj\wc24h-black401-25-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f401cc_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F401CC" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=25000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-Black401-25-Release">
+				<Option output="bin\Release\wc24h-black401-25.elf" />
+				<Option object_output="obj\wc24h-black401-25-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f401cc_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F401CC" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=25000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--no-warn" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-Black411-25-Debug">
+				<Option output="bin\Debug\wc24h-black411-25.elf" />
+				<Option object_output="obj\wc24h-black411-25-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f411ce_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F411CE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411xx" />
+					<Add option="-DSTM32F411" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=25000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-Black411-25-Release">
+				<Option output="bin\Release\wc24h-black411-25.elf" />
+				<Option object_output="obj\wc24h-black411-25-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f411ce_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F411CE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411xx" />
+					<Add option="-DSTM32F411" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=25000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--no-warn" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-Black401-8-Debug">
+				<Option output="bin\Debug\wc24h-blackpill401-8.elf" />
+				<Option object_output="obj\wc24h-black401-8-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f401cc_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F401CC" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-Black401-8-Release">
+				<Option output="bin\Release\wc24h-black401-8.elf" />
+				<Option object_output="obj\wc24h-black401-8-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f401cc_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F401CC" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--no-warn" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-Black411-8-Debug">
+				<Option output="bin\Debug\wc24h-black411-8.elf" />
+				<Option object_output="obj\wc24h-black411-8-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f411ce_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F411CE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411xx" />
+					<Add option="-DSTM32F411" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-Black411-8-Release">
+				<Option output="bin\Release\wc24h-black411-8.elf" />
+				<Option object_output="obj\wc24h-black411-8-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f411ce_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F411CE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411xx" />
+					<Add option="-DSTM32F411" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--no-warn" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
 			<Target title="WC24h-Nucleo401-Debug">
 				<Option output="bin\Debug\wc24h-nucleo401.elf" />
 				<Option object_output="obj\wc24h-nucleo401-debug\" />
@@ -37,9 +433,11 @@
 					<Add option="-O0" />
 					<Add option="-g3" />
 					<Add option="-DARM_MATH_CM4" />
-					<Add option="-D__FPU_USED" />
 					<Add option="-DSTM32F401RE" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
 					<Add option="-DSTM32F4XX" />
+					<Add option="-DNUCLEO_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=1" />
@@ -50,8 +448,8 @@
 					<Add option="-Wa,--gdwarf-2" />
 				</Assembler>
 				<Linker>
-					<Add option="-eb_start_files" />
 					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
 					<Add option="-Wl,--gc-sections" />
 				</Linker>
 			</Target>
@@ -84,9 +482,11 @@
 					<Add option="-Os" />
 					<Add option="-g2" />
 					<Add option="-DARM_MATH_CM4" />
-					<Add option="-D__FPU_USED" />
 					<Add option="-DSTM32F401RE" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
 					<Add option="-DSTM32F4XX" />
+					<Add option="-DNUCLEO_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=1" />
@@ -99,7 +499,6 @@
 					<Add option="-eb_lib=n" />
 					<Add option="-eb_start_files" />
 					<Add option="-Wl,--gc-sections" />
-					<Add option="-flto" />
 				</Linker>
 			</Target>
 			<Target title="WC24h-Nucleo411-Debug">
@@ -131,9 +530,11 @@
 					<Add option="-O0" />
 					<Add option="-g3" />
 					<Add option="-DARM_MATH_CM4" />
-					<Add option="-D__FPU_USED" />
 					<Add option="-DSTM32F411RE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411" />
 					<Add option="-DSTM32F4XX" />
+					<Add option="-DNUCLEO_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=1" />
@@ -144,8 +545,8 @@
 					<Add option="-Wa,--gdwarf-2" />
 				</Assembler>
 				<Linker>
-					<Add option="-eb_start_files" />
 					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
 					<Add option="-Wl,--gc-sections" />
 				</Linker>
 			</Target>
@@ -178,9 +579,11 @@
 					<Add option="-Os" />
 					<Add option="-g2" />
 					<Add option="-DARM_MATH_CM4" />
-					<Add option="-D__FPU_USED" />
 					<Add option="-DSTM32F411RE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411" />
 					<Add option="-DSTM32F4XX" />
+					<Add option="-DNUCLEO_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=1" />
@@ -193,7 +596,504 @@
 					<Add option="-eb_lib=n" />
 					<Add option="-eb_start_files" />
 					<Add option="-Wl,--gc-sections" />
-					<Add option="-flto" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-Black407-Debug">
+				<Option output="bin\Debug\wc24h-black407.elf" />
+				<Option object_output="obj\wc24h-black407-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f407ve_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F407VE" />
+					<Add option="-DSTM32F407" />
+					<Add option="-DSTM32F40_41xxx" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACK_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC24h-Black407-Release">
+				<Option output="bin\Release\wc24h-black407.elf" />
+				<Option object_output="obj\wc24h-black407-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f407ve_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F407VE" />
+					<Add option="-DSTM32F407" />
+					<Add option="-DSTM32F40_41xxx" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACK_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=1" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--no-warn" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black401-25-Debug">
+				<Option output="bin\Debug\wc12h-black401-25.elf" />
+				<Option object_output="obj\wc12h-black401-25-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f401cc_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F401CC" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=25000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black401-25-Release">
+				<Option output="bin\Release\wc12h-black401-25.elf" />
+				<Option object_output="obj\wc12h-black401-25-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f401cc_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F401CC" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=25000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black411-25-Debug">
+				<Option output="bin\Debug\wc12h-black411-25.elf" />
+				<Option object_output="obj\wc12h-black411-25-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f411ce_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F411CE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411xx" />
+					<Add option="-DSTM32F411" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=25000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black411-25-Release">
+				<Option output="bin\Release\wc12h-black411-25.elf" />
+				<Option object_output="obj\wc12h-black411-25-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f411ce_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F411CE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411xx" />
+					<Add option="-DSTM32F411" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=25000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black401-8-Debug">
+				<Option output="bin\Debug\wc12h-black401-8.elf" />
+				<Option object_output="obj\wc12h-black401-8-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f401cc_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F401CC" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black401-8-Release">
+				<Option output="bin\Release\wc12h-black401-8.elf" />
+				<Option object_output="obj\wc12h-black401-8-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f401cc_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F401CC" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black411-8-Debug">
+				<Option output="bin\Debug\wc12h-black411-8.elf" />
+				<Option object_output="obj\wc12h-black411-8-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f411ce_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F411CE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411xx" />
+					<Add option="-DSTM32F411" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black411-8-Release">
+				<Option output="bin\Release\wc12h-black411-8.elf" />
+				<Option object_output="obj\wc12h-black411-8-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f411ce_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F411CE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411xx" />
+					<Add option="-DSTM32F411" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACKPILL_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
 				</Linker>
 			</Target>
 			<Target title="WC12h-Nucleo401-Debug">
@@ -226,9 +1126,11 @@
 					<Add option="-O0" />
 					<Add option="-g3" />
 					<Add option="-DARM_MATH_CM4" />
-					<Add option="-D__FPU_USED" />
 					<Add option="-DSTM32F401RE" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
 					<Add option="-DSTM32F4XX" />
+					<Add option="-DNUCLEO_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=0" />
@@ -239,8 +1141,8 @@
 					<Add option="-Wa,--gdwarf-2" />
 				</Assembler>
 				<Linker>
-					<Add option="-eb_start_files" />
 					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
 					<Add option="-Wl,--gc-sections" />
 				</Linker>
 			</Target>
@@ -259,41 +1161,14 @@
 				</Device>
 				<Compiler>
 					<Add option="-mfloat-abi=hard" />
-					<Add option="-Wwrite-strings" />
-					<Add option="-Wunreachable-code" />
-					<Add option="-Wundef" />
-					<Add option="-Wstrict-prototypes" />
-					<Add option="-Wsign-compare" />
-					<Add option="-Wshadow" />
-					<Add option="-Wnested-externs" />
-					<Add option="-Wmissing-prototypes" />
-					<Add option="-Wmissing-declarations" />
-					<Add option="-Winline" />
-					<Add option="-Wcast-qual" />
-					<Add option="-Wcast-align" />
-					<Add option="-Wbad-function-cast" />
-					<Add option="-Waggregate-return" />
-					<Add option="-Werror" />
-					<Add option="-W" />
-					<Add option="-Wdouble-promotion" />
 					<Add option="-Wunused-value" />
 					<Add option="-Wunused-variable" />
 					<Add option="-Wunused-parameter" />
-					<Add option="-Wunused-label" />
 					<Add option="-Wunused-function" />
 					<Add option="-Wunused" />
 					<Add option="-Wuninitialized" />
 					<Add option="-Wtrigraphs" />
-					<Add option="-Wswitch" />
-					<Add option="-Wsequence-point" />
-					<Add option="-Wreturn-type" />
 					<Add option="-Wparentheses" />
-					<Add option="-Wmissing-braces" />
-					<Add option="-Wimplicit-int" />
-					<Add option="-Wimplicit-function-declaration" />
-					<Add option="-Wformat" />
-					<Add option="-Wdiv-by-zero" />
-					<Add option="-Wcomment" />
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
 					<Add option="-fdata-sections" />
@@ -301,22 +1176,23 @@
 					<Add option="-Os" />
 					<Add option="-g2" />
 					<Add option="-DARM_MATH_CM4" />
-					<Add option="-D__FPU_USED" />
 					<Add option="-DSTM32F401RE" />
+					<Add option="-DSTM32F401xx" />
+					<Add option="-DSTM32F401" />
 					<Add option="-DSTM32F4XX" />
+					<Add option="-DNUCLEO_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=0" />
 					<Add option="-fno-strict-aliasing" />
 				</Compiler>
 				<Assembler>
-					<Add option="-Wa,--no-warn" />
+					<Add option="-Wa,--gdwarf-2" />
 				</Assembler>
 				<Linker>
 					<Add option="-eb_lib=n" />
 					<Add option="-eb_start_files" />
 					<Add option="-Wl,--gc-sections" />
-					<Add option="-flto" />
 				</Linker>
 			</Target>
 			<Target title="WC12h-Nucleo411-Debug">
@@ -348,9 +1224,11 @@
 					<Add option="-O0" />
 					<Add option="-g3" />
 					<Add option="-DARM_MATH_CM4" />
-					<Add option="-D__FPU_USED" />
 					<Add option="-DSTM32F411RE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411" />
 					<Add option="-DSTM32F4XX" />
+					<Add option="-DNUCLEO_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=0" />
@@ -361,8 +1239,8 @@
 					<Add option="-Wa,--gdwarf-2" />
 				</Assembler>
 				<Linker>
-					<Add option="-eb_start_files" />
 					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
 					<Add option="-Wl,--gc-sections" />
 				</Linker>
 			</Target>
@@ -395,9 +1273,11 @@
 					<Add option="-Os" />
 					<Add option="-g2" />
 					<Add option="-DARM_MATH_CM4" />
-					<Add option="-D__FPU_USED" />
 					<Add option="-DSTM32F411RE" />
+					<Add option="-DSTM32F411xE" />
+					<Add option="-DSTM32F411" />
 					<Add option="-DSTM32F4XX" />
+					<Add option="-DNUCLEO_BOARD" />
 					<Add option="-DUSE_STDPERIPH_DRIVER" />
 					<Add option="-DHSE_VALUE=8000000" />
 					<Add option="-DWCLOCK24H=0" />
@@ -410,7 +1290,105 @@
 					<Add option="-eb_lib=n" />
 					<Add option="-eb_start_files" />
 					<Add option="-Wl,--gc-sections" />
-					<Add option="-flto" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black407-Debug">
+				<Option output="bin\Debug\wc12h-black407.elf" />
+				<Option object_output="obj\wc12h-black407-debug\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f407ve_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-O0" />
+					<Add option="-g3" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F407VE" />
+					<Add option="-DSTM32F407" />
+					<Add option="-DSTM32F40_41xxx" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACK_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-DDEBUG" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
+			</Target>
+			<Target title="WC12h-Black407-Release">
+				<Option output="bin\Release\wc12h-black407.elf" />
+				<Option object_output="obj\wc12h-black407-release\" />
+				<Option type="0" />
+				<Option create_hex="1" />
+				<Option compiler="armgcc_eb" />
+				<Device>
+					<Add option="$device=cortex-m4" />
+					<Add option="$fpu=fpv4-sp-d16" />
+					<Add option="$lscript=./stm32f407ve_flash.ld" />
+					<Add option="$stack=0x0100" />
+					<Add option="$heap=0x0000" />
+				</Device>
+				<Compiler>
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-Wunused-value" />
+					<Add option="-Wunused-variable" />
+					<Add option="-Wunused-parameter" />
+					<Add option="-Wunused-function" />
+					<Add option="-Wunused" />
+					<Add option="-Wuninitialized" />
+					<Add option="-Wtrigraphs" />
+					<Add option="-Wparentheses" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-fdata-sections" />
+					<Add option="-ffunction-sections" />
+					<Add option="-Os" />
+					<Add option="-g2" />
+					<Add option="-DARM_MATH_CM4" />
+					<Add option="-DSTM32F407VE" />
+					<Add option="-DSTM32F407" />
+					<Add option="-DSTM32F40_41xxx" />
+					<Add option="-DSTM32F4XX" />
+					<Add option="-DBLACK_BOARD" />
+					<Add option="-DUSE_STDPERIPH_DRIVER" />
+					<Add option="-DHSE_VALUE=8000000" />
+					<Add option="-DWCLOCK24H=0" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+				<Linker>
+					<Add option="-eb_lib=n" />
+					<Add option="-eb_start_files" />
+					<Add option="-Wl,--gc-sections" />
 				</Linker>
 			</Target>
 		</Build>
@@ -423,12 +1401,13 @@
 			<Add directory=".\SPL\inc" />
 			<Add directory=".\SPL\src" />
 		</Compiler>
-		<Unit filename="cmsis\arm_common_tables.h" />
-		<Unit filename="cmsis\arm_math.h" />
+		<Unit filename="cmsis\cmsis_compiler.h" />
+		<Unit filename="cmsis\cmsis_gcc.h" />
+		<Unit filename="cmsis\cmsis_version.h" />
 		<Unit filename="cmsis\core_cm4.h" />
-		<Unit filename="cmsis\core_cm4_simd.h" />
-		<Unit filename="cmsis\core_cmFunc.h" />
-		<Unit filename="cmsis\core_cmInstr.h" />
+		<Unit filename="cmsis\mpu_armv7.h" />
+		<Unit filename="cmsis\mpu_armv8.h" />
+		<Unit filename="cmsis\tz_context.h" />
 		<Unit filename="inc\stm32f4xx.h" />
 		<Unit filename="inc\stm32f4xx_conf.h" />
 		<Unit filename="inc\system_stm32f4xx.h" />
@@ -436,24 +1415,36 @@
 		<Unit filename="SPL\inc\misc.h" />
 		<Unit filename="SPL\inc\stm32f4xx_adc.h" />
 		<Unit filename="SPL\inc\stm32f4xx_can.h" />
+		<Unit filename="SPL\inc\stm32f4xx_cec.h" />
 		<Unit filename="SPL\inc\stm32f4xx_crc.h" />
 		<Unit filename="SPL\inc\stm32f4xx_cryp.h" />
 		<Unit filename="SPL\inc\stm32f4xx_dac.h" />
 		<Unit filename="SPL\inc\stm32f4xx_dbgmcu.h" />
 		<Unit filename="SPL\inc\stm32f4xx_dcmi.h" />
+		<Unit filename="SPL\inc\stm32f4xx_dfsdm.h" />
 		<Unit filename="SPL\inc\stm32f4xx_dma.h" />
+		<Unit filename="SPL\inc\stm32f4xx_dma2d.h" />
+		<Unit filename="SPL\inc\stm32f4xx_dsi.h" />
 		<Unit filename="SPL\inc\stm32f4xx_exti.h" />
 		<Unit filename="SPL\inc\stm32f4xx_flash.h" />
+		<Unit filename="SPL\inc\stm32f4xx_flash_ramfunc.h" />
+		<Unit filename="SPL\inc\stm32f4xx_fmc.h" />
+		<Unit filename="SPL\inc\stm32f4xx_fmpi2c.h" />
 		<Unit filename="SPL\inc\stm32f4xx_fsmc.h" />
 		<Unit filename="SPL\inc\stm32f4xx_gpio.h" />
 		<Unit filename="SPL\inc\stm32f4xx_hash.h" />
 		<Unit filename="SPL\inc\stm32f4xx_i2c.h" />
 		<Unit filename="SPL\inc\stm32f4xx_iwdg.h" />
+		<Unit filename="SPL\inc\stm32f4xx_lptim.h" />
+		<Unit filename="SPL\inc\stm32f4xx_ltdc.h" />
 		<Unit filename="SPL\inc\stm32f4xx_pwr.h" />
+		<Unit filename="SPL\inc\stm32f4xx_qspi.h" />
 		<Unit filename="SPL\inc\stm32f4xx_rcc.h" />
 		<Unit filename="SPL\inc\stm32f4xx_rng.h" />
 		<Unit filename="SPL\inc\stm32f4xx_rtc.h" />
+		<Unit filename="SPL\inc\stm32f4xx_sai.h" />
 		<Unit filename="SPL\inc\stm32f4xx_sdio.h" />
+		<Unit filename="SPL\inc\stm32f4xx_spdifrx.h" />
 		<Unit filename="SPL\inc\stm32f4xx_spi.h" />
 		<Unit filename="SPL\inc\stm32f4xx_syscfg.h" />
 		<Unit filename="SPL\inc\stm32f4xx_tim.h" />
@@ -466,6 +1457,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_can.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_cec.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_crc.c">
@@ -492,13 +1486,31 @@
 		<Unit filename="SPL\src\stm32f4xx_dcmi.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_dfsdm.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_dma.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_dma2d.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_dsi.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_exti.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_flash.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_flash_ramfunc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_fmc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_fmpi2c.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_fsmc.c">
@@ -522,7 +1534,16 @@
 		<Unit filename="SPL\src\stm32f4xx_iwdg.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_lptim.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_ltdc.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_pwr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_qspi.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_rcc.c">
@@ -534,7 +1555,13 @@
 		<Unit filename="SPL\src\stm32f4xx_rtc.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_sai.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_sdio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SPL\src\stm32f4xx_spdifrx.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="SPL\src\stm32f4xx_spi.c">
@@ -570,10 +1597,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\base\base.h" />
-		<Unit filename="src\beeper\beeper.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src\beeper\beeper.h" />
 		<Unit filename="src\board-led\board-led.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -607,6 +1630,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\ds18xx\ds18xx.h" />
+		<Unit filename="src\eep\eep.h" />
 		<Unit filename="src\eeprom\eeprom-data.h" />
 		<Unit filename="src\eeprom\eeprom.c">
 			<Option compilerVar="CC" />
@@ -624,14 +1648,32 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\esp8266\esp8266.h" />
+		<Unit filename="src\flash\flash.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\flash\flash.h" />
+		<Unit filename="src\font\font-iso88591-05x08.h" />
+		<Unit filename="src\font\font-iso88591-05x12.h" />
+		<Unit filename="src\font\font-iso88591-06x08.h" />
+		<Unit filename="src\font\font-iso88591-06x10.h" />
+		<Unit filename="src\font\font-iso88591-08x08.h" />
+		<Unit filename="src\font\font-iso88591-08x12.h" />
+		<Unit filename="src\font\font-iso88591-08x14.h" />
+		<Unit filename="src\font\font-iso88591-10x16.h" />
+		<Unit filename="src\font\font-iso88591-12x16.h" />
+		<Unit filename="src\font\font-iso88591-12x20.h" />
+		<Unit filename="src\font\font-iso88591-16x26.h" />
+		<Unit filename="src\font\font-iso88591-22x36.h" />
+		<Unit filename="src\font\font-iso88591-24x40.h" />
+		<Unit filename="src\font\font-iso88591-32x53.h" />
+		<Unit filename="src\font\font.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\font\font.h" />
 		<Unit filename="src\i2c\i2c.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\i2c\i2c.h" />
-		<Unit filename="src\i2c\softi2c.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src\i2c\softi2c.h" />
 		<Unit filename="src\io\io.h" />
 		<Unit filename="src\irmp\irmp.c">
 			<Option compilerVar="CC" />
@@ -686,10 +1728,50 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\sk6812\sk6812.h" />
-		<Unit filename="src\softuart\softuart-driver.h" />
-		<Unit filename="src\softuart\softuart.h" />
-		<Unit filename="src\startup_stm32f4xx.S">
+		<Unit filename="src\ssd1963\ssd1963-config.h" />
+		<Unit filename="src\ssd1963\ssd1963.c">
 			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\ssd1963\ssd1963.h" />
+		<Unit filename="src\startup_stm32f401xc.S">
+			<Option compilerVar="CC" />
+			<Option target="WC24h-Black401-25-Debug" />
+			<Option target="WC24h-Black401-25-Release" />
+			<Option target="WC12h-Black401-25-Debug" />
+			<Option target="WC12h-Black401-25-Release" />
+			<Option target="WC24h-Black411-25-Debug" />
+			<Option target="WC24h-Black411-25-Release" />
+			<Option target="WC24h-Black401-8-Debug" />
+			<Option target="WC24h-Black401-8-Release" />
+			<Option target="WC24h-Black411-8-Debug" />
+			<Option target="WC24h-Black411-8-Release" />
+			<Option target="WC12h-Black411-25-Debug" />
+			<Option target="WC12h-Black411-25-Release" />
+			<Option target="WC12h-Black401-8-Debug" />
+			<Option target="WC12h-Black401-8-Release" />
+			<Option target="WC12h-Black411-8-Debug" />
+			<Option target="WC12h-Black411-8-Release" />
+		</Unit>
+		<Unit filename="src\startup_stm32f401xe.S">
+			<Option compilerVar="CC" />
+			<Option target="WC24h-Nucleo401-Debug" />
+			<Option target="WC24h-Nucleo401-Release" />
+			<Option target="WC12h-Nucleo401-Debug" />
+			<Option target="WC12h-Nucleo401-Release" />
+		</Unit>
+		<Unit filename="src\startup_stm32f407xx.S">
+			<Option compilerVar="CC" />
+			<Option target="WC24h-Black407-Debug" />
+			<Option target="WC24h-Black407-Release" />
+			<Option target="WC12h-Black407-Debug" />
+			<Option target="WC12h-Black407-Release" />
+		</Unit>
+		<Unit filename="src\startup_stm32f411xe.S">
+			<Option compilerVar="CC" />
+			<Option target="WC24h-Nucleo411-Debug" />
+			<Option target="WC24h-Nucleo411-Release" />
+			<Option target="WC12h-Nucleo411-Debug" />
+			<Option target="WC12h-Nucleo411-Release" />
 		</Unit>
 		<Unit filename="src\system_stm32f4xx.c">
 			<Option compilerVar="CC" />
@@ -710,16 +1792,32 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\tetris\tetris.h" />
+		<Unit filename="src\tft\tft.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\tft\tft.h" />
+		<Unit filename="src\tftled\tftled.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\tftled\tftled.h" />
 		<Unit filename="src\timeserver\timeserver.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\timeserver\timeserver.h" />
+		<Unit filename="src\touch\touch.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\touch\touch.h" />
 		<Unit filename="src\uart\uart-driver.h" />
 		<Unit filename="src\uart\uart.h" />
 		<Unit filename="src\vars\vars.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\vars\vars.h" />
+		<Unit filename="src\w25qxx\w25qxx.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\w25qxx\w25qxx.h" />
 		<Unit filename="src\wclock24h-config.h" />
 		<Unit filename="src\weather\weather.c">
 			<Option compilerVar="CC" />
@@ -734,146 +1832,96 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\ws2812\ws2812.h" />
-		<Unit filename="stm32f407vg_flash.ld" />
-		<Unit filename="stm32f407vg_sram.ld" />
+		<Unit filename="src\xpt2046\xpt2046.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\xpt2046\xpt2046.h" />
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="WC24h-Nucleo401-Debug" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC12h-Black411-25-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC24h-Nucleo401-Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC24h-Nucleo411-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC24h-Nucleo411-Debug" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC24h-Nucleo401-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC24h-Nucleo411-Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC24h-Nucleo411-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC12h-Nucleo401-Debug" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC24h-Black407-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="7791436" unwind="1641417720" rstType="128828300" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="" ip_port="" path="" executable="" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC12h-Nucleo401-Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC24h-Nucleo401-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC12h-Nucleo411-Debug" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC12h-Black401-25-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
 				</target_debugging_settings>
-				<target_debugging_settings target="WC12h-Nucleo411-Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
+				<target_debugging_settings target="WC12h-Black401-25-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="4" unwind="1" rstType="0" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset;" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-Black407-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="7791436" unwind="1641417720" rstType="128830988" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="" ip_port="" path="" executable="" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Black411-25-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-Black401-8-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-Black401-8-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-Black411-8-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-Black411-8-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Black401-8-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Black407-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="7791436" unwind="1641417720" rstType="128847980" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="" ip_port="" path="" executable="" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Nucleo401-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Black411-8-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Nucleo401-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Black401-8-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Nucleo411-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Black411-8-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Nucleo411-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC12h-Black407-Release">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="7791436" unwind="1641417720" rstType="128847980" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="" ip_port="" path="" executable="" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-Black401-25-Debug">
+					<debug_interface description="" options="10" reg_filter="0" probe="STlink" device="auto" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="4" unwind="2" rstType="0" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset;" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="true" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-Black401-25-Release">
+					<debug_interface description="" options="10" reg_filter="0" probe="STlink" device="auto" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="4" unwind="2" rstType="0" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset;" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="true" flash_run="true" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-Black411-25-Debug">
+					<debug_interface description="" options="0" reg_filter="0" probe="" device="" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="32" unwind="1" rstType="18284544" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="false" flash_run="false" />
+				</target_debugging_settings>
+				<target_debugging_settings target="WC24h-Black411-25-Release">
+					<debug_interface description="" options="10" reg_filter="0" probe="stlink" device="auto" speed="" bus_address="" serial="" defines="" scripts="" flash_size="" ram_size="" vcc_voltage="" verbose="4" unwind="2" rstType="0" use_jtag="false" disable_cache="false" enable_semi="false" close_eblink="false" gdb_reset="" gdb_reset_remote="reset;" gdb_before_conn="" gdb_after_conn="" use_remote="false" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" start_server="false" arguments="" flash_verify="true" flash_run="false" />
 				</target_debugging_settings>
 			</debugger>
 			<envvars />

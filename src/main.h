@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * main.h - some global definitions/declarations
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,23 +15,27 @@
 #include <time.h>
 #include "eeprom-data.h"
 
-#define VERSION                     "2.9.5"
+#define VERSION                     "3.1.0"
 
 #define MAX_EEPROM_VERSION_LEN      4
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
- * hardware configuration word: 0 xxx xxx LLL WWW SSS
+ * hardware configuration word: 0 xxx FFF LLL WWW SSS
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 #define HW_STM32_MASK               (0x07 << 0)                         // 3 bits for microprocessor mask
-#define HW_STM32_F103               (0x00 << 0)                         // 0: F103
-#define HW_STM32_F401               (0x01 << 0)                         // 1: F401
-#define HW_STM32_F411               (0x02 << 0)                         // 2: F411
-#define HW_STM32_F446               (0x03 << 0)                         // 3: F446
+#define HW_STM32_F103C8             (0x00 << 0)                         // 0: F103C8 BluePill Board
+#define HW_STM32_F401RE             (0x01 << 0)                         // 1: F401RE Nucleo
+#define HW_STM32_F411RE             (0x02 << 0)                         // 2: F411RE Nucleo
+#define HW_STM32_F446RE             (0x03 << 0)                         // 3: F446RE Nucleo
+#define HW_STM32_F407VE             (0x04 << 0)                         // 4: F407VE Black Board
+#define HW_STM32_F401CC             (0x05 << 0)                         // 5: F401CC BlackPill Board
+#define HW_STM32_F411CE             (0x06 << 0)                         // 6: F411CE BlackPill Board
 
 #define HW_WC_MASK                  (0x07 << 3)                         // 3 bits for WC mask
 #define HW_WC_24H                   (0x00 << 3)                         // 0: WC24
 #define HW_WC_12H                   (0x01 << 3)                         // 1: WC12
+#define HW_UCLOCK                   (0x02 << 3)                         // 2: UCLOCK
 
 #define HW_LED_MASK                 (0x07 << 6)                         // 3 bits for LED type mask
 #define HW_LED_WS2812_GRB_LED       (0x00 << 6)                         // 0: WS2812 GRB
@@ -39,10 +43,15 @@
 #define HW_LED_APA102_RGB_LED       (0x02 << 6)                         // 2: APA102 RGB
 #define HW_LED_SK6812_RGB_LED       (0x03 << 6)                         // 3: SK6812 RGB
 #define HW_LED_SK6812_RGBW_LED      (0x04 << 6)                         // 4: SK6812 RGBW
+#define HW_LED_TFTLED_RGB_LED       (0x05 << 6)                         // 5: TFTLED RGB
+
+#define HW_OSC_FREQUENCY_MASK       (0x07 << 9)                         // 3 bits for OSC frequency mask
+#define HW_OSC_FREQUENCY_8MHZ       (0x00 << 9)                         // 0: standard oscillator frequency 8MHz
+#define HW_OSC_FREQUENCY_25MHZ      (0x01 << 9)                         // 1: BlackPill with 25 MHz oscillator
 
 typedef struct
 {
-    char                            eeprom_version[MAX_EEPROM_VERSION_LEN + 1];
+    char                            eep_version[MAX_EEPROM_VERSION_LEN + 1];
     uint16_t                        hardware_configuration;
     struct tm                       tm;
     char                            update_host[EEPROM_MAX_HOSTNAME_LEN];

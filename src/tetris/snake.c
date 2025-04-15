@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * snake.c - play snake on wclock24h
  *
- * Copyright (c) 2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2018-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 #include "display.h"
 #include "delay.h"
 #include "main.h"
+#include "base.h"
 #include "snake.h"
 
 #define SNAKE_ROWS      WC_ROWS
@@ -92,8 +93,8 @@ add_new_food (int idx)
 
     do
     {
-        y = rand() % SNAKE_ROWS;
-        x = rand() % SNAKE_COLS;
+        y = my_rand () % SNAKE_ROWS;
+        x = my_rand () % SNAKE_COLS;
 
     } while (snake_list[y][x] != EMPTY_CELL || food_at_cell (y, x) >= 0);
 
@@ -266,10 +267,15 @@ get_next_move (DIRECTION previous)
     switch (ch)
     {
         case 'l': if (previous != RIGHT) return LEFT;
+        // fall through
         case 'r': if (previous != LEFT) return RIGHT;
+        // fall through
         case 'u': if (previous != DOWN) return UP;
+        // fall through
         case 'd': if (previous != UP) return DOWN;
+        // fall through
         case 'q': return QUIT;
+        // fall through
         default: return previous;
     }
 }

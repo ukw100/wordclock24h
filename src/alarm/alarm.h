@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * alarm.h - declarations of alarm time routines
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ typedef struct
 extern ALARM_TIME       alarm_time[MAX_ALARM_TIMES];
 extern ALARM_TIME       ambilight_alarm_time[MAX_ALARM_TIMES];
 
-extern uint_fast8_t     alarm_read_data_from_eeprom (uint32_t);
-extern uint_fast8_t     alarm_write_data_to_eeprom (void);
+extern uint_fast8_t     alarm_read_data_from_eep (uint32_t);
+extern uint_fast8_t     alarm_write_data_to_eep (void);
 extern uint_fast8_t     alarm_check_alarm_times (uint_fast8_t, uint_fast16_t);
 extern void             alarm_init (void);
 

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * irmpsystem.h - system specific includes and defines
  *
- * Copyright (c) 2009-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2009-2024 Frank Meyer - frank(at)uclock.de
  *
  * $Id: irmpsystem.h,v 1.15 2015/01/19 10:54:37 fm Exp $
  *

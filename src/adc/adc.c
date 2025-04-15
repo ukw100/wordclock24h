@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * adc.c - adc functions
  *
- * Copyright (c) 2015-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,6 +12,7 @@
 
 #include "adc.h"
 #include "adc-config.h"
+#include "io.h"
 
 ADC_GLOBALS             gadc;
 
@@ -24,35 +25,18 @@ static uint_fast8_t     conversion_started = 0;
 void
 adc_init (void)
 {
-    static uint_fast8_t     already_called;
+    static uint_fast8_t already_called;
 
     if (!already_called)
     {
-        GPIO_InitTypeDef        gpio;
-        ADC_InitTypeDef         adc;
-        GPIO_StructInit (&gpio);
+        ADC_InitTypeDef adc;
         ADC_StructInit (&adc);
 
 #if defined (STM32F10X)
         RCC_ADCCLKConfig(RCC_PCLK2_Div6);
 #endif
-
         ADC_GPIO_CLOCK_CMD (ADC_GPIO_CLOCK, ENABLE);
-
-        gpio.GPIO_Pin   = ADC_PIN;                                                  // configure pin as Analog input
-
-#if defined (STM32F4XX)
-
-        gpio.GPIO_Mode  = GPIO_Mode_AN;
-        gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-
-#elif defined (STM32F10X)
-
-        gpio.GPIO_Mode  = GPIO_Mode_AIN;
-
-#endif
-
-        GPIO_Init (ADC_PORT, &gpio);
+        GPIO_SET_PIN_AIN(ADC_PORT, ADC_PIN);
 
         ADC_ADC_CLOCK_CMD (ADC_ADC_CLOCK, ENABLE);
 

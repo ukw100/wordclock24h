@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * onewire.c - onewire lib
  *
- * Copyright (c) 2015-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ onewire_get_time_of_low_pulse (uint32_t timeout)
 
     do
     {
-        if (GPIO_ReadInputDataBit (ONE_WIRE_PORT, ONE_WIRE_PIN) == Bit_RESET)
+        if (GPIO_GET_BIT(ONE_WIRE_PORT, ONE_WIRE_PIN) == Bit_RESET)
         {
             if (start == 0)
             {
@@ -81,7 +81,7 @@ onewire_reset (void)
     low_time = onewire_get_time_of_low_pulse (300);
 
     delay_usec (50);
-    is_high = (GPIO_ReadInputDataBit (ONE_WIRE_PORT, ONE_WIRE_PIN) == Bit_SET) ? 1 : 0;
+    is_high = (GPIO_GET_BIT(ONE_WIRE_PORT, ONE_WIRE_PIN) == Bit_SET) ? 1 : 0;
     delay_usec (120);
 
     if (low_time > 30 && is_high)
@@ -110,8 +110,8 @@ onewire_read_bit (void)
     DATA_HIGH;
     delay_usec (10);
 
-    rtc = (GPIO_ReadInputDataBit (ONE_WIRE_PORT, ONE_WIRE_PIN) == Bit_SET) ? 1 : 0;
-    delay_usec (50);
+    rtc = (GPIO_GET_BIT(ONE_WIRE_PORT, ONE_WIRE_PIN) == Bit_SET) ? 1 : 0;
+    delay_usec (50);                                                 // 5 + 10 + 50 = 65 usec, typ. time is 60 + 5 usec recovery time
 
     return rtc;
 }
@@ -234,35 +234,18 @@ onewire_get_rom_code (uint8_t * rom_code)
 void
 onewire_init (void)
 {
-    static uint32_t             already_called;
-    GPIO_InitTypeDef            gpio;
+    static uint32_t already_called;
 
     if (already_called)
     {
         return;
     }
 
-    delay_init (RESOLUTION);
-
     already_called = 1;
 
-    GPIO_StructInit (&gpio);
-
+    delay_init (RESOLUTION);
     ONE_WIRE_CLK_CMD (ONE_WIRE_CLK, ENABLE);                        // clock enable
-
-    gpio.GPIO_Pin       = ONE_WIRE_PIN;
-
-#if defined (STM32F4XX)
-    gpio.GPIO_Mode      = GPIO_Mode_OUT;
-    gpio.GPIO_OType     = GPIO_OType_OD;                            // configure as OpenDrain
-    gpio.GPIO_PuPd      = GPIO_PuPd_UP;
-#elif defined (STM32F10X)
-    gpio.GPIO_Mode      = GPIO_Mode_Out_OD;                         // configure as OpenDrain
-#endif
-
-    gpio.GPIO_Speed     = GPIO_Speed_50MHz;
-
-    GPIO_Init (ONE_WIRE_PORT, &gpio);
+    GPIO_SET_PIN_OUT_OD(ONE_WIRE_PORT, ONE_WIRE_PIN, GPIO_Speed_50MHz);
 
     DATA_HIGH;
 }

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * display.c - routines for LED display 16x18 and 10x11
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #include "irmp.h"
 #include "vars.h"
 
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 #include "esp-spiffs.h"
 #include "delay.h"
@@ -106,9 +106,15 @@ const uint16_t pwmtable8[MAX_COLOR_STEPS]  =
   197,   205,   213,   221,   229,   238,   246,   255
 };
 
+#if DSP_USE_TFTLED_RGB
+static DSP_COLORS       dimmed_display_colors           = DSP_RED_COLOR;
+static DSP_COLORS       dimmed_ambilight_colors         = DSP_RED_COLOR;
+static DSP_COLORS       dimmed_ambilight_marker_colors  = DSP_CYAN_COLOR;
+#else
 static DSP_COLORS       dimmed_display_colors           = DSP_DARK_RED_COLOR;
 static DSP_COLORS       dimmed_ambilight_colors         = DSP_DARK_RED_COLOR;
 static DSP_COLORS       dimmed_ambilight_marker_colors  = DSP_CYAN_COLOR;
+#endif
 
 uint_fast8_t daylight_red[24]   = {  0,  0,  0, 15, 31, 47, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 47, 31, 15,  0,  0 };
 uint_fast8_t daylight_green[24] = {  0,  0,  0,  0,  0,  0,  0,  0,  0, 15, 31, 47, 63, 47, 31, 15,  0,  0,  0,  0,  0,  0,  0,  0 };
@@ -905,16 +911,15 @@ display_set_display_led (uint_fast16_t n, LED_RGB * rgb, uint_fast8_t refresh)
 {
     if (n < DSP_DISPLAY_LEDS)
     {
-        uint_fast8_t y;
-        uint_fast8_t x;
-
-        y = n / WC_COLUMNS;
+#if DSP_USE_TFTLED_RGB == 0                                 // leds are snake-wired but not TFT
+        uint_fast8_t y = n / WC_COLUMNS;
 
         if (y & 0x01)                                       // snake: odd row: count from right to left
         {
-            x = n % WC_COLUMNS;
+            uint_fast8_t x = n % WC_COLUMNS;
             n = y * WC_COLUMNS + (WC_COLUMNS - 1 - x);
         }
+#endif
 
         led_set_led (DSP_DISPLAY_LED_OFFSET + n, rgb);
 
@@ -1020,16 +1025,45 @@ display_led_on (uint_fast8_t y, uint_fast8_t x)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static void
-display_word_on (uint_fast8_t idx)
+display_word_on (uint_fast8_t idx, uint_fast8_t pm_mode, uint_fast8_t show_it_is, uint_fast8_t full_or_half_hour)
 {
-    uint_fast8_t y = tables.illumination[idx].row;
-    uint_fast8_t x = tables.illumination[idx].col;
-    uint_fast8_t l = tables.illumination[idx].len;
+    uint_fast8_t    y               = tables.illumination[idx].row;
+    uint_fast8_t    x               = tables.illumination[idx].col;
+    uint_fast8_t    l               = tables.illumination[idx].len & ILLUMINATION_LEN_MASK;
+    uint_fast8_t    is_it_is_word   = tables.illumination[idx].len & ILLUMINATION_FLAG_IT_IS;
+    uint_fast8_t    is_am_word      = tables.illumination[idx].len & ILLUMINATION_FLAG_AM;
+    uint_fast8_t    is_pm_word      = tables.illumination[idx].len & ILLUMINATION_FLAG_PM;
+    uint_fast8_t    do_show         = 1;
 
-    while (l--)
+    if (! full_or_half_hour && is_it_is_word && ! show_it_is)
     {
-        display_led_on (y, x);
-        x++;
+        do_show = 0;
+    }
+    else
+    {
+        if (pm_mode == 0)
+        {
+            if (is_pm_word)
+            {
+                do_show = 0;
+            }
+        }
+        else // if (pm_mode == 1)
+        {
+            if (is_am_word)
+            {
+                do_show = 0;
+            }
+        }
+    }
+
+    if (do_show)
+    {
+        while (l--)
+        {
+            display_led_on (y, x);
+            x++;
+        }
     }
 }
 
@@ -1722,7 +1756,7 @@ display_animation_roll (void)
 
     if (display.animation_start_flag)
     {
-        x = rand () % 4;
+        x = my_rand () % 4;
     }
 
     switch (x)
@@ -2351,11 +2385,11 @@ display_animation_generic_matrix (uint_fast8_t do_use_green_color)
         {
             if (x & 0x01)
             {
-                y[x] = rand () % (WC_ROWS);
+                y[x] = my_rand () % (WC_ROWS);
             }
             else
             {
-                y[x] = (rand () % WC_ROWS) + WC_ROWS / 2;
+                y[x] = (my_rand () % WC_ROWS) + WC_ROWS / 2;
             }
         }
     }
@@ -2742,7 +2776,7 @@ display_animation_flicker (void)
     {
         cnt++;
 
-        if ((rand () & 0x07) > 1)
+        if ((my_rand () & 0x07) > 1)
         {
             flicker_on = 1;
         }
@@ -2812,7 +2846,7 @@ display_animation_random ()
         }
         else
         {
-            x = rand () %  map_size;
+            x = my_rand () %  map_size;
             x = map_idx[x];
         }
 
@@ -2902,22 +2936,29 @@ display_clock (uint_fast8_t hh, uint_fast8_t mm, uint_fast8_t display_clock_flag
 
             if (display.display_power_is_on)
             {
-                uint_fast8_t do_show_it_is = 0;
+                uint_fast8_t    pm_mode;
+
 #if WCLOCK24H == 0
                 mm /= 5;
 #endif
-                if ((display.display_flags & DISPLAY_FLAGS_PERMANENT_IT_IS) || mm == 0 || mm == MINUTE_COUNT / 2)
+
+                if (hh >= 12)
                 {
-                    do_show_it_is = 1;
+                    pm_mode = 1;
+                }
+                else
+                {
+                    pm_mode = 0;
                 }
 
-                if (tables_fill_words (words, hh, mm, do_show_it_is))
+                if (tables_fill_words (words, hh, mm))
                 {
                     for (idx = 0; idx < WP_COUNT; idx++)
                     {
                         if (words[idx])
                         {
-                            display_word_on (idx);
+                            display_word_on (idx, pm_mode, display.display_flags & DISPLAY_FLAGS_PERMANENT_IT_IS,
+                                             mm == MINUTE_COUNT / 2 || mm == 0);
                         }
                     }
 
@@ -3193,11 +3234,11 @@ display_read_icon (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-display_read_config_from_eeprom (uint32_t eeprom_version)
+display_read_config_from_eep (uint32_t eep_version)
 {
     uint_fast8_t                rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
         uint8_t      display_rgb_color_buf8[EEPROM_DATA_SIZE_DSP_COLORS];
         uint8_t      display_w_color8               = 0;
@@ -3209,7 +3250,7 @@ display_read_config_from_eeprom (uint32_t eeprom_version)
         uint8_t      color_animation_values8[COLOR_ANIMATION_MODES];
         uint8_t      ambilight_mode_values8[AMBILIGHT_MODES];
         uint8_t      display_mode8;
-        uint8_t      ambilight_mode8;
+        uint8_t      ambilight_mode8                 = 8;
         uint8_t      ambilight_leds8                 = 60;
         uint8_t      ambilight_led_offset8           = 22;
         uint8_t      animation_mode8                 = AMBILIGHT_MODE_NORMAL;
@@ -3226,36 +3267,36 @@ display_read_config_from_eeprom (uint32_t eeprom_version)
 
         rtc = 1;
 
-        eeprom_read (EEPROM_DATA_OFFSET_DSP_COLORS,         display_rgb_color_buf8,     EEPROM_DATA_SIZE_DSP_COLORS);
-        eeprom_read (EEPROM_DATA_OFFSET_DISPLAY_MODE,       &display_mode8,             EEPROM_DATA_SIZE_DISPLAY_MODE);
-        eeprom_read (EEPROM_DATA_OFFSET_ANIMATION_MODE,     &animation_mode8,           EEPROM_DATA_SIZE_ANIMATION_MODE);
-        eeprom_read (EEPROM_DATA_OFFSET_BRIGHTNESS,         &display_brightness8,       EEPROM_DATA_SIZE_BRIGHTNESS);
-        eeprom_read (EEPROM_DATA_OFFSET_AUTO_BRIGHTNESS,    &automatic_brightness8,     EEPROM_DATA_SIZE_AUTO_BRIGHTNESS);
+        eep_read (EEPROM_DATA_OFFSET_DSP_COLORS,         display_rgb_color_buf8,     EEPROM_DATA_SIZE_DSP_COLORS);
+        eep_read (EEPROM_DATA_OFFSET_DISPLAY_MODE,       &display_mode8,             EEPROM_DATA_SIZE_DISPLAY_MODE);
+        eep_read (EEPROM_DATA_OFFSET_ANIMATION_MODE,     &animation_mode8,           EEPROM_DATA_SIZE_ANIMATION_MODE);
+        eep_read (EEPROM_DATA_OFFSET_BRIGHTNESS,         &display_brightness8,       EEPROM_DATA_SIZE_BRIGHTNESS);
+        eep_read (EEPROM_DATA_OFFSET_AUTO_BRIGHTNESS,    &automatic_brightness8,     EEPROM_DATA_SIZE_AUTO_BRIGHTNESS);
 
-        if (eeprom_version >= EEPROM_VERSION_1_8)
+        if (eep_version >= EEPROM_VERSION_1_8)
         {
-            eeprom_read (EEPROM_DATA_OFFSET_COLOR_ANIMATION_MODE, &color_animation_mode8, EEPROM_DATA_SIZE_COLOR_ANIMATION_MODE);
+            eep_read (EEPROM_DATA_OFFSET_COLOR_ANIMATION_MODE, &color_animation_mode8, EEPROM_DATA_SIZE_COLOR_ANIMATION_MODE);
         }
 
-        if (eeprom_version >= EEPROM_VERSION_1_9)
+        if (eep_version >= EEPROM_VERSION_1_9)
         {
-            eeprom_read (EEPROM_DATA_OFFSET_DISPLAY_FLAGS,          &display_flags8,            EEPROM_DATA_SIZE_DISPLAY_FLAGS);
-            eeprom_read (EEPROM_DATA_OFFSET_AMBI_COLORS,            ambilight_rgb_color_buf8,   EEPROM_DATA_SIZE_AMBI_COLORS);
-            eeprom_read (EEPROM_DATA_OFFSET_AMBI_BRIGHTNESS,        &ambilight_brightness8,     EEPROM_DATA_SIZE_AMBI_BRIGHTNESS);
-            eeprom_read (EEPROM_DATA_OFFSET_AMBI_MODE,              &ambilight_mode8,           EEPROM_DATA_SIZE_AMBI_MODE);
+            eep_read (EEPROM_DATA_OFFSET_DISPLAY_FLAGS,          &display_flags8,            EEPROM_DATA_SIZE_DISPLAY_FLAGS);
+            eep_read (EEPROM_DATA_OFFSET_AMBI_COLORS,            ambilight_rgb_color_buf8,   EEPROM_DATA_SIZE_AMBI_COLORS);
+            eep_read (EEPROM_DATA_OFFSET_AMBI_BRIGHTNESS,        &ambilight_brightness8,     EEPROM_DATA_SIZE_AMBI_BRIGHTNESS);
+            eep_read (EEPROM_DATA_OFFSET_AMBI_MODE,              &ambilight_mode8,           EEPROM_DATA_SIZE_AMBI_MODE);
         }
 
-        if (eeprom_version >= EEPROM_VERSION_2_0)
+        if (eep_version >= EEPROM_VERSION_2_0)
         {
-            eeprom_read (EEPROM_DATA_OFFSET_AMBI_LEDS,              &ambilight_leds8,           EEPROM_DATA_SIZE_AMBI_LEDS);
-            eeprom_read (EEPROM_DATA_OFFSET_AMBI_OFFSET_SEC0,       &ambilight_led_offset8,     EEPROM_DATA_SIZE_AMBI_OFFSET_SEC0);
+            eep_read (EEPROM_DATA_OFFSET_AMBI_LEDS,              &ambilight_leds8,           EEPROM_DATA_SIZE_AMBI_LEDS);
+            eep_read (EEPROM_DATA_OFFSET_AMBI_OFFSET_SEC0,       &ambilight_led_offset8,     EEPROM_DATA_SIZE_AMBI_OFFSET_SEC0);
         }
 
-        if (eeprom_version >= EEPROM_VERSION_2_1)
+        if (eep_version >= EEPROM_VERSION_2_1)
         {
-            eeprom_read (EEPROM_DATA_OFFSET_ANIMATION_VALUES,       animation_values8,          ANIMATION_MODES);
-            eeprom_read (EEPROM_DATA_OFFSET_COLOR_ANIMATION_VALUES, color_animation_values8,    COLOR_ANIMATION_MODES);
-            eeprom_read (EEPROM_DATA_OFFSET_AMBILIGHT_MODE_VALUES,  ambilight_mode_values8,     AMBILIGHT_MODES);
+            eep_read (EEPROM_DATA_OFFSET_ANIMATION_VALUES,       animation_values8,          ANIMATION_MODES);
+            eep_read (EEPROM_DATA_OFFSET_COLOR_ANIMATION_VALUES, color_animation_values8,    COLOR_ANIMATION_MODES);
+            eep_read (EEPROM_DATA_OFFSET_AMBILIGHT_MODE_VALUES,  ambilight_mode_values8,     AMBILIGHT_MODES);
 
             for (idx = 0; idx < ANIMATION_MODES; idx++)
             {
@@ -3289,7 +3330,7 @@ display_read_config_from_eeprom (uint32_t eeprom_version)
                 {                                                                       // deceleration in lower nibble
                     display.ambilight_modes[idx].deceleration = ambilight_mode_values8[idx] & EEPROM_AMBILIGHT_DECELERATION_MASK;
 
-                    if (eeprom_version >= EEPROM_VERSION_2_6)
+                    if (eep_version >= EEPROM_VERSION_2_6)
                     {                                                                   // ambilight mode flags in upper nibble
                         if (idx == AMBILIGHT_MODE_CLOCK && ambilight_mode_values8[idx] & (AMBILIGHT_FLAG_SECONDS_MARKER << 4))
                         {
@@ -3300,17 +3341,17 @@ display_read_config_from_eeprom (uint32_t eeprom_version)
             }
         }
 
-        if (eeprom_version >= EEPROM_VERSION_2_2)
+        if (eep_version >= EEPROM_VERSION_2_2)
         {
-            eeprom_read (EEPROM_DATA_OFFSET_DSP_W_COLOR,  &display_w_color8,   EEPROM_DATA_SIZE_DSP_W_COLOR);
-            eeprom_read (EEPROM_DATA_OFFSET_AMBI_W_COLOR, &ambilight_w_color8, EEPROM_DATA_SIZE_AMBI_W_COLOR);
+            eep_read (EEPROM_DATA_OFFSET_DSP_W_COLOR,  &display_w_color8,   EEPROM_DATA_SIZE_DSP_W_COLOR);
+            eep_read (EEPROM_DATA_OFFSET_AMBI_W_COLOR, &ambilight_w_color8, EEPROM_DATA_SIZE_AMBI_W_COLOR);
         }
 
-        if (eeprom_version > EEPROM_VERSION_2_4)
+        if (eep_version > EEPROM_VERSION_2_4)
         {
             uint8_t dimmed_display_colors8[MAX_BRIGHTNESS + 1];
 
-            eeprom_read (EEPROM_DATA_OFFSET_DIMMED_DISPLAY_COLORS, dimmed_display_colors8, EEPROM_DATA_SIZE_DIMMED_DISPLAY_COLORS);
+            eep_read (EEPROM_DATA_OFFSET_DIMMED_DISPLAY_COLORS, dimmed_display_colors8, EEPROM_DATA_SIZE_DIMMED_DISPLAY_COLORS);
 
             for (idx = 0; idx <= MAX_BRIGHTNESS; idx++)                         // MAX_BRIGHTNESS + 1!
             {
@@ -3325,19 +3366,19 @@ display_read_config_from_eeprom (uint32_t eeprom_version)
             }
         }
 
-        if (eeprom_version >= EEPROM_VERSION_2_6)
+        if (eep_version >= EEPROM_VERSION_2_6)
         {
-            eeprom_read (EEPROM_DATA_OFFSET_TICKER_DECELERATION,  &ticker_deceleration8,   EEPROM_DATA_SIZE_TICKER_DECELERATION);
+            eep_read (EEPROM_DATA_OFFSET_TICKER_DECELERATION,  &ticker_deceleration8,   EEPROM_DATA_SIZE_TICKER_DECELERATION);
         }
 
-        if (eeprom_version >= EEPROM_VERSION_2_9)
+        if (eep_version >= EEPROM_VERSION_2_9)
         {
             uint8_t dimmed_ambilight_colors8[MAX_BRIGHTNESS + 1];
 
-            eeprom_read (EEPROM_DATA_OFFSET_AMBI_MARKER_COLORS, ambilight_marker_rgb_color_buf8, EEPROM_DATA_SIZE_AMBI_MARKER_COLORS);
-            eeprom_read (EEPROM_DATA_OFFSET_AMBI_W_COLOR,       &ambilight_marker_w_color8,      EEPROM_DATA_SIZE_AMBI_MARKER_W_COLOR);
-            eeprom_read (EEPROM_DATA_OFFSET_DATE_TICKER_FORMAT, display.date_ticker_format,      EEPROM_DATA_SIZE_DATE_TICKER_FORMAT);
-            eeprom_read (EEPROM_DATA_OFFSET_DIMMED_AMBILIGHT_COLORS, dimmed_ambilight_colors8,   EEPROM_DATA_SIZE_DIMMED_AMBILIGHT_COLORS);
+            eep_read (EEPROM_DATA_OFFSET_AMBI_MARKER_COLORS, ambilight_marker_rgb_color_buf8, EEPROM_DATA_SIZE_AMBI_MARKER_COLORS);
+            eep_read (EEPROM_DATA_OFFSET_AMBI_W_COLOR,       &ambilight_marker_w_color8,      EEPROM_DATA_SIZE_AMBI_MARKER_W_COLOR);
+            eep_read (EEPROM_DATA_OFFSET_DATE_TICKER_FORMAT, display.date_ticker_format,      EEPROM_DATA_SIZE_DATE_TICKER_FORMAT);
+            eep_read (EEPROM_DATA_OFFSET_DIMMED_AMBILIGHT_COLORS, dimmed_ambilight_colors8,   EEPROM_DATA_SIZE_DIMMED_AMBILIGHT_COLORS);
 
             for (idx = 0; idx <= MAX_BRIGHTNESS; idx++)                              // MAX_BRIGHTNESS + 1!
             {
@@ -3511,13 +3552,13 @@ display_save_display_colors (void)
     display_rgb_color_buf8[1] = display.display_colors.green;
     display_rgb_color_buf8[2] = display.display_colors.blue;
 
-    eeprom_write (EEPROM_DATA_OFFSET_DSP_COLORS, display_rgb_color_buf8, EEPROM_DATA_SIZE_DSP_COLORS);
+    eep_write (EEPROM_DATA_OFFSET_DSP_COLORS, display_rgb_color_buf8, EEPROM_DATA_SIZE_DSP_COLORS);
 
 #if DSP_USE_SK6812_RGBW == 1
     uint8_t display_w_color8;
 
     display_w_color8 = display.display_colors.white;
-    eeprom_write (EEPROM_DATA_OFFSET_DSP_W_COLOR, &display_w_color8, EEPROM_DATA_SIZE_DSP_W_COLOR);
+    eep_write (EEPROM_DATA_OFFSET_DSP_W_COLOR, &display_w_color8, EEPROM_DATA_SIZE_DSP_W_COLOR);
 #endif
 }
 
@@ -3532,7 +3573,7 @@ display_save_display_mode (void)
     uint8_t     display_mode8;
 
     display_mode8 = display.display_mode;
-    eeprom_write (EEPROM_DATA_OFFSET_DISPLAY_MODE, &display_mode8, EEPROM_DATA_SIZE_DISPLAY_MODE);
+    eep_write (EEPROM_DATA_OFFSET_DISPLAY_MODE, &display_mode8, EEPROM_DATA_SIZE_DISPLAY_MODE);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3545,7 +3586,7 @@ display_save_display_flags (void)
     uint8_t     display_flags8;
 
     display_flags8 = display.display_flags;
-    eeprom_write (EEPROM_DATA_OFFSET_DISPLAY_FLAGS, &display_flags8, EEPROM_DATA_SIZE_DISPLAY_FLAGS);
+    eep_write (EEPROM_DATA_OFFSET_DISPLAY_FLAGS, &display_flags8, EEPROM_DATA_SIZE_DISPLAY_FLAGS);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3558,7 +3599,7 @@ display_save_animation_mode (void)
     uint8_t     animation_mode8;
 
     animation_mode8 = display.animation_mode;
-    eeprom_write (EEPROM_DATA_OFFSET_ANIMATION_MODE, &animation_mode8, EEPROM_DATA_SIZE_ANIMATION_MODE);
+    eep_write (EEPROM_DATA_OFFSET_ANIMATION_MODE, &animation_mode8, EEPROM_DATA_SIZE_ANIMATION_MODE);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3571,7 +3612,7 @@ display_save_color_animation_mode (void)
     uint8_t     color_animation_mode8;
 
     color_animation_mode8 = display.color_animation_mode;
-    eeprom_write (EEPROM_DATA_OFFSET_COLOR_ANIMATION_MODE, &color_animation_mode8, EEPROM_DATA_SIZE_COLOR_ANIMATION_MODE);
+    eep_write (EEPROM_DATA_OFFSET_COLOR_ANIMATION_MODE, &color_animation_mode8, EEPROM_DATA_SIZE_COLOR_ANIMATION_MODE);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3584,7 +3625,7 @@ display_save_brightness (void)
     uint8_t     display_brightness8;
 
     display_brightness8 = display.display_brightness;
-    eeprom_write (EEPROM_DATA_OFFSET_BRIGHTNESS, &display_brightness8, EEPROM_DATA_SIZE_BRIGHTNESS);
+    eep_write (EEPROM_DATA_OFFSET_BRIGHTNESS, &display_brightness8, EEPROM_DATA_SIZE_BRIGHTNESS);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3597,7 +3638,7 @@ display_save_automatic_brightness (void)
     uint8_t automatic_brightness8;
 
     automatic_brightness8 = display.automatic_brightness;
-    eeprom_write (EEPROM_DATA_OFFSET_AUTO_BRIGHTNESS, &automatic_brightness8, EEPROM_DATA_SIZE_AUTO_BRIGHTNESS);
+    eep_write (EEPROM_DATA_OFFSET_AUTO_BRIGHTNESS, &automatic_brightness8, EEPROM_DATA_SIZE_AUTO_BRIGHTNESS);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3612,13 +3653,13 @@ display_save_ambilight_colors (void)
     ambilight_rgb_color_buf8[0] = display.ambilight_colors.red;
     ambilight_rgb_color_buf8[1] = display.ambilight_colors.green;
     ambilight_rgb_color_buf8[2] = display.ambilight_colors.blue;
-    eeprom_write (EEPROM_DATA_OFFSET_AMBI_COLORS, ambilight_rgb_color_buf8, EEPROM_DATA_SIZE_AMBI_COLORS);
+    eep_write (EEPROM_DATA_OFFSET_AMBI_COLORS, ambilight_rgb_color_buf8, EEPROM_DATA_SIZE_AMBI_COLORS);
 
 #if DSP_USE_SK6812_RGBW == 1
     uint8_t     ambilight_w_color8;
 
     ambilight_w_color8 = display.ambilight_colors.white;
-    eeprom_write (EEPROM_DATA_OFFSET_AMBI_W_COLOR, &ambilight_w_color8, EEPROM_DATA_SIZE_AMBI_W_COLOR);
+    eep_write (EEPROM_DATA_OFFSET_AMBI_W_COLOR, &ambilight_w_color8, EEPROM_DATA_SIZE_AMBI_W_COLOR);
 #endif
 }
 
@@ -3634,13 +3675,13 @@ display_save_ambilight_marker_colors (void)
     ambilight_marker_rgb_color_buf8[0] = display.ambilight_marker_colors.red;
     ambilight_marker_rgb_color_buf8[1] = display.ambilight_marker_colors.green;
     ambilight_marker_rgb_color_buf8[2] = display.ambilight_marker_colors.blue;
-    eeprom_write (EEPROM_DATA_OFFSET_AMBI_MARKER_COLORS, ambilight_marker_rgb_color_buf8, EEPROM_DATA_SIZE_AMBI_MARKER_COLORS);
+    eep_write (EEPROM_DATA_OFFSET_AMBI_MARKER_COLORS, ambilight_marker_rgb_color_buf8, EEPROM_DATA_SIZE_AMBI_MARKER_COLORS);
 
 #if DSP_USE_SK6812_RGBW == 1
     uint8_t     ambilight_marker_w_color8;
 
     ambilight_marker_w_color8 = display.ambilight_marker_colors.white;
-    eeprom_write (EEPROM_DATA_OFFSET_AMBI_MARKER_W_COLOR, &ambilight_marker_w_color8, EEPROM_DATA_SIZE_AMBI_MARKER_W_COLOR);
+    eep_write (EEPROM_DATA_OFFSET_AMBI_MARKER_W_COLOR, &ambilight_marker_w_color8, EEPROM_DATA_SIZE_AMBI_MARKER_W_COLOR);
 #endif
 }
 
@@ -3654,7 +3695,7 @@ display_save_ambilight_brightness (void)
     uint8_t     ambilight_brightness8;
 
     ambilight_brightness8 = display.ambilight_brightness;
-    eeprom_write (EEPROM_DATA_OFFSET_AMBI_BRIGHTNESS, &ambilight_brightness8, EEPROM_DATA_SIZE_AMBI_BRIGHTNESS);
+    eep_write (EEPROM_DATA_OFFSET_AMBI_BRIGHTNESS, &ambilight_brightness8, EEPROM_DATA_SIZE_AMBI_BRIGHTNESS);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3667,7 +3708,7 @@ display_save_ambilight_mode (void)
     uint8_t     ambilight_mode8;
 
     ambilight_mode8 = display.ambilight_mode;
-    eeprom_write (EEPROM_DATA_OFFSET_AMBI_MODE, &ambilight_mode8, EEPROM_DATA_SIZE_AMBI_MODE);
+    eep_write (EEPROM_DATA_OFFSET_AMBI_MODE, &ambilight_mode8, EEPROM_DATA_SIZE_AMBI_MODE);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3680,7 +3721,7 @@ display_save_number_of_ambilight_leds (void)
     uint8_t ambilight_leds8;
 
     ambilight_leds8 = display.ambilight_leds;
-    eeprom_write (EEPROM_DATA_OFFSET_AMBI_LEDS, &ambilight_leds8, EEPROM_DATA_SIZE_AMBI_LEDS);
+    eep_write (EEPROM_DATA_OFFSET_AMBI_LEDS, &ambilight_leds8, EEPROM_DATA_SIZE_AMBI_LEDS);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3693,7 +3734,7 @@ display_save_ambilight_led_offset (void)
     uint8_t     ambilight_led_offset8;
 
     ambilight_led_offset8 = display.ambilight_led_offset;
-    eeprom_write (EEPROM_DATA_OFFSET_AMBI_OFFSET_SEC0, &ambilight_led_offset8, EEPROM_DATA_SIZE_AMBI_OFFSET_SEC0);
+    eep_write (EEPROM_DATA_OFFSET_AMBI_OFFSET_SEC0, &ambilight_led_offset8, EEPROM_DATA_SIZE_AMBI_OFFSET_SEC0);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3719,7 +3760,7 @@ display_save_animation (uint_fast8_t idx)
         animation_value8 = 0xFF;                                                                        // set as unused
     }
 
-    eeprom_write (EEPROM_DATA_OFFSET_ANIMATION_VALUES + idx, &animation_value8, sizeof (uint8_t));
+    eep_write (EEPROM_DATA_OFFSET_ANIMATION_VALUES + idx, &animation_value8, sizeof (uint8_t));
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3755,7 +3796,7 @@ display_save_color_animation (uint_fast8_t idx)
         color_animation_value8 = 0xFF;                                                          // set as unused
     }
 
-    eeprom_write (EEPROM_DATA_OFFSET_COLOR_ANIMATION_VALUES + idx, &color_animation_value8, sizeof (uint8_t));
+    eep_write (EEPROM_DATA_OFFSET_COLOR_ANIMATION_VALUES + idx, &color_animation_value8, sizeof (uint8_t));
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3796,7 +3837,7 @@ display_save_ambilight_mode_deceleration (uint_fast8_t idx)
         ambilight_mode_value8 = 0xFF;                                                      // set as unused
     }
 
-    eeprom_write (EEPROM_DATA_OFFSET_AMBILIGHT_MODE_VALUES + idx, &ambilight_mode_value8, sizeof (uint8_t));
+    eep_write (EEPROM_DATA_OFFSET_AMBILIGHT_MODE_VALUES + idx, &ambilight_mode_value8, sizeof (uint8_t));
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3829,7 +3870,7 @@ display_save_dimmed_display_colors (void)
         dimmed_display_colors8[idx] = display.dimmed_display_colors[idx];
     }
 
-    eeprom_write (EEPROM_DATA_OFFSET_DIMMED_DISPLAY_COLORS, dimmed_display_colors8, EEPROM_DATA_SIZE_DIMMED_DISPLAY_COLORS);
+    eep_write (EEPROM_DATA_OFFSET_DIMMED_DISPLAY_COLORS, dimmed_display_colors8, EEPROM_DATA_SIZE_DIMMED_DISPLAY_COLORS);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3847,7 +3888,7 @@ display_save_dimmed_ambilight_colors (void)
         dimmed_ambilight_colors8[idx] = display.dimmed_ambilight_colors[idx];
     }
 
-    eeprom_write (EEPROM_DATA_OFFSET_DIMMED_AMBILIGHT_COLORS, dimmed_ambilight_colors8, EEPROM_DATA_SIZE_DIMMED_AMBILIGHT_COLORS);
+    eep_write (EEPROM_DATA_OFFSET_DIMMED_AMBILIGHT_COLORS, dimmed_ambilight_colors8, EEPROM_DATA_SIZE_DIMMED_AMBILIGHT_COLORS);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3895,13 +3936,13 @@ display_save_ticker_deceleration (void)
 {
     uint8_t     ticker_deceleration8 = display.ticker_deceleration;
 
-    eeprom_write (EEPROM_DATA_OFFSET_TICKER_DECELERATION, &ticker_deceleration8, EEPROM_DATA_SIZE_TICKER_DECELERATION);
+    eep_write (EEPROM_DATA_OFFSET_TICKER_DECELERATION, &ticker_deceleration8, EEPROM_DATA_SIZE_TICKER_DECELERATION);
 }
 
 static void
 display_save_date_ticker_format (void)
 {
-    eeprom_write (EEPROM_DATA_OFFSET_DATE_TICKER_FORMAT, display.date_ticker_format, EEPROM_DATA_SIZE_DATE_TICKER_FORMAT);
+    eep_write (EEPROM_DATA_OFFSET_DATE_TICKER_FORMAT, display.date_ticker_format, EEPROM_DATA_SIZE_DATE_TICKER_FORMAT);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -3909,11 +3950,11 @@ display_save_date_ticker_format (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-display_write_config_to_eeprom (void)
+display_write_config_to_eep (void)
 {
     uint_fast8_t            rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
         display_save_display_colors ();
         display_save_display_mode ();
@@ -6060,12 +6101,9 @@ display_temperature (uint_fast8_t temperature_index)
 
                 display_reset_led_states ();
 
-                display_word_on (tables.it_is[0]);
-                display_word_on (tables.it_is[1]);
-
                 for (idx = 0; idx < tables.max_minute_words && tbl_minute->word_idx[idx] != 0; idx++)
                 {
-                    display_word_on (tbl_minute->word_idx[idx]);
+                    display_word_on (tbl_minute->word_idx[idx], 0, display.display_flags & DISPLAY_FLAGS_PERMANENT_IT_IS, 0);
                 }
 
                 display.animation_start_flag = 1;
@@ -6074,10 +6112,51 @@ display_temperature (uint_fast8_t temperature_index)
     }
 }
 
+/*-------------------------------------------------------------------------------------------------------------------------------------------
+ * display temperature on WC24h with big digits
+ *
+ *   index ==   0  ->   0°C
+ *   index == 250  -> 125°C
+ *-------------------------------------------------------------------------------------------------------------------------------------------
+ */
+void
+display_temperature_digits (uint_fast8_t temperature_index)
+{
+    if (display.display_power_is_on)
+    {
+        char buf[16];
+        uint_fast8_t    temp;
+        uint_fast8_t    start_line;
+        uint_fast8_t    start_col;
+        int             len;
+        int             i;
+
+        temp = (temperature_index + 1) / 2;                                     // + 1: round
+
+        sprintf (buf, "%02u", temp);
+
+        display_animation_flush (FALSE);
+        display_reset_led_states ();
+
+        start_line = (WC_ROWS - TICKER_LINES) / 2;
+        start_col  = 1;
+
+        len = strlen (buf);
+
+        for (i = 0; i < len; i++)
+        {
+            display_show_ticker_char (start_line, start_col, buf[i], 0, TRUE);
+            start_col += TICKER_COLS + 1;                                       // +1 = gap between letters
+        }
+
+        display.animation_start_flag = 1;
+    }
+}
+
 #else
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
- * display temperature on WC12h with 2 big digits
+ * display temperature on WC12h
  *
  *   index ==   0  ->   0°C
  *   index == 250  -> 125°C
@@ -6088,7 +6167,7 @@ display_temperature (uint_fast8_t temperature_index)
 {
     if (display.display_power_is_on)
     {
-        char buf[4];
+        char buf[16];
         uint_fast8_t     temp;
         uint_fast8_t     temp_fraction;
         uint_fast8_t     start_line;
@@ -6097,7 +6176,7 @@ display_temperature (uint_fast8_t temperature_index)
         temp = temperature_index / 2;
         temp_fraction = temperature_index % 2;
 
-        sprintf (buf, "%u", temp);
+        sprintf (buf, "%02u", temp);
 
         display_animation_flush (FALSE);
         display_reset_led_states ();
@@ -6111,6 +6190,19 @@ display_temperature (uint_fast8_t temperature_index)
         display_minute_leds (2 * temp_fraction);
         display.animation_start_flag = 1;
     }
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------
+ * display temperature on WC12h with 2 big digits
+ *
+ *   index ==   0  ->   0°C
+ *   index == 250  -> 125°C
+ *-------------------------------------------------------------------------------------------------------------------------------------------
+ */
+void
+display_temperature_digits (uint_fast8_t temperature_index)
+{
+    display_temperature (temperature_index);
 }
 
 #endif // WCLOCK24H == 1
@@ -6145,8 +6237,13 @@ display_init (void)
     display.ambilight_led_offset            = 22;                                       // ambilight: LED offset
     display.ambilight_leds                  = 60;                                       // ambilight: number of LEDs
 
+#if DSP_USE_TFTLED_RGB
+    display.display_colors.red              = MAX_COLOR_STEPS - 1;                      // display color, default is red
+    display.ambilight_colors.red            = MAX_COLOR_STEPS - 1;                      // ambilight color, default is red
+#else
     display.display_colors.red              = MAX_COLOR_STEPS / 2;                      // display color, default is red
     display.ambilight_colors.red            = MAX_COLOR_STEPS / 2;                      // ambilight color, default is red
+#endif
 
     display.ambilight_marker_colors.green   = MAX_COLOR_STEPS / 2;                      // ambilight marker color, default is cyan (green + blue)
     display.ambilight_marker_colors.blue    = MAX_COLOR_STEPS / 2;

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * uart-driver.h - UART driver routines for STM32F4XX or STM32F10X
  *
- * Copyright (c) 2015-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
  *
  * example of usage:
  *
@@ -58,14 +58,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if (defined STM32F4XX)
+#if defined (STM32F4XX)
 #include "stm32f4xx.h"
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_usart.h"
 #include "stm32f4xx_rcc.h"
 #include "misc.h"
 
-#elif (defined STM32F10X)
+#elif defined (STM32F10X)
 #include "stm32f10x.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_usart.h"
@@ -136,13 +136,8 @@ static volatile uint_fast16_t       uart_rxsize = 0;                            
 #  error wrong UART_ALTERNATE value
 #endif
 
-#if 0 // fm: STM32F407?
-#define UART_GPIO_CLOCK_CMD         RCC_AHB2PeriphClockCmd
-#define UART_GPIO                   RCC_AHB2Periph_GPIO
-#else
 #define UART_GPIO_CLOCK_CMD         RCC_AHB1PeriphClockCmd
 #define UART_GPIO                   RCC_AHB1Periph_GPIO
-#endif
 
 #define UART_NAME                   USART1
 #define UART_USART_CLOCK_CMD        RCC_APB2PeriphClockCmd
@@ -288,13 +283,8 @@ static volatile uint_fast16_t       uart_rxsize = 0;                            
 #  error wrong UART_ALTERNATE value
 #endif
 
-#if 0 // fm: STM32F407?
-#define UART_GPIO_CLOCK_CMD         RCC_AHB2PeriphClockCmd
-#define UART_GPIO                   RCC_AHB2Periph_GPIO
-#else
 #define UART_GPIO_CLOCK_CMD         RCC_AHB1PeriphClockCmd
 #define UART_GPIO                   RCC_AHB1Periph_GPIO
-#endif
 
 #define UART_NAME                   USART6
 #define UART_USART_CLOCK_CMD        RCC_APB2PeriphClockCmd
@@ -480,7 +470,7 @@ UART_PREFIX_INIT (uint32_t baudrate)
         gpio.GPIO_Mode  = GPIO_Mode_AF;
         gpio.GPIO_Speed = GPIO_Speed_100MHz;
         gpio.GPIO_OType = GPIO_OType_PP;
-        gpio.GPIO_PuPd  = GPIO_PuPd_UP;                                                             // fm: perhaps better: GPIO_PuPd_NOPULL
+        gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;                                                             // fm: GPIO_PuPd_NOPULL or GPIO_PuPd_UP?
 
         gpio.GPIO_Pin = UART_TX_PIN;
         GPIO_Init(UART_TX_PORT, &gpio);

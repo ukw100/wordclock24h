@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * irmp.c - infrared multi-protocol decoder, supports several remote control protocols
  *
- * Copyright (c) 2009-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2009-2024 Frank Meyer - frank(at)uclock.de
  *
  * $Id: irmp.c,v 1.169 2015/01/26 12:49:52 fm Exp $
  *

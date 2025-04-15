@@ -1,16 +1,16 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
- * i2c.c - I2C routines using I2C3 on STM32F4x1 Nucleo Board, I2C1 on STM32F103
+ * i2c.c - I2C routines
  *
  * Ports/Pins:
  *
- *  +------+------------------+---------------+
- *  |      | STM32F4x1 Nucleo | STM32F103C8T6 |
- *  +------+------------------+---------------+
- *  | SCL  |       PA8        |      PB6      |
- *  | SDA  |       PC9        |      PB7      |
- *  +------+------------------+---------------+
+ *  +------+------------------+---------------+---------------+
+ *  |      | STM32F4x1 Nucleo | STM32F407VE   | STM32F103C8T6 |
+ *  +------+------------------+---------------+---------------+
+ *  | SCL  | I2C3  PA8        | I2C1  PB8     | I2C1  PB6     |
+ *  | SDA  | I2C3  PC9        | I2C1  PB9     | I2C1  PB7     |
+ *  +------+------------------+---------------+---------------+
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,73 @@
 #include "io.h"
 #include "log.h"
 
-#define   I2C_TIMEOUT   5                                // timeout: 5 msec
+#define I2C_TIMEOUT         5                                       // timeout: 5 msec
 
-static uint32_t         i2c_clockspeed;
+#if defined (BLACK_BOARD)
+
+#define PERIPH_SCL_PORT     RCC_AHB1Periph_GPIOB
+#define SCL_PORT            GPIOB                                   // SCL PB8
+#define SCL_PIN             GPIO_Pin_8
+#define SCL_PIN_SOURCE      GPIO_PinSource8
+
+#define PERIPH_SDA_PORT     RCC_AHB1Periph_GPIOB
+#define SDA_PORT            GPIOB                                   // SDA PB9
+#define SDA_PIN             GPIO_Pin_9
+#define SDA_PIN_SOURCE      GPIO_PinSource9
+
+#define I2C_CHANNEL         I2C1
+#define RCC_PERIPH_I2C      RCC_APB1Periph_I2C1
+#define GPIO_AF_I2C         GPIO_AF_I2C1
+
+#elif defined (NUCLEO_BOARD)
+
+#define PERIPH_SCL_PORT     RCC_AHB1Periph_GPIOA
+#define SCL_PORT            GPIOA                                   // SCL PA8
+#define SCL_PIN             GPIO_Pin_8
+#define SCL_PIN_SOURCE      GPIO_PinSource8
+
+#define PERIPH_SDA_PORT     RCC_AHB1Periph_GPIOC
+#define SDA_PORT            GPIOC                                   // SDA PC9
+#define SDA_PIN             GPIO_Pin_9
+#define SDA_PIN_SOURCE      GPIO_PinSource9
+
+#define I2C_CHANNEL         I2C3
+#define RCC_PERIPH_I2C      RCC_APB1Periph_I2C3
+#define GPIO_AF_I2C         GPIO_AF_I2C3
+
+#elif defined (BLACKPILL_BOARD)
+
+#define PERIPH_SCL_PORT     RCC_AHB1Periph_GPIOB
+#define SCL_PORT            GPIOB                                   // SCL PB6
+#define SCL_PIN             GPIO_Pin_6
+#define SCL_PIN_SOURCE      GPIO_PinSource6
+
+#define PERIPH_SDA_PORT     RCC_AHB1Periph_GPIOB
+#define SDA_PORT            GPIOB                                   // SDA PB7
+#define SDA_PIN             GPIO_Pin_7
+#define SDA_PIN_SOURCE      GPIO_PinSource7
+
+#define I2C_CHANNEL         I2C1
+#define RCC_PERIPH_I2C      RCC_APB1Periph_I2C1
+#define GPIO_AF_I2C         GPIO_AF_I2C1
+
+#elif defined (BLUEPILL_BOARD)
+
+#define PERIPH_SCL_SDA_PORT RCC_APB2Periph_GPIOB
+#define SCL_PORT            GPIOB                                   // SCL PB6
+#define SCL_PIN             GPIO_Pin_6
+
+#define SDA_PORT            GPIOB                                   // SDA PB7
+#define SDA_PIN             GPIO_Pin_7
+
+#define I2C_CHANNEL         I2C1
+#define RCC_PERIPH_I2C      RCC_APB1Periph_I2C1
+
+#else
+#error STM32 undefined
+#endif
+
+static uint32_t             i2c_clockspeed;
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * init i2c bus
@@ -181,31 +245,6 @@ i2c_send_address (uint_fast8_t slave_addr, uint_fast16_t addr, uint_fast8_t is_1
     return I2C_OK;
 }
 
-#if defined (STM32F4XX)
-
-#define PERIPH_SCL_PORT     RCC_AHB1Periph_GPIOA
-#define SCL_PORT            GPIOA                                   // SCL PA8
-#define SCL_PIN             GPIO_Pin_8
-#define SCL_PIN_SOURCE      GPIO_PinSource8
-
-#define PERIPH_SDA_PORT     RCC_AHB1Periph_GPIOC
-#define SDA_PORT            GPIOC                                   // SDA PC9
-#define SDA_PIN             GPIO_Pin_9
-#define SDA_PIN_SOURCE      GPIO_PinSource9
-
-#elif defined (STM32F10X)
-
-#define PERIPH_SCL_SDA_PORT RCC_APB2Periph_GPIOB
-#define SCL_PORT            GPIOB                                   // SCL PB6
-#define SCL_PIN             GPIO_Pin_6
-
-#define SDA_PORT            GPIOB                                   // SDA PB7
-#define SDA_PIN             GPIO_Pin_7
-
-#else
-#error STM32 undefined
-#endif
-
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * reset I2C bus
  *-------------------------------------------------------------------------------------------------------------------------------------------
@@ -213,50 +252,19 @@ i2c_send_address (uint_fast8_t slave_addr, uint_fast16_t addr, uint_fast8_t is_1
 static void
 i2c_reset_bus (void)
 {
-    GPIO_InitTypeDef    gpio;
     uint_fast8_t        idx;
 
 #if defined (STM32F4XX)
-    RCC_AHB1PeriphClockCmd(PERIPH_SCL_PORT, ENABLE);           // for SCL
-    RCC_AHB1PeriphClockCmd(PERIPH_SDA_PORT, ENABLE);           // for SDA
-
-    GPIO_StructInit (&gpio);
-
-    gpio.GPIO_Mode  = GPIO_Mode_OUT;
-    gpio.GPIO_OType = GPIO_OType_OD;
-    gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-    gpio.GPIO_Pin   = SCL_PIN;                                      // SCL pin PA8
-    GPIO_Init(SCL_PORT, &gpio);
-
-    GPIO_StructInit (&gpio);
-
-    gpio.GPIO_Mode  = GPIO_Mode_IN;
-    gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-    gpio.GPIO_Pin   = SDA_PIN;                                      // SDA pin PC9
-
-    GPIO_Init(SDA_PORT, &gpio);
-
+    RCC_AHB1PeriphClockCmd(PERIPH_SCL_PORT, ENABLE);                // for SCL
+    RCC_AHB1PeriphClockCmd(PERIPH_SDA_PORT, ENABLE);                // for SDA
 #elif defined (STM32F10X)
-
     RCC_APB2PeriphClockCmd(PERIPH_SCL_SDA_PORT, ENABLE);            // for SCL & SDA
-
-    GPIO_StructInit (&gpio);
-    gpio.GPIO_Pin   = SCL_PIN;                                      // SCL pin PB6
-    gpio.GPIO_Mode  = GPIO_Mode_Out_OD;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-    GPIO_Init(SCL_PORT, &gpio);
-
-    GPIO_StructInit (&gpio);
-    gpio.GPIO_Pin   = SDA_PIN;                                      // SDA pin PB7
-    gpio.GPIO_Mode  = GPIO_Mode_IN_FLOATING;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-    GPIO_Init(SDA_PORT, &gpio);
-
 #else
 #error STM32 undefined
 #endif
+
+    GPIO_SET_PIN_OUT_OD(SCL_PORT, SCL_PIN, GPIO_Speed_2MHz);
+    GPIO_SET_PIN_IN_NOPULL(SDA_PORT, SDA_PIN, GPIO_Speed_2MHz);
 
     if (GPIO_ReadInputDataBit(SDA_PORT, SDA_PIN) == Bit_RESET)      // SDA low?
     {                                                               // yes...
@@ -311,16 +319,15 @@ i2c_init (uint32_t clockspeed)
     GPIO_StructInit (&gpio);
 
 #if defined (STM32F4XX)
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C3, ENABLE);
     RCC_AHB1PeriphClockCmd(PERIPH_SCL_PORT, ENABLE);                // for SCL
     RCC_AHB1PeriphClockCmd(PERIPH_SDA_PORT, ENABLE);                // for SDA
 
     // I2C reset
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C3, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C3, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_PERIPH_I2C, ENABLE);
+    RCC_APB1PeriphResetCmd(RCC_PERIPH_I2C, DISABLE);
 
-    GPIO_PinAFConfig(SCL_PORT, SCL_PIN_SOURCE, GPIO_AF_I2C3);       // SCL: PA8
-    GPIO_PinAFConfig(SDA_PORT, SDA_PIN_SOURCE, GPIO_AF_I2C3);       // SDA: PC9
+    GPIO_PinAFConfig(SCL_PORT, SCL_PIN_SOURCE, GPIO_AF_I2C);        // SCL: PA8 / PB8
+    GPIO_PinAFConfig(SDA_PORT, SDA_PIN_SOURCE, GPIO_AF_I2C);        // SDA: PC9 / PB9
 
     gpio.GPIO_Mode  = GPIO_Mode_AF;
     gpio.GPIO_Speed = GPIO_Speed_50MHz;
@@ -333,20 +340,21 @@ i2c_init (uint32_t clockspeed)
     gpio.GPIO_Pin = SDA_PIN;                                        // SDA pin
     GPIO_Init(SDA_PORT, &gpio);
 
-#elif defined (STM32F10X)
+    RCC_APB1PeriphClockCmd(RCC_PERIPH_I2C, ENABLE);                 // new: enable I2C Peripheral Clock *after* initializing GPIO
 
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
+#elif defined (STM32F10X)
     RCC_APB2PeriphClockCmd(PERIPH_SCL_SDA_PORT, ENABLE);            // for SCL & SDA
 
     // I2C reset
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_PERIPH_I2C, ENABLE);
+    RCC_APB1PeriphResetCmd(RCC_PERIPH_I2C, DISABLE);
 
     gpio.GPIO_Pin   = SCL_PIN | SDA_PIN;                            // SCL=PB6, SDA=PB7
     gpio.GPIO_Mode  = GPIO_Mode_AF_OD;
     gpio.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(SCL_PORT, &gpio);
 
+    RCC_APB1PeriphClockCmd(RCC_PERIPH_I2C, ENABLE);                 // new: enable I2C Peripheral Clock *after* initializing GPIO
 #else
 #error STM32 undefined
 #endif

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * weather.h - some global definitions/declarations for functions using openweathermap.org
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,8 +38,8 @@ typedef struct
 
 extern WEATHER_GLOBALS  weather;
 
-extern uint_fast8_t     weather_read_config_from_eeprom (void);
-extern uint_fast8_t     weather_write_config_to_eeprom (void);
+extern uint_fast8_t     weather_read_config_from_eep (void);
+extern uint_fast8_t     weather_write_config_to_eep (void);
 extern void             weather_set_appid (char *);
 extern void             weather_set_city (char *);
 extern void             weather_set_lon (char *);

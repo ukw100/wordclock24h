@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * button.c - read user button of STM32F4 Discovery / STM32F4xx Nucleo / STM32F103
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10,23 +10,37 @@
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 #include "button.h"
+#include "io.h"
 
-#if defined (STM32F407VG)                                               // STM32F4 Discovery Board PA0
+#if defined (DISCO_BOARD)                                               // STM32F4 Discovery Board PA0
 #define BUTTON_PERIPH_CLOCK_CMD     RCC_AHB1PeriphClockCmd
 #define BUTTON_PERIPH               RCC_AHB1Periph_GPIOA
 #define BUTTON_PORT                 GPIOA
 #define BUTTON_PIN                  GPIO_Pin_0
 #define BUTTON_PRESSED              Bit_SET                             // pressed if high
 
-#elif defined (STM32F4XX)                                               // STM32F4xx Nucleo Board PC13
+#elif defined (BLACK_BOARD)                                             // STM32F407VE Black Board PE4
+#define BUTTON_PERIPH_CLOCK_CMD     RCC_AHB1PeriphClockCmd
+#define BUTTON_PERIPH               RCC_AHB1Periph_GPIOE
+#define BUTTON_PORT                 GPIOE
+#define BUTTON_PIN                  GPIO_Pin_4
+#define BUTTON_PRESSED              Bit_RESET                           // pressed if low
+
+#elif defined (NUCLEO_BOARD)                                            // STM32F4xx Nucleo Board PC13
 #define BUTTON_PERIPH_CLOCK_CMD     RCC_AHB1PeriphClockCmd
 #define BUTTON_PERIPH               RCC_AHB1Periph_GPIOC
 #define BUTTON_PORT                 GPIOC
 #define BUTTON_PIN                  GPIO_Pin_13
 #define BUTTON_PRESSED              Bit_RESET                           // pressed if low
 
-#elif defined (STM32F103)                                               // STM32F103 Mini Development Board PA6
+#elif defined (BLACKPILL_BOARD)                                         // STM32F4xx Nucleo Board PC13
+#define BUTTON_PERIPH_CLOCK_CMD     RCC_AHB1PeriphClockCmd
+#define BUTTON_PERIPH               RCC_AHB1Periph_GPIOA
+#define BUTTON_PORT                 GPIOA
+#define BUTTON_PIN                  GPIO_Pin_0
+#define BUTTON_PRESSED              Bit_RESET                           // pressed if low
 
+#elif defined (BLUEPILL_BOARD)                                          // STM32F103 BluePill PA6
 #define BUTTON_PERIPH_CLOCK_CMD     RCC_APB2PeriphClockCmd
 #define BUTTON_PERIPH               RCC_APB2Periph_GPIOA
 #define BUTTON_PORT                 GPIOA
@@ -44,21 +58,22 @@
 void
 button_init (void)
 {
-    GPIO_InitTypeDef gpio;
-
-    GPIO_StructInit (&gpio);
     BUTTON_PERIPH_CLOCK_CMD (BUTTON_PERIPH, ENABLE);
 
-    gpio.GPIO_Pin = BUTTON_PIN;
+#if defined (DISCO_BOARD)                                   // STM32F407 Disco Board with external pulldown
+    GPIO_SET_PIN_IN_NOPULL(BUTTON_PORT, BUTTON_PIN, GPIO_Speed_2MHz);
+#elif defined (BLACK_BOARD)                                 // STM32F407 Black Board with internal pullup
+    GPIO_SET_PIN_IN_UP(BUTTON_PORT, BUTTON_PIN, GPIO_Speed_2MHz);
+#elif defined (NUCLEO_BOARD)                                // STM32F4x1 Nucleo with external pullup
+    GPIO_SET_PIN_IN_NOPULL(BUTTON_PORT, BUTTON_PIN, GPIO_Speed_2MHz);
+#elif defined (BLACKPILL_BOARD)                             // STM32F4x1 BlackPill Board with internal pullup
+    GPIO_SET_PIN_IN_UP(BUTTON_PORT, BUTTON_PIN, GPIO_Speed_2MHz);
+#elif defined (BLUEPILL_BOARD)                              // STM32F103 BluePill with internal pullup
+    GPIO_SET_PIN_IN_UP(BUTTON_PORT, BUTTON_PIN, GPIO_Speed_2MHz);
 
-#if defined (STM32F10X)
-    gpio.GPIO_Mode = GPIO_Mode_IPU;                         // use pin as input with internal pullup
-#elif defined (STM32F4XX)
-    gpio.GPIO_Mode = GPIO_Mode_IN;                          // use pin as input, button has already an external pullup
-    gpio.GPIO_PuPd = GPIO_PuPd_NOPULL;
+#else
+#error STM32 unknown
 #endif
-
-    GPIO_Init(BUTTON_PORT, &gpio);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -68,7 +83,7 @@ button_init (void)
 uint_fast8_t
 button_pressed (void)
 {
-    if (GPIO_ReadInputDataBit(BUTTON_PORT, BUTTON_PIN) == BUTTON_PRESSED)
+    if (GPIO_GET_BIT(BUTTON_PORT, BUTTON_PIN) == BUTTON_PRESSED)
     {
         return 1;
     }

@@ -1738,11 +1738,11 @@
 	"stm32f4xx_gpio.h"
 	"stm32f4xx_rcc.h"
 
-1515496590 source:f:\emblocksprojects\wclock24h\src\adc\adc.c
+1670849538 source:f:\emblocksprojects\wclock24h\src\adc\adc.c
 	"adc.h"
 	"adc-config.h"
 
-1515496596 f:\emblocksprojects\wclock24h\src\adc\adc.h
+1670849355 f:\emblocksprojects\wclock24h\src\adc\adc.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -1752,28 +1752,28 @@
 	"stm32f4xx_rcc.h"
 	"stm32f4xx_adc.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\inc\stm32f10x.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\inc\stm32f10x.h
 	"core_cm3.h"
 	"system_stm32f10x.h"
 	<stdint.h>
 	"stm32f10x_conf.h"
 
-1426154075 f:\emblocksprojects\wclock24h\wclock24h-f103\cmsis\core_cm3.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\cmsis\core_cm3.h
 	<stdint.h>
 	<core_cmInstr.h>
 	<core_cmFunc.h>
 
-1426154075 f:\emblocksprojects\wclock24h\wclock24h-f103\cmsis\core_cminstr.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\cmsis\core_cminstr.h
 	<cmsis_iar.h>
 	<cmsis_ccs.h>
 
-1426154075 f:\emblocksprojects\wclock24h\wclock24h-f103\cmsis\core_cmfunc.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\cmsis\core_cmfunc.h
 	<cmsis_iar.h>
 	<cmsis_ccs.h>
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\inc\system_stm32f10x.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\inc\system_stm32f10x.h
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\inc\stm32f10x_conf.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\inc\stm32f10x_conf.h
 	"stm32f10x_adc.h"
 	"stm32f10x_bkp.h"
 	"stm32f10x_can.h"
@@ -1798,83 +1798,83 @@
 	"stm32f10x_wwdg.h"
 	"misc.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_adc.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_adc.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_bkp.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_bkp.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_can.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_can.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_cec.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_cec.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_crc.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_crc.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_dac.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_dac.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_dbgmcu.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_dbgmcu.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_dma.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_dma.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_exti.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_exti.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_flash.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_flash.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_fsmc.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_fsmc.h
 	"stm32f10x.h"
 
-1426160842 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_gpio.h
+1426157244 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_gpio.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_i2c.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_i2c.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_iwdg.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_iwdg.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_pwr.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_pwr.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_rcc.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_rcc.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_rtc.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_rtc.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_sdio.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_sdio.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_spi.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_spi.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_tim.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_tim.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_usart.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_usart.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_wwdg.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\stm32f10x_wwdg.h
 	"stm32f10x.h"
 
-1426154074 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\misc.h
+1426150476 f:\emblocksprojects\wclock24h\wclock24h-f103\spl\inc\misc.h
 	"stm32f10x.h"
 
-1515497530 f:\emblocksprojects\wclock24h\src\adc\adc-config.h
+1670849357 f:\emblocksprojects\wclock24h\src\adc\adc-config.h
 
-1515496642 source:f:\emblocksprojects\wclock24h\src\apa102\apa102.c
+1670849535 source:f:\emblocksprojects\wclock24h\src\apa102\apa102.c
 	"apa102.h"
 	"apa102-config.h"
 	"io.h"
 
-1515496654 f:\emblocksprojects\wclock24h\src\apa102\apa102.h
+1670849349 f:\emblocksprojects\wclock24h\src\apa102\apa102.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -1888,31 +1888,31 @@
 	"misc.h"
 	"apa102-config.h"
 
-1515497548 f:\emblocksprojects\wclock24h\src\apa102\apa102-config.h
+1670849351 f:\emblocksprojects\wclock24h\src\apa102\apa102-config.h
 	"display-config.h"
 
-1527942936 f:\emblocksprojects\wclock24h\src\display\display-config.h
+1670849332 f:\emblocksprojects\wclock24h\src\display\display-config.h
 
-1515496682 source:f:\emblocksprojects\wclock24h\src\base\base.c
+1670849533 source:f:\emblocksprojects\wclock24h\src\base\base.c
 	<stdio.h>
 	"base.h"
 	"log.h"
 
-1515496684 f:\emblocksprojects\wclock24h\src\base\base.h
+1670849348 f:\emblocksprojects\wclock24h\src\base\base.h
 	<string.h>
 	<stdint.h>
 	<time.h>
 
-1515858801 f:\emblocksprojects\wclock24h\src\esp8266\esp8266.h
+1670849319 f:\emblocksprojects\wclock24h\src\esp8266\esp8266.h
 	<string.h>
 	<stdint.h>
 	<time.h>
 
-1515497070 f:\emblocksprojects\wclock24h\src\log\log.h
+1670849254 f:\emblocksprojects\wclock24h\src\log\log.h
 	<stdarg.h>
 	"uart.h"
 
-1515497794 f:\emblocksprojects\wclock24h\src\uart\uart.h
+1670849199 f:\emblocksprojects\wclock24h\src\uart\uart.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_usart.h"
@@ -1923,12 +1923,12 @@
 	"stm32f4xx_rcc.h"
 	"misc.h"
 
-1515496694 source:f:\emblocksprojects\wclock24h\src\beeper\beeper.c
+1670849531 source:f:\emblocksprojects\wclock24h\src\beeper\beeper.c
 	"stm32f10x.h"
 	"stm32f4xx.h"
 	"beeper.h"
 
-1515496708 f:\emblocksprojects\wclock24h\src\beeper\beeper.h
+1670849346 f:\emblocksprojects\wclock24h\src\beeper\beeper.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -1936,13 +1936,13 @@
 	"stm32f4xx_gpio.h"
 	"stm32f4xx_rcc.h"
 
-1515496738 source:f:\emblocksprojects\wclock24h\src\board-led\board-led.c
+1670849528 source:f:\emblocksprojects\wclock24h\src\board-led\board-led.c
 	"stm32f10x.h"
 	"stm32f4xx.h"
 	"board-led.h"
 	"io.h"
 
-1515496736 f:\emblocksprojects\wclock24h\src\board-led\board-led.h
+1670849344 f:\emblocksprojects\wclock24h\src\board-led\board-led.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -1950,10 +1950,10 @@
 	"stm32f4xx_gpio.h"
 	"stm32f4xx_rcc.h"
 
-1515496754 source:f:\emblocksprojects\wclock24h\src\button\button.c
+1670849526 source:f:\emblocksprojects\wclock24h\src\button\button.c
 	"button.h"
 
-1515496762 f:\emblocksprojects\wclock24h\src\button\button.h
+1670849341 f:\emblocksprojects\wclock24h\src\button\button.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -1961,19 +1961,17 @@
 	"stm32f4xx_gpio.h"
 	"stm32f4xx_rcc.h"
 
-1515496782 source:f:\emblocksprojects\wclock24h\src\dcf77\dcf77.c
+1670849524 source:f:\emblocksprojects\wclock24h\src\dcf77\dcf77.c
 	<string.h>
 	"wclock24h-config.h"
 	"dcf77.h"
-	"eeprom.h"
-	"eeprom-data.h"
 	"log.h"
 	"board-led.h"
 	"io.h"
 
-1515497480 f:\emblocksprojects\wclock24h\src\wclock24h-config.h
+1670849540 f:\emblocksprojects\wclock24h\src\wclock24h-config.h
 
-1515496780 f:\emblocksprojects\wclock24h\src\dcf77\dcf77.h
+1670849339 f:\emblocksprojects\wclock24h\src\dcf77\dcf77.h
 	<stdint.h>
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
@@ -1983,11 +1981,11 @@
 	"stm32f4xx_rcc.h"
 	<time.h>
 
-1515496886 f:\emblocksprojects\wclock24h\src\eeprom\eeprom.h
+1670849323 f:\emblocksprojects\wclock24h\src\eeprom\eeprom.h
 	"stm32f10x.h"
 	"stm32f4xx.h"
 
-1515848094 f:\emblocksprojects\wclock24h\src\eeprom\eeprom-data.h
+1670849324 f:\emblocksprojects\wclock24h\src\eeprom\eeprom-data.h
 	"night.h"
 	"alarm.h"
 	"display.h"
@@ -1995,18 +1993,19 @@
 	"remote-ir.h"
 	"overlay.h"
 
-1515497134 f:\emblocksprojects\wclock24h\src\night\night.h
+1670849252 f:\emblocksprojects\wclock24h\src\night\night.h
 	<string.h>
 	<stdint.h>
 
-1527942896 f:\emblocksprojects\wclock24h\src\display\display.h
+1670849331 f:\emblocksprojects\wclock24h\src\display\display.h
 	"display-config.h"
 	"tables.h"
 	"apa102.h"
 	"ws2812.h"
 	"sk6812.h"
+	"tftled.h"
 
-1515497424 f:\emblocksprojects\wclock24h\src\ws2812\ws2812.h
+1670849164 f:\emblocksprojects\wclock24h\src\ws2812\ws2812.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -2019,7 +2018,7 @@
 	"stm32f4xx_dma.h"
 	"misc.h"
 
-1515497284 f:\emblocksprojects\wclock24h\src\sk6812\sk6812.h
+1670849239 f:\emblocksprojects\wclock24h\src\sk6812\sk6812.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -2032,23 +2031,23 @@
 	"stm32f4xx_dma.h"
 	"misc.h"
 
-1515762968 f:\emblocksprojects\wclock24h\src\weather\weather.h
+1670849191 f:\emblocksprojects\wclock24h\src\weather\weather.h
 	<string.h>
 	<stdint.h>
 
-1515497200 f:\emblocksprojects\wclock24h\src\remote-ir\remote-ir.h
+1670849243 f:\emblocksprojects\wclock24h\src\remote-ir\remote-ir.h
 
-1515496792 source:f:\emblocksprojects\wclock24h\src\delay\delay.c
+1670849521 source:f:\emblocksprojects\wclock24h\src\delay\delay.c
 	<stdint.h>
 	"delay.h"
 
-1515496796 f:\emblocksprojects\wclock24h\src\delay\delay.h
+1670849336 f:\emblocksprojects\wclock24h\src\delay\delay.h
 	"stm32f10x.h"
 	"stm32f10x_rcc.h"
 	"stm32f4xx.h"
 	"stm32f4xx_rcc.h"
 
-1527942896 source:f:\emblocksprojects\wclock24h\src\display\display.c
+1581800206 source:f:\emblocksprojects\wclock24h\src\display\display.c
 	<string.h>
 	<stdio.h>
 	<stdlib.h>
@@ -2060,7 +2059,7 @@
 	"power.h"
 	"irmp.h"
 	"vars.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 	"esp-spiffs.h"
 	"delay.h"
@@ -2079,7 +2078,7 @@
 	"wclock24h-config.h"
 	<stdint.h>
 
-1515497184 f:\emblocksprojects\wclock24h\src\power\power.h
+1670849246 f:\emblocksprojects\wclock24h\src\power\power.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -2087,12 +2086,12 @@
 	"stm32f4xx_gpio.h"
 	"stm32f4xx_rcc.h"
 
-1515497028 f:\emblocksprojects\wclock24h\src\irmp\irmp.h
+1670849266 f:\emblocksprojects\wclock24h\src\irmp\irmp.h
 	"irmpsystem.h"
 	"irmpconfig.h"
 	"irmpprotocols.h"
 
-1515497676 f:\emblocksprojects\wclock24h\src\irmp\irmpsystem.h
+1670849260 f:\emblocksprojects\wclock24h\src\irmp\irmpsystem.h
 	<xc.h>
 	<stm32l1xx.h>
 	<stm32f10x.h>
@@ -2127,14 +2126,14 @@
 	<timers.h>
 	<pwm.h>
 
-1515497664 f:\emblocksprojects\wclock24h\src\irmp\irmpconfig.h
+1670849268 f:\emblocksprojects\wclock24h\src\irmp\irmpconfig.h
 
-1515497670 f:\emblocksprojects\wclock24h\src\irmp\irmpprotocols.h
+1670849263 f:\emblocksprojects\wclock24h\src\irmp\irmpprotocols.h
 
-1515857479 f:\emblocksprojects\wclock24h\src\vars\vars.h
+1670849197 f:\emblocksprojects\wclock24h\src\vars\vars.h
 	<stdint.h>
 
-1515497042 f:\emblocksprojects\wclock24h\src\ldr\ldr.h
+1670849258 f:\emblocksprojects\wclock24h\src\ldr\ldr.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -2152,14 +2151,12 @@
 	"wclock24h-config.h"
 	"tables12h.h"
 
-1515496868 source:f:\emblocksprojects\wclock24h\src\ds18xx\ds18xx.c
+1670849515 source:f:\emblocksprojects\wclock24h\src\ds18xx\ds18xx.c
 	"onewire.h"
 	"ds18xx.h"
 	"ds18xx-config.h"
-	"eeprom.h"
-	"eeprom-data.h"
 
-1515497154 f:\emblocksprojects\wclock24h\src\onewire\onewire.h
+1670849249 f:\emblocksprojects\wclock24h\src\onewire\onewire.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -2171,20 +2168,20 @@
 	"misc.h"
 	<string.h>
 
-1515496866 f:\emblocksprojects\wclock24h\src\ds18xx\ds18xx.h
+1670849327 f:\emblocksprojects\wclock24h\src\ds18xx\ds18xx.h
 	"stm32f10x.h"
 	"stm32f4xx.h"
 	"onewire.h"
 
-1515497600 f:\emblocksprojects\wclock24h\src\ds18xx\ds18xx-config.h
+1670849329 f:\emblocksprojects\wclock24h\src\ds18xx\ds18xx-config.h
 
-1515847429 source:f:\emblocksprojects\wclock24h\src\eeprom\eeprom.c
+1670849513 source:f:\emblocksprojects\wclock24h\src\eeprom\eeprom.c
 	"eeprom.h"
 	"i2c.h"
 	"eeprom-data.h"
 	"log.h"
 
-1515497002 f:\emblocksprojects\wclock24h\src\i2c\i2c.h
+1670849298 f:\emblocksprojects\wclock24h\src\i2c\i2c.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -2194,10 +2191,10 @@
 	"stm32f4xx_rcc.h"
 	"stm32f4xx_i2c.h"
 
-1515496916 source:f:\emblocksprojects\wclock24h\src\esp8266\esp8266-uart.c
+1670849510 source:f:\emblocksprojects\wclock24h\src\esp8266\esp8266-uart.c
 	"uart-driver.h"
 
-1515497790 f:\emblocksprojects\wclock24h\src\uart\uart-driver.h
+1670849201 f:\emblocksprojects\wclock24h\src\uart\uart-driver.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -2213,7 +2210,7 @@
 	"misc.h"
 	"uart.h"
 
-1515858825 source:f:\emblocksprojects\wclock24h\src\esp8266\esp8266.c
+1670849512 source:f:\emblocksprojects\wclock24h\src\esp8266\esp8266.c
 	<stdio.h>
 	<stdlib.h>
 	"log.h"
@@ -2225,80 +2222,82 @@
 	"uart.h"
 	"uart.h"
 
-1515497642 f:\emblocksprojects\wclock24h\src\esp8266\esp8266-config.h
+1670849321 f:\emblocksprojects\wclock24h\src\esp8266\esp8266-config.h
 
-1515496950 source:f:\emblocksprojects\wclock24h\src\i2c\i2c.c
+1670849493 source:f:\emblocksprojects\wclock24h\src\i2c\i2c.c
 	"i2c.h"
 	"delay.h"
 	"io.h"
 	"log.h"
 
-1515497016 source:f:\emblocksprojects\wclock24h\src\irmp\irmp.c
+1670849472 source:f:\emblocksprojects\wclock24h\src\irmp\irmp.c
 	"wclock24h-config.h"
 	"irmp.h"
 	"stm32f4xx_usart.h"
 	"irmpextlog.h"
 	<util/setbaud.h>
 
-1515753010 source:f:\emblocksprojects\wclock24h\src\ldr\ldr.c
+1670849470 source:f:\emblocksprojects\wclock24h\src\ldr\ldr.c
 	"adc.h"
 	"ldr.h"
 	"delay.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 
-1515497054 source:f:\emblocksprojects\wclock24h\src\log\log-uart.c
+1670849467 source:f:\emblocksprojects\wclock24h\src\log\log-uart.c
 	"uart-driver.h"
 
-1515497066 source:f:\emblocksprojects\wclock24h\src\log\log.c
+1670849469 source:f:\emblocksprojects\wclock24h\src\log\log.c
 	<stdio.h>
 	"log.h"
 	"uart.h"
 
-1515497136 source:f:\emblocksprojects\wclock24h\src\night\night.c
+1670849466 source:f:\emblocksprojects\wclock24h\src\night\night.c
 	<stdio.h>
 	<stdlib.h>
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 	"night.h"
 	"log.h"
 
-1515497146 source:f:\emblocksprojects\wclock24h\src\onewire\onewire.c
+1670849464 source:f:\emblocksprojects\wclock24h\src\onewire\onewire.c
 	"onewire.h"
 	"onewire-config.h"
 	"delay.h"
 	"io.h"
 
-1515497722 f:\emblocksprojects\wclock24h\src\onewire\onewire-config.h
+1670849251 f:\emblocksprojects\wclock24h\src\onewire\onewire-config.h
 
-1515497186 source:f:\emblocksprojects\wclock24h\src\power\power.c
+1670849461 source:f:\emblocksprojects\wclock24h\src\power\power.c
 	"stm32f10x.h"
 	"stm32f4xx.h"
 	"power.h"
+	"display-config.h"
+	"tft.h"
 	"io.h"
 	"log.h"
 
-1515497194 source:f:\emblocksprojects\wclock24h\src\remote-ir\remote-ir.c
+1670849460 source:f:\emblocksprojects\wclock24h\src\remote-ir\remote-ir.c
 	"wclock24h-config.h"
 	"irmp.h"
 	"remote-ir.h"
 	"display.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 	"log.h"
 
-1515497212 source:f:\emblocksprojects\wclock24h\src\rtc\rtc.c
+1670849459 source:f:\emblocksprojects\wclock24h\src\rtc\rtc.c
 	"rtc.h"
 	"i2c.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 
-1515497252 f:\emblocksprojects\wclock24h\src\rtc\rtc.h
+1670849242 f:\emblocksprojects\wclock24h\src\rtc\rtc.h
 	<time.h>
 	"stm32f10x.h"
 	"stm32f4xx.h"
 
-1525209289 source:f:\emblocksprojects\wclock24h\src\sk6812\sk6812.c
+1670849457 source:f:\emblocksprojects\wclock24h\src\sk6812\sk6812.c
 	<string.h>
 	"sk6812-config.h"
 	"sk6812.h"
@@ -2306,20 +2305,20 @@
 	"io.h"
 	"log.h"
 
-1515497750 f:\emblocksprojects\wclock24h\src\sk6812\sk6812-config.h
+1670849240 f:\emblocksprojects\wclock24h\src\sk6812\sk6812-config.h
 	"display-config.h"
 
-1515497308 source:f:\emblocksprojects\wclock24h\src\tempsensor\tempsensor.c
+1670849447 source:f:\emblocksprojects\wclock24h\src\tempsensor\tempsensor.c
 	"ds18xx.h"
 	"tempsensor.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 
-1515497304 f:\emblocksprojects\wclock24h\src\tempsensor\tempsensor.h
+1670849216 f:\emblocksprojects\wclock24h\src\tempsensor\tempsensor.h
 	"stm32f10x.h"
 	"stm32f4xx.h"
 
-1515671544 source:f:\emblocksprojects\wclock24h\src\tetris\tetris.c
+1670849445 source:f:\emblocksprojects\wclock24h\src\tetris\tetris.c
 	<stdio.h>
 	<stdint.h>
 	<time.h>
@@ -2331,34 +2330,34 @@
 	"main.h"
 	"tetris.h"
 
-1527942984 f:\emblocksprojects\wclock24h\src\main.h
+1670849541 f:\emblocksprojects\wclock24h\src\main.h
 	<time.h>
 	"eeprom-data.h"
 
-1515497320 f:\emblocksprojects\wclock24h\src\tetris\tetris.h
+1670849212 f:\emblocksprojects\wclock24h\src\tetris\tetris.h
 
-1515497338 source:f:\emblocksprojects\wclock24h\src\timeserver\timeserver.c
+1670849379 source:f:\emblocksprojects\wclock24h\src\timeserver\timeserver.c
 	<stdio.h>
 	<stdlib.h>
 	"base.h"
 	"timeserver.h"
 	"esp8266.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 	"log.h"
 
-1515497336 f:\emblocksprojects\wclock24h\src\timeserver\timeserver.h
+1670849205 f:\emblocksprojects\wclock24h\src\timeserver\timeserver.h
 	<string.h>
 	<stdint.h>
 	<time.h>
 	"esp8266.h"
 
-1515694717 source:f:\emblocksprojects\wclock24h\src\vars\vars.c
+1670849368 source:f:\emblocksprojects\wclock24h\src\vars\vars.c
 	<stdio.h>
 	"vars.h"
 	"display.h"
 	"overlay.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 	"main.h"
 	"power.h"
@@ -2371,22 +2370,23 @@
 	"alarm.h"
 	"weather.h"
 	"dfplayer.h"
+	"ssd1963.h"
 	"delay.h"
 	"log.h"
 	"esp8266.h"
 	"uart.h"
 
-1515762940 source:f:\emblocksprojects\wclock24h\src\weather\weather.c
+1670849364 source:f:\emblocksprojects\wclock24h\src\weather\weather.c
 	"base.h"
 	"weather.h"
 	"esp8266.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 
-1515497392 source:f:\emblocksprojects\wclock24h\src\wpsbutton\wpsbutton.c
+1670849363 source:f:\emblocksprojects\wclock24h\src\wpsbutton\wpsbutton.c
 	"wpsbutton.h"
 
-1515497402 f:\emblocksprojects\wclock24h\src\wpsbutton\wpsbutton.h
+1670849183 f:\emblocksprojects\wclock24h\src\wpsbutton\wpsbutton.h
 	"stm32f10x.h"
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
@@ -2394,7 +2394,7 @@
 	"stm32f4xx_gpio.h"
 	"stm32f4xx_rcc.h"
 
-1516027260 source:f:\emblocksprojects\wclock24h\src\ws2812\ws2812.c
+1670849361 source:f:\emblocksprojects\wclock24h\src\ws2812\ws2812.c
 	<string.h>
 	"ws2812.h"
 	"ws2812-config.h"
@@ -2402,99 +2402,99 @@
 	"io.h"
 	"log.h"
 
-1515497810 f:\emblocksprojects\wclock24h\src\ws2812\ws2812-config.h
+1670849171 f:\emblocksprojects\wclock24h\src\ws2812\ws2812-config.h
 	"display-config.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\misc.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\misc.c
 	"misc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_adc.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_adc.c
 	"stm32f10x_adc.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_bkp.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_bkp.c
 	"stm32f10x_bkp.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_can.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_can.c
 	"stm32f10x_can.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_cec.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_cec.c
 	"stm32f10x_cec.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_crc.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_crc.c
 	"stm32f10x_crc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_dac.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_dac.c
 	"stm32f10x_dac.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_dbgmcu.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_dbgmcu.c
 	"stm32f10x_dbgmcu.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_dma.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_dma.c
 	"stm32f10x_dma.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_exti.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_exti.c
 	"stm32f10x_exti.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_flash.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_flash.c
 	"stm32f10x_flash.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_fsmc.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_fsmc.c
 	"stm32f10x_fsmc.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_gpio.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_gpio.c
 	"stm32f10x_gpio.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_i2c.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_i2c.c
 	"stm32f10x_i2c.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_iwdg.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_iwdg.c
 	"stm32f10x_iwdg.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_pwr.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_pwr.c
 	"stm32f10x_pwr.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_rcc.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_rcc.c
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_rtc.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_rtc.c
 	"stm32f10x_rtc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_sdio.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_sdio.c
 	"stm32f10x_sdio.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_spi.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_spi.c
 	"stm32f10x_spi.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_tim.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_tim.c
 	"stm32f10x_tim.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_usart.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_usart.c
 	"stm32f10x_usart.h"
 	"stm32f10x_rcc.h"
 
-1426154075 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_wwdg.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\spl\src\stm32f10x_wwdg.c
 	"stm32f10x_wwdg.h"
 	"stm32f10x_rcc.h"
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\src\startup_stm32f10x_md.s
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\src\startup_stm32f10x_md.s
 
-1426154074 source:f:\emblocksprojects\wclock24h\wclock24h-f103\src\system_stm32f10x.c
+1426150476 source:f:\emblocksprojects\wclock24h\wclock24h-f103\src\system_stm32f10x.c
 	"stm32f10x.h"
 
-1527015299 source:f:\emblocksprojects\wclock24h\src\main.c
+1670849550 source:f:\emblocksprojects\wclock24h\src\main.c
 	<stdio.h>
 	<stdint.h>
 	<stdlib.h>
@@ -2514,7 +2514,7 @@
 	"remote-ir.h"
 	"button.h"
 	"wpsbutton.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 	"tempsensor.h"
 	"ds18xx.h"
@@ -2530,6 +2530,8 @@
 	"tetris.h"
 	"snake.h"
 	"log.h"
+	"ssd1963.h"
+	"touch.h"
 	"main.h"
 
 1511946726 source:f:\emblocksprojects\wclock24h\src\nic\alloc.c
@@ -2609,43 +2611,43 @@
 
 1507976987 f:\emblocksprojects\wclock24h\src\nic\funclist.h
 
-1515496616 source:f:\emblocksprojects\wclock24h\src\alarm\alarm.c
+1670849536 source:f:\emblocksprojects\wclock24h\src\alarm\alarm.c
 	<stdio.h>
 	<stdlib.h>
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 	"alarm.h"
 	"log.h"
 
-1515496622 f:\emblocksprojects\wclock24h\src\alarm\alarm.h
+1670849354 f:\emblocksprojects\wclock24h\src\alarm\alarm.h
 	<string.h>
 	<stdint.h>
 
-1515496812 source:f:\emblocksprojects\wclock24h\src\dfplayer\dfplayer-uart.c
+1670849518 source:f:\emblocksprojects\wclock24h\src\dfplayer\dfplayer-uart.c
 	"uart-driver.h"
 
-1514907234 f:\emblocksprojects\wclock24h\src\io\io.h
+1670849401 f:\emblocksprojects\wclock24h\src\io\io.h
 
-1525032070 source:f:\emblocksprojects\wclock24h\src\dfplayer\dfplayer.c
+1670849520 source:f:\emblocksprojects\wclock24h\src\dfplayer\dfplayer.c
 	<stdio.h>
 	<stdlib.h>
 	"log.h"
 	"delay.h"
-	"eeprom.h"
+	"eep.h"
 	"eeprom-data.h"
 	"dfplayer.h"
 	"uart.h"
 
-1515496834 f:\emblocksprojects\wclock24h\src\dfplayer\dfplayer.h
+1670849335 f:\emblocksprojects\wclock24h\src\dfplayer\dfplayer.h
 	<string.h>
 	<stdint.h>
 	<time.h>
 
-1515846976 f:\emblocksprojects\wclock24h\src\overlay\overlay.h
+1670849248 f:\emblocksprojects\wclock24h\src\overlay\overlay.h
 
-1515496906 f:\emblocksprojects\wclock24h\src\esp-spiffs\esp-spiffs.h
+1670849318 f:\emblocksprojects\wclock24h\src\esp-spiffs\esp-spiffs.h
 
-1515713846 source:f:\emblocksprojects\wclock24h\src\esp-spiffs\esp-spiffs.c
+1670849509 source:f:\emblocksprojects\wclock24h\src\esp-spiffs\esp-spiffs.c
 	<stdio.h>
 	<string.h>
 	<stdint.h>
@@ -2672,14 +2674,14 @@
 	"stm32f4xx_rcc.h"
 	"stm32f4xx_i2c.h"
 
-1515848094 source:f:\emblocksprojects\wclock24h\src\overlay\overlay.c
-	"eeprom.h"
+1670849463 source:f:\emblocksprojects\wclock24h\src\overlay\overlay.c
+	"eep.h"
 	"eeprom-data.h"
 	"base.h"
 	"log.h"
 	"overlay.h"
 
-1515422780 f:\emblocksprojects\wclock24h\src\tables\tables.h
+1670849217 f:\emblocksprojects\wclock24h\src\tables\tables.h
 	"wclock24h-config.h"
 
 1514998694 source:f:\emblocksprojects\wclock24h\src\nic\nic-extern.c
@@ -2745,7 +2747,7 @@
 1514981476 f:\emblocksprojects\wclock24h\src\nic\nici-alloc.h
 	<stdlib.h>
 
-1527337627 source:f:\emblocksprojects\wclock24h\src\tables\tables.c
+1670849448 source:f:\emblocksprojects\wclock24h\src\tables\tables.c
 	<stdio.h>
 	<stdint.h>
 	"wclock24h-config.h"
@@ -2755,7 +2757,7 @@
 	"base.h"
 	"log.h"
 
-1527715128 source:f:\emblocksprojects\wclock24h\src\tetris\snake.c
+1670849446 source:f:\emblocksprojects\wclock24h\src\tetris\snake.c
 	<stdio.h>
 	<stdlib.h>
 	<stdint.h>
@@ -2766,5 +2768,50 @@
 	"main.h"
 	"snake.h"
 
-1527010792 f:\emblocksprojects\wclock24h\src\tetris\snake.h
+1670849214 f:\emblocksprojects\wclock24h\src\tetris\snake.h
+
+1670849326 f:\emblocksprojects\wclock24h\src\eep\eep.h
+	"stm32f10x.h"
+	"stm32f4xx.h"
+	"flash.h"
+	"eeprom.h"
+
+1670849219 f:\emblocksprojects\wclock24h\src\ssd1963\ssd1963.h
+	<stdio.h>
+	<stdint.h>
+	"ssd1963-config.h"
+	"stm32f10x.h"
+	"stm32f10x_gpio.h"
+	"stm32f10x_rcc.h"
+	"stm32f4xx.h"
+	"stm32f4xx_gpio.h"
+	"stm32f4xx_rcc.h"
+
+1670849221 f:\emblocksprojects\wclock24h\src\ssd1963\ssd1963-config.h
+
+1670849203 f:\emblocksprojects\wclock24h\src\touch\touch.h
+	"xpt2046.h"
+
+1670849207 f:\emblocksprojects\wclock24h\src\tft\tft.h
+	<stdint.h>
+	"ssd1963.h"
+
+1670849456 source:f:\emblocksprojects\wclock24h\src\ssd1963\ssd1963.c
+	"ssd1963.h"
+	"eep.h"
+	"eeprom-data.h"
+	"vars.h"
+	"delay.h"
+
+1670849442 source:f:\emblocksprojects\wclock24h\src\tft\tft.c
+	<stdint.h>
+	<stdlib.h>
+	<math.h>
+	"ssd1963.h"
+	"delay.h"
+	"tft.h"
+
+1670849369 source:f:\emblocksprojects\wclock24h\src\touch\touch.c
+	"touch.h"
+	"log.h"
 

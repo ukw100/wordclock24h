@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * esp8266-uart.c - definitions of uart driver routines
  *
- * Copyright (c) 2015-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
  *
  * Possible UARTs of STM32F10x:
  *           ALTERNATE=0    ALTERNATE=1    ALTERNATE=2
@@ -45,12 +45,22 @@
 
 #define UART_PREFIX             esp8266                 // see also esp8266.c
 
-#if defined (STM32F4XX)                                 // STM32F4xx Nucleo Board: we use USART6 ALT1: PA11 | PA12
+#if defined (BLACK_BOARD)                               // STM32F407VE Black Board: we use USART3 ALT0: PB10 | PB11
+#  define UART_NUMBER           3                       // UART number on STM32F407VE (1-6 for UART)
+#  define UART_ALTERNATE        0                       // ALTERNATE number
+
+#elif defined (NUCLEO_BOARD)                            // STM32F4xx Nucleo Board: we use USART6 ALT1: PA11 | PA12
 #  define UART_NUMBER           6                       // UART number on STM32F4xx (1-6 for UART)
 #  define UART_ALTERNATE        1                       // ALTERNATE number
-#elif defined (STM32F103)                               // STM32F103C8T6 Mini Development Board: we use USART2 ALT0: PA2 | PA3
+
+#elif defined (BLACKPILL_BOARD)                         // STM32F4xx BlackPill Board: we use USART6 ALT1: PA11 | PA12
+#  define UART_NUMBER           2                       // UART number on STM32F4xx (1-6 for UART)
+#  define UART_ALTERNATE        0                       // ALTERNATE number
+
+#elif defined (BLUEPILL_BOARD)                          // STM32F103C8T6 BluePill Board: we use USART2 ALT0: PA2 | PA3
 #  define UART_NUMBER           2                       // UART number on STM32F1xx
 #  define UART_ALTERNATE        0                       // ALTERNATE number
+
 #else
 #  error unknown STM32
 #endif

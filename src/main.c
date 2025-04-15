@@ -1,89 +1,305 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * main.c - main routines of wclock24h
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
- * System Clocks configured on STM32F103 Mini development board:
- *
- *    External 8MHz crystal
- *    SYSCLK:       72MHz ((HSE_VALUE / HSE_Prediv) * PLL_Mul) = ((8MHz / 1) * 9)  = 72MHz
- *    AHB clock:    72MHz (AHB  Prescaler = 1)
- *    APB1 clock:   36MHz (APB1 Prescaler = 2)
- *    APB2 clock:   72MHz (APB2 Prescaler = 1)
- *    Timer clock:  72MHz (APB1 Prescaler = 2, Timer Multiplier 2)
- *
- * System Clocks configured on STM32F401 Nucleo Board (see changes in system_stm32f4xx.c):
+ *  System Clocks configured on STM32F103 BluePill board:
  *
  *    External 8MHz crystal
- *    Main clock:   84MHz ((HSE_VALUE / PLL_M) * PLL_N) / PLL_P = ((8MHz / 4) * 84) / 2 = 84MHz
- *    AHB clock:    84MHz (AHB  Prescaler = 1)
- *    APB1 clock:   42MHz (APB1 Prescaler = 2)
- *    APB2 clock:   84MHz (APB2 Prescaler = 1)
- *    Timer clock:  84MHz
+ *    SYSCLK:               72MHz ((HSE_VALUE / HSE_Prediv) * PLL_Mul) = ((8MHz / 1) * 9)  = 72MHz
+ *    AHB clock:            72MHz (AHB  Prescaler = 1)
+ *    APB1 clock:           36MHz (APB1 Prescaler = 2)
+ *    APB2 clock:           72MHz (APB2 Prescaler = 1)
+ *    Timer clock:          72MHz (APB1 Prescaler = 2, Timer Multiplier 2)
  *
- * System Clocks configured on STM32F411 Nucleo Board (see changes in system_stm32f4xx.c):
+ *  System Clocks configured on STM32F401 Nucleo Board (see changes in system_stm32f4xx.c):
  *
- *    External 8MHz crystal
- *    Main clock:   100MHz ((HSE_VALUE / PLL_M) * PLL_N) / PLL_P = ((8MHz / 4) * 100) / 2 = 100MHz
- *    AHB clock:    100MHz (AHB  Prescaler = 1)
- *    APB1 clock:    50MHz (APB1 Prescaler = 2)
- *    APB2 clock:   100MHz (APB2 Prescaler = 1)
- *    Timer clock:  100MHz
+ *      HSE_VALUE           8MHz, external 8MHz crystal
+ *      PLL M               4
+ *      PLL N               84
+ *      PLL P               2
+ *      AHB prescaler       1
+ *      APB1 prescaler      2
+ *      APB2 prescaler      1
  *
- * System Clocks configured on STM32F446 Nucleo Board (see changes in system_stm32f4xx.c):
+ *      Main clock:         84MHz ((HSE_VALUE / PLL_M) * PLL_N) / PLL_P = ((8MHz / 4) * 84) / 2 = 84MHz
+ *      AHB clock:          84MHz (AHB  Prescaler = 1)
+ *      APB1 clock:         42MHz (APB1 Prescaler = 2)
+ *      APB2 clock:         84MHz (APB2 Prescaler = 1)
+ *      Timer clock:        84MHz
  *
- *    External 8MHz crystal
- *    Main clock:   180MHz ((HSE_VALUE / PLL_M) * PLL_N) / PLL_P = ((8MHz / 4) * 180) / 2 = 180MHz
- *    AHB clock:    180MHz (AHB  Prescaler = 1)
- *    APB1 clock:    45MHz (APB1 Prescaler = 4)
- *    APB2 clock:    90MHz (APB2 Prescaler = 2)
- *    Timer clock:  180MHz
+ *  System Clocks configured on STM32F401 BlackPill Board (see changes in system_stm32f4xx.c):
  *
- * On STM32F4xx Nucleo Board, make sure that
+ *      HSE_VALUE           25MHz, external 25MHz crystal
+ *      PLL M               25
+ *      PLL N               336
+ *      PLL P               4
+ *      AHB prescaler       1
+ *      APB1 prescaler      2
+ *      APB2 prescaler      1
  *
- *    - SB54 and SB55 are OFF
- *    - SB16 and SB50 are OFF
- *    - R35 and R37 are soldered (0R or simple wire)
- *    - C33 and C34 are soldered with 22pF capacitors
- *    - X3 is soldered with 8MHz crystal
+ *      Main clock:         84MHz ((HSE_VALUE / PLL_M) * PLL_N) / PLL_P = ((25MHz / 25) * 336) / 4 = 84MHz
+ *      AHB clock:          84MHz (AHB  Prescaler = 1)
+ *      APB1 clock:         42MHz (APB1 Prescaler = 2)
+ *      APB2 clock:         84MHz (APB2 Prescaler = 1)
+ *      Timer clock:        84MHz
  *
- * Internal devices used:
+ *  System Clocks configured on STM32F411 Nucleo Board (see changes in system_stm32f4xx.c):
  *
- *    +-------------------------+---------------------------------------+-----------------------------------+-------------------------------+
- *    | Device                  | STM32F4x1 Nucleo                      | STM32F103C8T6                     | Remarks                       |
- *    +-------------------------+---------------------------------------+-----------------------------------+-------------------------------+
- *    | User button             | GPIO:          PC13                   | GPIO:      PA6                    |                               |
- *    | Board LED               | GPIO:          PA5                    | GPIO:      PC13                   |                               |
- *    +-------------------------+---------------------------------------+-----------------------------------+-------------------------------+
+ *      HSE_VALUE           8MHz, external 8MHz crystal
+ *      PLL M               4
+ *      PLL N               100
+ *      PLL P               2
+ *      AHB prescaler       1
+ *      APB1 prescaler      2
+ *      APB2 prescaler      1
  *
- * External devices:
+ *      Main clock:         100MHz ((HSE_VALUE / PLL_M) * PLL_N) / PLL_P = ((8MHz / 4) * 100) / 2 = 100MHz
+ *      AHB clock:          100MHz (AHB  Prescaler = 1)
+ *      APB1 clock:          50MHz (APB1 Prescaler = 2)
+ *      APB2 clock:         100MHz (APB2 Prescaler = 1)
+ *      Timer clock:        100MHz
  *
- *    +-------------------------+---------------------------------------+-----------------------------------+-------------------------------+
- *    | Device                  | STM32F4x1 Nucleo                      | STM32F103C8T6                     | Remarks                       |
- *    +-------------------------+---------------------------------------+-----------------------------------+-------------------------------+
- *    | TSOP31238 (IRMP)        | GPIO:          PC10                   | GPIO:      PB3                    |                               |
- *    | DS18xx (OneWire)        | GPIO:          PD2                    | GPIO:      PB5                    |                               |
- *    | Logger (Nucleo: USB)    | USART2:        TX=PA2  RX=PA3         | USART1:    TX=PA9  RX=PA10        |                               |
- *    | WPS button              | GPIO:          PC5                    | GPIO:      PA7                    |                               |
- *    | ESP8266 USART           | USART6:        TX=PA11 RX=PA12        | USART2:    TX=PA2  RX=PA3         |                               |
- *    | ESP8266 RST/CH_PD       | GPIO:          RST=PA7 CH_PD=PA6      | GPIO:      RST=PA0 CH_PD=PA1      |                               |
- *    | ESP8266 GPIO0           | GPIO:          FLASH=PA4              | GPIO:      FLASH=PA4              |                               |
- *    | ESP8266 GPIO13/GPIO15   | USART1:        GPIO13=PA9 GPIO15=PA10 | USART1:    GPIO13=PA9 GPIO15=PA10 | Only in STM32 bootloader mode |
- *    | ESP8266 GPIO14          | GPIO:          GPIO14=RESET           | GPIO:      GPIO14=RESET           |                               |
- *    | ESP8266 GPIO4           | GPIO:          GPIO4=BOOT0            | GPIO:      GPIO4=BOOT0            |                               |
- *    | DCF77                   | GPIO:          DATA=PC11 PON=PC12     | GPIO:      DATA=PB8  PON=PB9      |                               |
- *    | I2C DS3231 & EEPROM     | I2C3:          SCL=PA8 SDA=PC9        | I2C1:      SCL=PB6 SDA=PB7        |                               |
- *    | LDR                     | ADC:           ADC1_IN14=PC4          | ADC:       ADC12_IN5=PA5          |                               |
- *    | WS2812 / SK6812         | TIM3/DMA1:     PC6                    | TIM1/DMA1: PA8                    |                               |
- *    | APA102                  | SPI2/DMA1:     SCK=PB13 MOSI=PB15     | SPI2/DMA1: SCK=PB13 MOSI=PB15     |                               |
- *    | Power switch            | GPIO:          PC8                    | GPIO:      PB0                    |                               |
- *    | Beeper                  | PWM:           PB1 TIM3/CH4           | PWM:       PB1 TIM3/CH4           |                               |
- *    | DFPlayer                | USART1 (ALT1): TX=PB6  RX=PB7         | USART3:    TX=PB10  RX=PB11       |                               |
- *    +-------------------------+---------------------------------------+-----------------------------------+-------------------------------+
- *    | Free Port A             | PA0 PA1 PA15                          | PA11 PA12 PA15                    |                               |
- *    | Free Port B             | PB0 PB2 PB4  PB5 PB12 PB14            | PB4  PB12 PB14                    |                               |
- *    | Free Port C             | PC3 PC7 PC14 PC15                     | PC14 PC15                         |                               |
- *    +-------------------------+---------------------------------------+-----------------------------------+-------------------------------+
+ *  System Clocks configured on STM32F411 BlackPill Board (see changes in system_stm32f4xx.c):
+ *
+ *      HSE_VALUE           25MHz, external 25MHz crystal
+ *      PLL M               25
+ *      PLL N               200
+ *      PLL P               2
+ *      AHB prescaler       1
+ *      APB1 prescaler      2
+ *      APB2 prescaler      1
+ *
+ *      Main clock:         100MHz ((HSE_VALUE / PLL_M) * PLL_N) / PLL_P = ((8MHz / 4) * 100) / 2 = 100MHz
+ *      AHB clock:          100MHz (AHB  Prescaler = 1)
+ *      APB1 clock:          50MHz (APB1 Prescaler = 2)
+ *      APB2 clock:         100MHz (APB2 Prescaler = 1)
+ *      Timer clock:        100MHz
+ *
+ *  System Clocks configured on STM32F446 Nucleo Board (see changes in system_stm32f4xx.c):
+ *
+ *      HSE_VALUE           8MHz, external 8MHz crystal
+ *      PLL M               4
+ *      PLL N               180
+ *      PLL P               2
+ *      AHB prescaler       1
+ *      APB1 prescaler      4
+ *      APB2 prescaler      2
+ *
+ *      Main clock:         180 MHz ((HSE_VALUE / PLL_M) * PLL_N) / PLL_P = ((8MHz / 4) * 180) / 2 = 180MHz
+ *      AHB clock:          180 MHz (AHB  Prescaler = 1)
+ *      APB1 clock:          45 MHz (APB1 Prescaler = 4)
+ *      APB2 clock:          90 MHz (APB2 Prescaler = 2)
+ *      Timer clock:        180 MHz
+ *
+ *  System Clocks configured on STM32F407VE Black Board Board (see changes in system_stm32f4xx.c):
+ *
+ *      HSE_VALUE           8MHz, external 8MHz crystal
+ *      PLL M               4
+ *      PLL N               168
+ *      PLL P               2
+ *      AHB prescaler       1
+ *      APB1 prescaler      4
+ *      APB2 prescaler      2
+ *
+ *      Main clock:         168 MHz ((HSE_VALUE / PLL_M) * PLL_N) / PLL_P = ((8MHz / 4) * 168) / 2 = 168MHz
+ *      AHB clock:          168 MHz (AHB  Prescaler = 1)
+ *      APB1 clock:          42 MHz (APB1 Prescaler = 4)
+ *      APB2 clock:          84 MHz (APB2 Prescaler = 2)
+ *      Timer clock:        168 MHz
+ *
+ *
+ *  On STM32F4xx Nucleo Board, make sure that
+ *
+ *      - SB54 and SB55 are OFF
+ *      - SB16 and SB50 are OFF
+ *      - R35 and R37 are soldered (0R or simple wire)
+ *      - C33 and C34 are soldered with 22pF capacitors
+ *      - X3 is soldered with 8MHz crystal
+ *
+ * Devices Nucleo, BlackPill, and BluePill:
+ *
+ *    +-----------------------+----------------------------------+----------------------------------+----------------------------------+-------------------------------+
+ *    | Device                | STM32F4x1 Nucleo                 | STM32F4x1 BlackPill              | STM32F103C8T6 BluePill           | Remarks                       |
+ *    +-----------------------+----------------------------------+----------------------------------+----------------------------------+-------------------------------+
+ *    | User button           | GPIO:     PC13 (on board)        | GPIO:     PA0 (on board)         | GPIO:     PA6                    | on board                      |
+ *    | Board LED             | GPIO:     PA5                    | GPIO:     PC13                   | GPIO:     PC13                   | on board                      |
+ *    +-----------------------+----------------------------------+----------------------------------+----------------------------------+-------------------------------+
+ *    | TSOP31238 (IRMP)      | GPIO      PC10                   | GPIO      PB4                    | GPIO      PB3                    |                               |
+ *    | DS18xx (OneWire)      | GPIO      PD2                    | GPIO      PB5                    | GPIO      PB5                    |                               |
+ *    | Logger (Nucleo: USB)  | USART2    TX=PA2  RX=PA3         | USART1    TX=PA9  RX=PA10        | USART1    TX=PA9  RX=PA10        |                               |
+ *    | WPS button            | GPIO      PC5                    | GPIO      PA7                    | GPIO      PA7                    |                               |
+ *    | ESP8266 USART         | USART6    TX=PA11 RX=PA12        | USART2    TX=PA2  RX=PA3         | USART2    TX=PA2  RX=PA3         |                               |
+ *    | ESP8266 RST/CH_PD     | GPIO      RST=PA7 CH_PD=PA6      | GPIO      RST=PB10 CH_PD=PB3     | GPIO      RST=PA0 CH_PD=PA1      |                               |
+ *    | ESP8266 GPIO0         | GPIO      FLASH=PA4              | GPIO      FLASH=PA4              | GPIO      FLASH=PA4              |                               |
+ *    | ESP8266 GPIO13/GPIO15 | USART1    GPIO13=PA9 GPIO15=PA10 | USART1    GPIO13=PA9 GPIO15=PA10 | USART1    GPIO13=PA9 GPIO15=PA10 | only in STM32 bootloader mode |
+ *    | ESP8266 GPIO14        | GPIO      GPIO14=RESET           | GPIO      GPIO14=RESET           | GPIO      GPIO14=RESET           |                               |
+ *    | ESP8266 GPIO4         | GPIO      GPIO4=BOOT0            | GPIO      GPIO4=BOOT0            | GPIO      GPIO4=BOOT0            |                               |
+ *    | DCF77                 | GPIO      DATA=PC11 PON=PC12     | GPIO      DATA=PB8  PON=PB9      | GPIO      DATA=PB8  PON=PB9      |                               |
+ *    | I2C DS3231 & EEPROM   | I2C3      SCL=PA8 SDA=PC9        | I2C1      SCL=PB6 SDA=PB7        | I2C1      SCL=PB6 SDA=PB7        |                               |
+ *    | LDR                   | ADC       ADC1_IN14=PC4          | ADC       ADC12_IN5=PA5          | ADC       ADC12_IN5=PA5          |                               |
+ *    | WS2812 / SK6812       | TIM3/DMA1 PC6                    | TIM3/DMA1 PB1                    | TIM1/DMA1 PA8                    |                               |
+ *    | APA102                | SPI2/DMA1 SCK=PB13 MOSI=PB15     | SPI2/DMA1 SCK=PB13 MOSI=PB15     | SPI2/DMA1 SCK=PB13 MOSI=PB15     |                               |
+ *    | Power switch          | GPIO      PC8                    | GPIO      PB0                    | GPIO      PB0                    |                               |
+ *    | DFPlayer              | USART1    TX=PB6  RX=PB7         | USART6    TX=PA11  RX=PA12       | USART3    TX=PB10  RX=PB11       |                               |
+ *    +-----------------------+----------------------------------+----------------------------------+----------------------------------+-------------------------------+
+ *    | Free Port A           | PA0 PA1 PA15                     | PA1  PA6  PA8  PA15              | PA11 PA12 PA15                   |                               |
+ *    | Free Port B           | PB0 PB1 PB2 PB4  PB5 PB12 PB14   | PB2 (BOOT0!) PB12 PB14           | PB1  PB4  PB12 PB14              |                               |
+ *    | Free Port C           | PC3 PC7 PC14 PC15                | PC14 PC15                        | PC14 PC15                        |                               |
+ *    +-----------------------+----------------------------------+----------------------------------+----------------------------------+-------------------------------+
+ *
+ *
+ *  Devices STM32F407VE BlackBoard with TFT - sorted by function:
+ *
+ *    +-----------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | Device                | STM32F407VE BlackBoard                                                    | Remarks                       |
+ *    +-----------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | User button   "K0"    | GPIO           PE4                                                        | on board                      |
+ *    | Board LED     D2      | GPIO           PA6                                                        | on board                      |
+ *    +-----------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | TSOP31238     (IRMP)  | GPIO           PC1                                                        |                               |
+ *    | DS18xx                | GPIO           PD3                                                        |                               |
+ *    | Logger        USART   | USART2 ALT0    TX=PA2  RX=PA3                                             |                               |
+ *    | WPS button    "K1"    | GPIO           Button "K1" PE3                                            |                               |
+ *    | ESP8266       RX      | USART3 ALT0    TX=PB10                                                    |                               |
+ *    | ESP8266       TX      | USART3 ALT0    RX=PB11                                                    |                               |
+ *    | ESP8266       RST     | GPIO           RST=PA4                                                    |                               |
+ *    | ESP8266       CH_PD   | GPIO           CH_PD=PA5                                                  |                               |
+ *    | ESP8266       GPIO0   | FLASH          PA8                                                        |                               |
+ *    | ESP8266       GPIO13  | USART1         GPIO13=PA9                                                 | only in STM32 bootloader mode |
+ *    | ESP8266       GPIO15  | USART1         GPIO15=PA10                                                | only in STM32 bootloader mode |
+ *    | ESP8266       GPIO14  | RESET          GPIO14=RESET                                               |                               |
+ *    | ESP8266       GPIO4   | BOOT0          GPIO4=BOOT0                                                |                               |
+ *    | Flash W25Q16          | F_CS           PB0                                                        | fix on BlackBoard             |
+ *    | Flash W25Q16          | SPI1 CLK       PB3                                                        | fix on BlackBoard             |
+ *    | Flash W25Q16          | SPI1 MISO      PB4                                                        | fix on BlackBoard             |
+ *    | Flash W25Q16          | SPI1 MOSI      PB5                                                        | fix on BlackBoard             |
+ *    | DCF77                 | GPIO           DATA=PC2 PON=PC3                                           |                               |
+ *    | I2C DS3231 & EEPROM   | I2C1:          SCL=PB8 SDA=PB9 (here: EEPROM not used, but FLASH on SPI1) |                               |
+ *    | LDR                   | ADC            ADC1_IN14=PC4                                              |                               |
+ *    | WS2812 / SK6812       | TIM3/DMA1      PC6                                                        |                               |
+ *    | APA102                |                Not supported here                                         | Nucleo: SCK=PB13 MOSI=PB15    |
+ *    | Power switch          | GPIO           PC0                                                        |                               |
+ *    | DFPlayer      RX      | USART1 (ALT1): TX=PB6                                                     |                               |
+ *    | DFPlayer      TX      | USART1 (ALT1): RX=PB7                                                     |                               |
+ *    +-----------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | FSMC          TFT     |                                                                           |                               |
+ *    | FSMC RST      RS      | FSMC RST       STM32 RESET                                                | fix on BlackBoard             |
+ *    | FSMC D15      DB15    | FSMC D15       PD10                                                       | fix on BlackBoard             |
+ *    | FSMC D14      DB14    | FSMC D14       PD9                                                        | fix on BlackBoard             |
+ *    | FSMC D13      DB13    | FSMC D13       PD8                                                        | fix on BlackBoard             |
+ *    | FSMC D12      DB12    | FSMC D12       PE15                                                       | fix on BlackBoard             |
+ *    | FSMC D11      DB11    | FSMC D11       PE14                                                       | fix on BlackBoard             |
+ *    | FSMC D10      DB10    | FSMC D10       PE13                                                       | fix on BlackBoard             |
+ *    | FSMC D9       DB9     | FSMC D9        PE12                                                       | fix on BlackBoard             |
+ *    | FSMC D8       DB8     | FSMC D8        PE11                                                       | fix on BlackBoard             |
+ *    | FSMC D7       DB7     | FSMC D7        PE10                                                       | fix on BlackBoard             |
+ *    | FSMC D6       DB6     | FSMC D6        PE9                                                        | fix on BlackBoard             |
+ *    | FSMC D5       DB5     | FSMC D5        PE8                                                        | fix on BlackBoard             |
+ *    | FSMC D4       DB4     | FSMC D4        PE7                                                        | fix on BlackBoard             |
+ *    | FSMC D3       DB3     | FSMC D3        PD1                                                        | fix on BlackBoard             |
+ *    | FSMC D2       DB2     | FSMC D2        PD0                                                        | fix on BlackBoard             |
+ *    | FSMC D1       DB1     | FSMC D1        PD15                                                       | fix on BlackBoard             |
+ *    | FSMC D0       DB0     | FSMC D0        PD14                                                       | fix on BlackBoard             |
+ *    | FSMC NOE      RD      | FSMC NOE       PD4                                                        | fix on BlackBoard             |
+ *    | FSMC NWE      WR      | FSMC NWE       PD5                                                        | fix on BlackBoard             |
+ *    | FSMC A18      RS      | FSMC A18       PD13                                                       | fix on BlackBoard             |
+ *    | FSMC NE1      CS      | FSMC NE1       PD7                                                        | fix on BlackBoard             |
+ *    | LCD BL                | LCD            PB1 (not used)                                             | fix on BlackBoard             |
+ *    +-----------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | TOUCH         TFT     |                                                                           |                               |
+ *    | TOUCH         T_CS    | T_CS           PB12                                                       | fix on BlackBoard             |
+ *    | TOUCH         T_SCK   | T_SCK          PB13                                                       | fix on BlackBoard             |
+ *    | TOUCH         T_MISO  | T_MISO         PB14                                                       | fix on BlackBoard             |
+ *    | TOUCH         T_MOSI  | T_MOSI         PB15                                                       | fix on BlackBoard             |
+ *    | TOUCH         T_PEN   | T_PEN          PC5                                                        | fix on BlackBoard             |
+ *    +-----------------------+---------------------------------------------------------------------------+-------------------------------+
+ *
+ * List of STM32F407VE BlackBoard pins - sorted by Port/Pin:
+ *
+ *    +-------------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | Reserved                | WK_UP button   PA0                                                        | fix on BlackBoard             |
+ *    | Free                    |                PA1                                                        |                               |
+ *    | Logger          RX      | USART2 TX      PA2                                                        |                               |
+ *    | Logger          TX      | USART2 RX      PA3                                                        |                               |
+ *    | ESP8266         RST     | GPIO           PA4                                                        |                               |
+ *    | ESP8266         CH_PD   | GPIO           PA5                                                        |                               |
+ *    | Board LED       D2      | GPIO           PA6                                                        |                               |
+ *    | Board LED       D3      | Board LED D3   PA7 (not used)                                             | fix on BlackBoard             |
+ *    | ESP8266         GPIO0   | FLASH          PA8                                                        |                               |
+ *    | ESP8266         GPIO13  | USART1 TX      PA9                                                        | only in STM32 bootloader mode |
+ *    | ESP8266         GPIO15  | USART1 RX      PA10                                                       | only in STM32 bootloader mode |
+ *    | Reserved        USB DM  | USB DM -       PA11                                                       | fix on BlackBoard             |
+ *    | Reserved        USB DP  | USB DP +       PA12                                                       | fix on BlackBoard             |
+ *    | Reserved        JTAG    | JTAG TMS       PA13                                                       | fix on BlackBoard             |
+ *    | Reserved        JTAG    | JTAG TCK       PA14                                                       | fix on BlackBoard             |
+ *    | Reserved        JTAG    | JTAG TDI       PA15                                                       | fix on BlackBoard             |
+ *    +-------------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | Flash W25Q16            | F_CS           PB0                                                        | fix on BlackBoard             |
+ *    | LCD             BL      | LCD BL         PB1 (not used)                                             | fix on BlackBoard             |
+ *    | Reserved                | BOOT1          PB2                                                        | fix on BlackBoard             |
+ *    | Flash W25Q16            | SPI1 CLK       PB3                                                        | fix on BlackBoard             |
+ *    | Flash W25Q16            | SPI1 MISO      PB4                                                        | fix on BlackBoard             |
+ *    | Flash W25Q16            | SPI1 MOSI      PB5                                                        | fix on BlackBoard             |
+ *    | DFPlayer TX             | USART1 TX      PB6                                                        |                               |
+ *    | DFPlayer RX             | USART1 RX      PB7                                                        |                               |
+ *    | I2C DS3231 & EEPROM     | I2C1 SCL       PB8 (here: EEPROM not used, but FLASH on SPI1)             |                               |
+ *    | I2C DS3231 & EEPROM     | I2C1 SDA       PB9 (here: EEPROM not used, but FLASH on SPI1)             |                               |
+ *    | ESP8266 USART   TX      | USART3 TX      PB10                                                       |                               |
+ *    | ESP8266 USART   RX      | USART3 RX      PB11                                                       |                               |
+ *    | TOUCH           T_CS    | T_CS           PB12                                                       | touch (yet not used)          |
+ *    | TOUCH           T_SCK   | T_SCK          PB13                                                       | touch (yet not used)          |
+ *    | TOUCH           T_MISO  | T_MISO         PB14                                                       | touch (yet not used)          |
+ *    | TOUCH           T_MOSI  | T_MOSI         PB15                                                       | touch (yet not used)          |
+ *    +-------------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | LED strip power switch  | GPIO           PC0                                                        |                               |
+ *    | TSOP31238 (IRMP)        | GPIO           PC1                                                        |                               |
+ *    | DCF77 Data              | GPIO           PC2                                                        |                               |
+ *    | DCF77 PON               | GPIO           PC3                                                        |                               |
+ *    | LDR                     | ADC_IN14       PC4                                                        |                               |
+ *    | TOUCHH          T_PEN   | T_PEN          PC5                                                        | fix on BlackBoard             |
+ *    | WS2812 / SK6812         | TIM3/DMA1      PC6                                                        |                               |
+ *    | Free                    |                PC7                                                        |                               |
+ *    | Reserved                | SDIO D0        PC8                                                        | fix on BlackBoard             |
+ *    | Reserved                | SDIO D1        PC9                                                        | fix on BlackBoard             |
+ *    | Reserved                | SDIO D2        PC10                                                       | fix on BlackBoard             |
+ *    | Reserved                | SDIO D3        PC11                                                       | fix on BlackBoard             |
+ *    | Reserved                | SDIO SCK       PC12                                                       | fix on BlackBoard             |
+ *    | Free                    |                PC13                                                       |                               |
+ *    | Reserved                | XTAL           PC14                                                       | fix on BlackBoard             |
+ *    | Reserved                | XTAL           PC15                                                       | fix on BlackBoard             |
+ *    +-------------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | FSMC D2         DB2     | FSMC D2        PD0                                                        | fix on BlackBoard             |
+ *    | FSMC D3         DB3     | FSMC D3        PD1                                                        | fix on BlackBoard             |
+ *    | Reserved                | SDIO CMD       PD2                                                        | fix on BlackBoard             |
+ *    | DS18xx (OneWire)        | GPIO           PD3                                                        |                               |
+ *    | FSMC NOE        RD      | FSMC NOE       PD4                                                        | fix on BlackBoard             |
+ *    | FSMC NWE        WR      | FSMC NWE       PD5                                                        | fix on BlackBoard             |
+ *    | FSMC NWAIT              | FSMC NWAIT     PD6                                                        | fix on BlackBoard, not used   |
+ *    | FSMC NE1        CS      | FSMC NE1       PD7                                                        | fix on BlackBoard             |
+ *    | FSMC D13        DB13    | FSMC D13       PD8                                                        | fix on BlackBoard             |
+ *    | FSMC D14        DB14    | FSMC D14       PD9                                                        | fix on BlackBoard             |
+ *    | FSMC D15        DB15    | FSMC D15       PD10                                                       | fix on BlackBoard             |
+ *    | Free                    |                PD11                                                       |                               |
+ *    | Free                    |                PD12                                                       |                               |
+ *    +-------------------------+---------------------------------------------------------------------------+-------------------------------+
+ *    | Free                    |                PE0                                                        |                               |
+ *    | Free                    |                PE1                                                        |                               |
+ *    | Free                    |                PE2                                                        |                               |
+ *    | WPS button      "K1"    | GPIO           PE3                                                        |                               |
+ *    | User button     "K0"    | GPIO           PE4                                                        |                               |
+ *    | Free                    |                PE5                                                        |                               |
+ *    | Free                    |                PE6                                                        | fix on BlackBoard             |
+ *    | FSMC D4         DB4     | FSMC D4        PE7                                                        | fix on BlackBoard             |
+ *    | FSMC D5         DB5     | FSMC D5        PE8                                                        | fix on BlackBoard             |
+ *    | FSMC D6         DB6     | FSMC D6        PE9                                                        | fix on BlackBoard             |
+ *    | FSMC D7         DB7     | FSMC D7        PE10                                                       | fix on BlackBoard             |
+ *    | FSMC D8         DB8     | FSMC D8        PE11                                                       | fix on BlackBoard             |
+ *    | FSMC D9         DB9     | FSMC D9        PE12                                                       | fix on BlackBoard             |
+ *    | FSMC D10        DB10    | FSMC D10       PE13                                                       | fix on BlackBoard             |
+ *    | FSMC D11        DB11    | FSMC D11       PE14                                                       | fix on BlackBoard             |
+ *    | FSMC D12        DB12    | FSMC D12       PE15                                                       | fix on BlackBoard             |
+ *    +-------------------------+---------------------------------------------------------------------------+-------------------------------+
  *
  * Timers:
  *
@@ -122,7 +338,7 @@
 #include "remote-ir.h"
 #include "button.h"
 #include "wpsbutton.h"
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 #include "tempsensor.h"
 #include "ds18xx.h"
@@ -138,13 +354,16 @@
 #include "tetris.h"
 #include "snake.h"
 #include "log.h"
+#include "ssd1963.h"
+#include "touch.h"
 #include "main.h"
 
-#define DEFAULT_UPDATE_HOST     "uclock.de"
-#define DEFAULT_UPDATE_PATH     "update"
+#define DEFAULT_UPDATE_HOST         "uclock.de"
+#define DEFAULT_UPDATE_PATH         "update"
+#define DEFAULT_OBSERVE_SUMMERTIME  1
 
-#define STATUS_LED_FLASH_TIME   50                                      // status LED: time of flash
-#define MAX_DATE_TICKER_LEN     32                                      // date ticker overlay: buffer len
+#define STATUS_LED_FLASH_TIME       50                                  // status LED: time of flash
+#define MAX_DATE_TICKER_LEN         32                                  // date ticker overlay: buffer len
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * global public variables
@@ -157,7 +376,7 @@ MAIN_GLOBALS                    gmain;
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t             esp8266_is_online           = 0;
-static uint32_t                 eeprom_version              = 0xFFFFFFFF;
+static uint32_t                 eep_version                 = 0xFFFFFFFF;
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * global private variables, modified by timer ISR
@@ -205,35 +424,65 @@ static volatile uint_fast8_t    ambilight_clock_tick        = 0;        // flag:
  *      TIM_PRESCALER   =  66 - 1 =  65
  *      F_INTERRUPTS    = 100000000 / 66 / 101 = 15015 (0.01% error)
  * STM32F446:
- *      TIM_PERIOD      =   12 - 1 =  11
+ *      TIM_PERIOD      =    6 - 1 =   5
  *      TIM_PRESCALER   = 1000 - 1 = 999
- *      F_INTERRUPTS    = 180000000 / 1000 / 12 = 15000 (0.00% error)
+ *      F_INTERRUPTS    = 90000000 / 1000 / 6 = 15000 (0.00% error)
+ * STM32F407VE:
+ *      TIM_PERIOD      =    8 - 1 =    7
+ *      TIM_PRESCALER   =  700 - 1 =  699
+ *      F_INTERRUPTS    = 84000000 / 700 / 8 = 15000 (0.00% error)
  * STM32F103:
  *      TIM_PERIOD      =   6 - 1 =   5
  *      TIM_PRESCALER   = 800 - 1 = 799
  *      F_INTERRUPTS    = 72000000 / 800 / 6 = 15000 (0.00% error)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
-#if   defined (STM32F401RE)                                                 // STM32F401 Nucleo Board
-#define TIM_CLK                 84000000L                                   // 84 MHz
-#define TIM_PERIOD              7
+#if defined (NUCLEO_BOARD)
+#  if defined (STM32F401RE)                                             // STM32F401 Nucleo Board @84MHz
+#    define TIM_CLK                 84000000L                           // 84 MHz
+#    define TIM_PERIOD              7
+#  elif defined (STM32F411RE)                                           // STM32F411 Nucleo Board @100MHz
+#    define TIM_CLK                 100000000L                          // 100 MHz
+#    define TIM_PERIOD              100
+#  elif defined (STM32F446RE)                                           // STM32F446 Nucleo Board @180MHz
+#    define TIM_CLK                 90000000L                           // APB2 clock: 90 MHz
+#    define TIM_PERIOD              5
+#  else
+#    error STM32 unknown
+#  endif
 
-#elif defined (STM32F411RE)                                                 // STM32F411 Nucleo Board
-#define TIM_CLK                 100000000L                                  // 100 MHz
-#define TIM_PERIOD              100
+#elif defined (BLACK_BOARD)
+#  if defined (STM32F407VE)                                             // STM32F407VE Black Board @168MHz
+#    define TIM_CLK                 84000000L                           // APB2 clock: 84 MHz
+#    define TIM_PERIOD              7
+#  else
+#    error STM32 unknown
+#  endif
 
-#elif defined (STM32F446RE)                                                 // STM32F446 Nucleo Board
-#define TIM_CLK                 180000000L                                  // 180 MHz
-#define TIM_PERIOD              11
+#elif defined (BLACKPILL_BOARD)
+#  if defined (STM32F401CC)                                             // STM32F401 BlackPill Board @84MHz
+#    define TIM_CLK                 84000000L                           // 84 MHz
+#    define TIM_PERIOD              7
+#  elif defined (STM32F411CE)                                           // STM32F411 BlackPill Board @100MHz
+#    define TIM_CLK                 100000000L                          // 100 MHz
+#    define TIM_PERIOD              100
+#  else
+#    error STM32 unknown
+#  endif
 
-#elif defined (STM32F103)
-#define TIM_CLK                 72000000L                                   // timer clock, 72MHz on STM32F103
-#define TIM_PERIOD              5
+#elif defined (BLUEPILL_BOARD)
+#  if defined (STM32F103)                                               // STM32F103 BLuePill Board @72MHz
+#    define TIM_CLK                 72000000L                           // APB2 clock: 72MHz
+#    define TIM_PERIOD              5
+#  else
+#    error STM32 unknown
+#  endif
+
 #else
 #error STM32 unknown
 #endif
 
-#define TIM_PRESCALER           ((TIM_CLK / F_INTERRUPTS) / (TIM_PERIOD + 1) - 1)
+#define TIM_PRESCALER               ((TIM_CLK / F_INTERRUPTS) / (TIM_PERIOD + 1) - 1)
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * initialize timer2
@@ -299,18 +548,20 @@ TIM2_IRQHandler (void)
     static uint_fast16_t    clk_cnt;
     static uint_fast16_t    dcf77_cnt;
     static uint_fast16_t    net_time_cnt;
-    static uint_fast16_t    eeprom_cnt;
     static uint_fast8_t     ambi_tick_cnt = 0;
+#ifndef BLACK_BOARD                                                     // eeprom not used on STM32F407VE
+    static uint_fast16_t    eeprom_cnt;
+#endif
 
     TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 
-    (void) irmp_ISR ();                                         // call irmp ISR
+    (void) irmp_ISR ();                                                 // call irmp ISR
 
     if (uptime > 1)
     {
         ldr_cnt++;
 
-        if (ldr_cnt == F_INTERRUPTS / 4)                        // start LDR conversion every 1/4 second
+        if (ldr_cnt == F_INTERRUPTS / 4)                                // start LDR conversion every 1/4 second
         {
             ldr_conversion_flag = 1;
             ldr_cnt = 0;
@@ -319,17 +570,17 @@ TIM2_IRQHandler (void)
 
     animation_cnt++;
 
-    if (animation_cnt == F_INTERRUPTS / 64)                     // set animation_flag every 1/64 of a second
+    if (animation_cnt == F_INTERRUPTS / 64)                             // set animation_flag every 1/64 of a second
     {
         animation_flag = 1;
         animation_cnt = 0;
     }
 
-    if (dcf77_enabled)                                          // disabled if power is on
+    if (dcf77_enabled)                                                  // disabled if power is on
     {
         dcf77_cnt++;
 
-        if (dcf77_cnt == F_INTERRUPTS / 100)                    // call dcf77_tick every 1/100 of a second
+        if (dcf77_cnt == F_INTERRUPTS / 100)                            // call dcf77_tick every 1/100 of a second
         {
             dcf77_cnt = 0;
             dcf77_tick ();
@@ -338,21 +589,23 @@ TIM2_IRQHandler (void)
 
     net_time_cnt++;
 
-    if (net_time_cnt == F_INTERRUPTS / 100)                     // set esp8266_ten_ms_tick every 1/100 of a second
+    if (net_time_cnt == F_INTERRUPTS / 100)                             // set esp8266_ten_ms_tick every 1/100 of a second
     {
         esp8266_ten_ms_tick = 1;
         net_time_cnt = 0;
     }
 
+#ifndef BLACK_BOARD                                                     // eeprom not used on STM32F407VE
     eeprom_cnt++;
 
-    if (eeprom_cnt == F_INTERRUPTS / 1000)                      // set eeprom_ms_tick every 1/1000 of a second
+    if (eeprom_cnt == F_INTERRUPTS / 1000)                              // set eep_ms_tick every 1/1000 of a second
     {
         eeprom_ms_tick = 1;
         eeprom_cnt = 0;
     }
+#endif
 
-    if (ambilight_clock_wait_cycles)                            // wait cycles for ambilight mode clock & clock2
+    if (ambilight_clock_wait_cycles)                                    // wait cycles for ambilight mode clock & clock2
     {
         ambilight_clock_wait_cnt++;
 
@@ -368,13 +621,13 @@ TIM2_IRQHandler (void)
                 ambi_tick_cnt = 0;
             }
 
-            ambilight_clock_tick = 1;                           // set AMBILIGHT_CLOCK_TICK_COUNT_PER_LED times per ambilight LED
+            ambilight_clock_tick = 1;                                   // set AMBILIGHT_CLOCK_TICK_COUNT_PER_LED times per ambilight LED
         }
     }
 
     clk_cnt++;
 
-    if (clk_cnt == F_INTERRUPTS)                                // increment internal clock every second
+    if (clk_cnt == F_INTERRUPTS)                                        // increment internal clock every second
     {
         clk_cnt         = 0;
         seconds_flag    = 1;
@@ -382,7 +635,7 @@ TIM2_IRQHandler (void)
         uptime++;
         gmain.second++;
 
-        if (gmain.second == 45)                                 // get rtc time at hh:mm:45, but not twice in same minute
+        if (gmain.second == 45)                                         // get rtc time at hh:mm:45, but not twice in same minute
         {
             if (last_minute_of_ds3231_flag != gmain.minute)
             {
@@ -392,21 +645,21 @@ TIM2_IRQHandler (void)
         }
         else if (gmain.second == 49)
         {
-            measure_temperature_flag = 1;                       // start ADC conversion of DS18xx
+            measure_temperature_flag = 1;                               // start ADC conversion of DS18xx
         }
         else if (gmain.second == 50)
         {
-            read_temperature_flag = 1;                          // read temperature data of DS18xx
+            read_temperature_flag = 1;                                  // read temperature data of DS18xx
         }
         else if (gmain.second == 51)
         {
-            read_rtc_temperature_flag = 1;                      // read temperature data of RTC
+            read_rtc_temperature_flag = 1;                              // read temperature data of RTC
         }
         else if (gmain.second == 60)
         {
             gmain.second             = 0;
-            ambilight_clock_wait_cnt = 0;                       // fix rounding errors by resetting wait_cnt every minute
-            ambilight_clock_led_idx  = 0;                       // reset led index, too
+            ambilight_clock_wait_cnt = 0;                               // fix rounding errors by resetting wait_cnt every minute
+            ambilight_clock_led_idx  = 0;                               // reset led index, too
             ambi_tick_cnt            = 0;
             gmain.minute++;
 
@@ -452,7 +705,7 @@ TIM2_IRQHandler (void)
         {
             net_time_countdown--;
 
-            if (net_time_countdown == 0)                        // trigger net time update
+            if (net_time_countdown == 0)                                // trigger net time update
             {
                 net_time_flag = 1;
             }
@@ -465,13 +718,13 @@ TIM2_IRQHandler (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t
-read_version_from_eeprom (void)
+read_version_from_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        rtc = eeprom_read (EEPROM_DATA_OFFSET_VERSION, (uint8_t *) &eeprom_version, sizeof(uint32_t));
+        rtc = eep_read (EEPROM_DATA_OFFSET_VERSION, (uint8_t *) &eep_version, sizeof(uint32_t));
     }
 
     return rtc;
@@ -482,13 +735,13 @@ read_version_from_eeprom (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t
-write_version_to_eeprom (void)
+write_version_to_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        rtc = eeprom_write (EEPROM_DATA_OFFSET_VERSION, (uint8_t *) &eeprom_version, sizeof(uint32_t));
+        rtc = eep_write (EEPROM_DATA_OFFSET_VERSION, (uint8_t *) &eep_version, sizeof(uint32_t));
     }
 
     return rtc;
@@ -499,13 +752,13 @@ write_version_to_eeprom (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t
-read_update_host_from_eeprom (void)
+read_update_host_from_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        rtc = eeprom_read (EEPROM_DATA_OFFSET_UPDATE_HOSTNAME, (uint8_t *) gmain.update_host, EEPROM_DATA_SIZE_UPDATE_HOSTNAME);
+        rtc = eep_read (EEPROM_DATA_OFFSET_UPDATE_HOSTNAME, (uint8_t *) gmain.update_host, EEPROM_DATA_SIZE_UPDATE_HOSTNAME);
     }
 
     return rtc;
@@ -516,13 +769,13 @@ read_update_host_from_eeprom (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t
-write_update_host_to_eeprom (void)
+write_update_host_to_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        rtc = eeprom_write (EEPROM_DATA_OFFSET_UPDATE_HOSTNAME, (uint8_t *) gmain.update_host, EEPROM_DATA_SIZE_UPDATE_HOSTNAME);
+        rtc = eep_write (EEPROM_DATA_OFFSET_UPDATE_HOSTNAME, (uint8_t *) gmain.update_host, EEPROM_DATA_SIZE_UPDATE_HOSTNAME);
     }
 
     return rtc;
@@ -533,13 +786,13 @@ write_update_host_to_eeprom (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t
-read_update_path_from_eeprom (void)
+read_update_path_from_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        rtc = eeprom_read (EEPROM_DATA_OFFSET_UPDATE_PATH, (uint8_t *) gmain.update_path, EEPROM_DATA_SIZE_UPDATE_PATH);
+        rtc = eep_read (EEPROM_DATA_OFFSET_UPDATE_PATH, (uint8_t *) gmain.update_path, EEPROM_DATA_SIZE_UPDATE_PATH);
     }
 
     return rtc;
@@ -550,13 +803,13 @@ read_update_path_from_eeprom (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t
-write_update_path_to_eeprom (void)
+write_update_path_to_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        rtc = eeprom_write (EEPROM_DATA_OFFSET_UPDATE_PATH, (uint8_t *) gmain.update_path, EEPROM_DATA_SIZE_UPDATE_PATH);
+        rtc = eep_write (EEPROM_DATA_OFFSET_UPDATE_PATH, (uint8_t *) gmain.update_path, EEPROM_DATA_SIZE_UPDATE_PATH);
     }
 
     return rtc;
@@ -567,16 +820,16 @@ write_update_path_to_eeprom (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t
-read_main_parameters_from_eeprom (void)
+read_main_parameters_from_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (eeprom_version >= EEPROM_VERSION_2_6)
+        if (eep_version >= EEPROM_VERSION_2_6)
         {
-            if (read_update_host_from_eeprom () &&
-                read_update_path_from_eeprom ())
+            if (read_update_host_from_eep () &&
+                read_update_path_from_eep ())
             {
                 if (gmain.update_host[0] >= 'a' && gmain.update_host[0] <= 'z' &&
                     gmain.update_path[0] >= 'a' && gmain.update_path[0] <= 'z')
@@ -595,14 +848,14 @@ read_main_parameters_from_eeprom (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t
-write_main_parameters_to_eeprom (void)
+write_main_parameters_to_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (write_update_host_to_eeprom () &&
-            write_update_path_to_eeprom ())
+        if (write_update_host_to_eep () &&
+            write_update_path_to_eep ())
         {
             rtc = 1;
         }
@@ -612,11 +865,11 @@ write_main_parameters_to_eeprom (void)
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
- * log eeprom write error
+ * log eep write error
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static void
-log_eeprom_error (const char * str)
+log_eep_error (const char * str)
 {
     log_printf ("Writing %s to EEPROM failed\r\n", str);
 }
@@ -626,77 +879,85 @@ log_eeprom_error (const char * str)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static void
-read_configuration_from_eeprom (void)
+read_configuration_from_eep (void)
 {
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        log_message ("eeprom is online");
+        log_message ("eeprom/flash is online");
         display_set_status_or_minute_leds (0, 1, 0);                                        // show green status or minute LEDs
-        read_version_from_eeprom ();
-        //eeprom_version = 0x00000000;                                                      // hack: reset EEPROM to default values
-        log_printf ("current eeprom version: 0x%08x\r\n", eeprom_version);
+        read_version_from_eep ();
+        //eep_version = 0x00000000;                                                         // hack: reset EEPROM to default values
+        log_printf ("current eeprom/flash version: 0x%08x\r\n", eep_version);
 
-        if ((eeprom_version & 0xFF0000FF) == 0x00000000 &&
-            eeprom_version >= EEPROM_VERSION_1_5 && eeprom_version <= EEPROM_VERSION)
-        {                                                                       // Upper and Lower Byte must be 0x00
-            gmain.eeprom_version[0] = ((eeprom_version >> 16) & 0xFF) + '0';
-            gmain.eeprom_version[1] = '.';
-            gmain.eeprom_version[2] = ((eeprom_version >>  8) & 0xFF) + '0';
-            gmain.eeprom_version[4] = '\0';
+        if ((eep_version & 0xFF0000FF) == 0x00000000 &&
+            eep_version >= EEPROM_VERSION_1_5 && eep_version <= EEPROM_VERSION)
+        {                                                                                   // Upper and Lower Byte must be 0x00
+            gmain.eep_version[0] = ((eep_version >> 16) & 0xFF) + '0';
+            gmain.eep_version[1] = '.';
+            gmain.eep_version[2] = ((eep_version >>  8) & 0xFF) + '0';
+            gmain.eep_version[4] = '\0';
 
-            if (eeprom_version >= EEPROM_VERSION_1_5)
+            if (eep_version >= EEPROM_VERSION_1_5)
             {
-                log_message ("reading ir codes from eeprom");
-                remote_ir_read_codes_from_eeprom ();
+                log_message ("reading ir codes");
+                remote_ir_read_codes_from_eep ();
 
-                debug_log_message ("reading display configuration from eeprom");
-                display_read_config_from_eeprom (eeprom_version);
+                debug_log_message ("reading display configuration");
+                display_read_config_from_eep (eep_version);
 
-                debug_log_message ("reading timeserver data from eeprom");
-                timeserver_read_data_from_eeprom ();
+                debug_log_message ("reading timeserver data");
+                timeserver_read_data_from_eep ();
             }
 
-            debug_log_message ("reading overlay configuration from eeprom");
-            overlay_read_config_from_eeprom (eeprom_version);
+            debug_log_message ("reading overlay configuration");
+            overlay_read_config_from_eep (eep_version);
 
-            debug_log_message ("reading night timers from eeprom");
-            night_read_data_from_eeprom (eeprom_version);
+            debug_log_message ("reading night timers");
+            night_read_data_from_eep (eep_version);
 
-            debug_log_message ("reading alarm timers from eeprom");
-            alarm_read_data_from_eeprom (eeprom_version);
+            debug_log_message ("reading alarm timers");
+            alarm_read_data_from_eep (eep_version);
 
-            if (eeprom_version >= EEPROM_VERSION_2_1)
+            if (eep_version >= EEPROM_VERSION_2_1)
             {
-                debug_log_message ("reading temp configuration from eeprom");
-                temp_read_config_from_eeprom (eeprom_version);
-                rtc_read_config_from_eeprom (eeprom_version);
+                debug_log_message ("reading temp configuration");
+                temp_read_config_from_eep (eep_version);
+                rtc_read_config_from_eep (eep_version);
 
-                debug_log_message ("reading LDR configuration from eeprom");
-                ldr_read_config_from_eeprom (eeprom_version);
+                debug_log_message ("reading LDR configuration");
+                ldr_read_config_from_eep (eep_version);
             }
 
-            if (eeprom_version >= EEPROM_VERSION_2_2)
+            if (eep_version >= EEPROM_VERSION_2_2)
             {
-                debug_log_message ("reading weather configuration from eeprom");
-                weather_read_config_from_eeprom ();
+                debug_log_message ("reading weather configuration");
+                weather_read_config_from_eep ();
             }
 
-            debug_log_message ("reading dfplayer configuration from eeprom");
-            dfplayer_read_config_from_eeprom (eeprom_version);
+            debug_log_message ("reading dfplayer configuration");
+            dfplayer_read_config_from_eep (eep_version);
 
-            debug_log_message ("reading update host/path configuration from eeprom");
-            if (! read_main_parameters_from_eeprom ())
+            debug_log_message ("reading update host/path configuration");
+            if (! read_main_parameters_from_eep ())
             {
                 strcpy (gmain.update_host, DEFAULT_UPDATE_HOST);
                 strcpy (gmain.update_path, DEFAULT_UPDATE_PATH);
-                write_main_parameters_to_eeprom ();
+                write_main_parameters_to_eep ();
             }
+
+#if DSP_USE_TFTLED_RGB == 1
+            if (eep_version >= EEPROM_VERSION_2_9)
+            {
+                debug_log_message ("reading SSD1963 flags");
+                ssd1963_read_flags_from_eep ();
+            }
+#endif
         }
         display_set_status_or_minute_leds (0, 0, 0);                                       // switch status or minute LEDs off
     }
     else
     {
-        log_message ("eeprom is offline");
+        log_message ("eeprom/flash is offline");
     }
 }
 
@@ -705,110 +966,119 @@ read_configuration_from_eeprom (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static void
-upgrade_eeprom_version (void)
+upgrade_eep_version (void)
 {
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (eeprom_version != EEPROM_VERSION)
+        if (eep_version != EEPROM_VERSION)
         {
             display_set_status_or_minute_leds (1, 0, 0);                                        // show red status or minute LEDs
             log_printf ("updating EEPROM to version 0x%08x... ", EEPROM_VERSION);
 
-            eeprom_version = EEPROM_VERSION;
+            eep_version = EEPROM_VERSION;
 
             display_set_status_or_minute_leds (1, 1, 0);                                        // show yellow status or minute LEDs
 
-            if (! remote_ir_write_codes_to_eeprom ())
+            if (! remote_ir_write_codes_to_eep ())
             {
-                log_eeprom_error ("IR codes");
+                log_eep_error ("IR codes");
             }
 
             display_set_status_or_minute_leds (1, 0, 0);                                        // show red status or minute LEDs
 
-            if (! display_write_config_to_eeprom ())
+            if (! display_write_config_to_eep ())
             {
-                log_eeprom_error ("display configuration");
+                log_eep_error ("display configuration");
             }
 
             display_set_status_or_minute_leds (1, 1, 0);                                        // show yellow status or minute LEDs
 
-            if (! overlay_write_config_to_eeprom ())
+            if (! overlay_write_config_to_eep ())
             {
-                log_eeprom_error ("overlay configuration");
+                log_eep_error ("overlay configuration");
             }
 
             display_set_status_or_minute_leds (1, 0, 0);                                        // show red status or minute LEDs
 
-            if (! timeserver_write_data_to_eeprom ())
+            if (! timeserver_write_data_to_eep ())
             {
-                log_eeprom_error ("timeserver configuration");
+                log_eep_error ("timeserver configuration");
             }
 
             display_set_status_or_minute_leds (1, 1, 0);                                        // show yellow status or minute LEDs
 
-            if (! night_write_data_to_eeprom ())
+            if (! night_write_data_to_eep ())
             {
-                log_eeprom_error ("night time configuration");
+                log_eep_error ("night time configuration");
             }
 
             display_set_status_or_minute_leds (1, 0, 0);                                        // show red status or minute LEDs
 
-            if (! alarm_write_data_to_eeprom ())
+            if (! alarm_write_data_to_eep ())
             {
-                log_eeprom_error ("alarm time configuration");
+                log_eep_error ("alarm time configuration");
             }
 
             display_set_status_or_minute_leds (1, 1, 0);                                        // show yellow status or minute LEDs
 
-            if (! temp_write_config_to_eeprom ())
+            if (! temp_write_config_to_eep ())
             {
-                log_eeprom_error ("temperature configuration");
+                log_eep_error ("temperature configuration");
             }
 
             display_set_status_or_minute_leds (1, 0, 0);                                        // show red status or minute LEDs
 
-            if (! rtc_write_config_to_eeprom ())
+            if (! rtc_write_config_to_eep ())
             {
-                log_eeprom_error ("RTC configuration");
+                log_eep_error ("RTC configuration");
             }
 
             display_set_status_or_minute_leds (1, 1, 0);                                        // show yellow status or minute LEDs
 
-            if (! ldr_write_config_to_eeprom ())
+            if (! ldr_write_config_to_eep ())
             {
-                log_eeprom_error ("LDR configuration");
+                log_eep_error ("LDR configuration");
             }
 
             display_set_status_or_minute_leds (1, 0, 0);                                        // show red status or minute LEDs
 
-            if (! weather_write_config_to_eeprom ())
+            if (! weather_write_config_to_eep ())
             {
-                log_eeprom_error ("weather configuration");
+                log_eep_error ("weather configuration");
             }
 
             display_set_status_or_minute_leds (1, 1, 0);                                        // show yellow status or minute LEDs
 
-            if (! dfplayer_write_config_to_eeprom ())
+            if (! dfplayer_write_config_to_eep ())
             {
-                log_eeprom_error ("dfplayer configuration");
+                log_eep_error ("dfplayer configuration");
             }
 
             display_set_status_or_minute_leds (1, 0, 0);                                        // show red status or minute LEDs
 
-            if (! write_main_parameters_to_eeprom ())
+#if DSP_USE_TFTLED_RGB == 1
+            if (! ssd1963_write_flags_to_eep ())
             {
-                log_eeprom_error ("update main parameters configuration");
+                log_eep_error ("SSD1963 configuration");
             }
+#endif
 
             display_set_status_or_minute_leds (1, 1, 0);                                        // show yellow status or minute LEDs
 
-            if (! write_version_to_eeprom ())                                                   // at least, write new eeprom version
+            if (! write_main_parameters_to_eep ())
             {
-                log_eeprom_error ("version");
+                log_eep_error ("update main parameters configuration");
+            }
+
+            display_set_status_or_minute_leds (1, 0, 0);                                        // show red status or minute LEDs
+
+            if (! write_version_to_eep ())                                                      // at least, write new eeprom version
+            {
+                log_eep_error ("version");
             }
 
             log_message ("done");
-            eeprom_version = EEPROM_VERSION;
+            eep_version = EEPROM_VERSION;
 
             display_set_status_or_minute_leds (0, 0, 0);                                        // switch off status or minute LEDs
         }
@@ -880,7 +1150,7 @@ speak (uint_fast8_t hh, uint_fast8_t mm)
             do_show_it_is = 1;
         }
 
-        if (tables_fill_words (words, hh, mm, do_show_it_is))
+        if (tables_fill_words (words, hh, mm))
         {
             dfplayer_flush_queue ();
 
@@ -888,7 +1158,10 @@ speak (uint_fast8_t hh, uint_fast8_t mm)
             {
                 if (words[idx])
                 {
-                    dfplayer_enqueue (idx);
+                    if (do_show_it_is || !(tables.illumination[idx].len & ILLUMINATION_FLAG_IT_IS))
+                    {
+                        dfplayer_enqueue (idx);
+                    }
                 }
             }
 
@@ -902,6 +1175,7 @@ speak (uint_fast8_t hh, uint_fast8_t mm)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static uint_fast8_t     show_temperature            = 0;
+static uint_fast8_t     show_temperature_digits     = 0;
 static uint_fast8_t     display_clock_flag          = DISPLAY_CLOCK_FLAG_UPDATE_ALL;
 static uint_fast8_t     show_date                   = 0;
 static uint_fast8_t     last_ldr_value              = 0xFF;
@@ -996,7 +1270,7 @@ schedule_esp8266_remote_procedure (char * parameters)
 
             if (remote_ir_learn ())
             {
-                remote_ir_write_codes_to_eeprom ();
+                remote_ir_write_codes_to_eep ();
             }
             break;
         }
@@ -1039,9 +1313,9 @@ schedule_esp8266_remote_procedure (char * parameters)
 
         case RESET_EEPROM_RPC_VAR:
         {
-            eeprom_version = EEPROM_VERSION_0_0;
-            write_version_to_eeprom ();
-            debug_log_message ("rpc: reset EEPROM");
+            eep_version = EEPROM_VERSION_0_0;
+            write_version_to_eep ();
+            debug_log_message ("rpc: reset EEPROM/FLASH");
             break;
         }
 
@@ -1080,7 +1354,7 @@ schedule_esp8266_numeric_variable (char * parameters)
     {
         case EEPROM_IS_UP_NUM_VAR:
         {
-            debug_log_printf ("cmd: set eeprom_is_up = %d, but it's readonly\r\n", val);
+            debug_log_printf ("cmd: set eep_is_up = %d, but it's readonly\r\n", val);
             break;
         }
 
@@ -1126,6 +1400,20 @@ schedule_esp8266_numeric_variable (char * parameters)
             }
             break;
         }
+
+#ifdef BLACK_BOARD                                                              // TFT & SSD1963 only for STM32F407
+        case SSD1963_FLAGS_NUM_VAR:
+        {
+            if (ssd1963.flags != val)
+            {
+#if DSP_USE_TFTLED_RGB == 1
+                ssd1963_set_flags (val, FALSE);
+#endif
+                debug_log_printf ("cmd: set ssd1963_flags = %d\r\n", val);
+            }
+            break;
+        }
+#endif
 
         case DISPLAY_BRIGHTNESS_NUM_VAR:
         {
@@ -1241,15 +1529,21 @@ schedule_esp8266_numeric_variable (char * parameters)
 
         case TIMEZONE_NUM_VAR:
         {
-            int_fast16_t tz = val & 0xFF;
+            uint_fast8_t    do_observe_summertime = 0;
+            int_fast16_t    tz = val & 0xFF;
 
             if (val & 0x100)
             {
                 tz = -tz;
             }
 
+            if (val & 0x200)
+            {
+                do_observe_summertime = 1;
+            }
+
             debug_log_printf ("cmd: set timezone = %d\r\n", tz);
-            timeserver_set_timezone (tz);
+            timeserver_set_timezone (tz, do_observe_summertime);
             break;
         }
 
@@ -1456,7 +1750,7 @@ schedule_esp8266_string_variable (char * parameters)
 
         case EEPROM_VERSION_STR_VAR:
         {
-            debug_log_printf ("cmd: set eeprom_version = '%s', but it's readonly\r\n", parameters);
+            debug_log_printf ("cmd: set eep_version = '%s', but it's readonly\r\n", parameters);
             break;
         }
 
@@ -1504,7 +1798,7 @@ schedule_esp8266_string_variable (char * parameters)
         case UPDATE_HOST_VAR:
         {
             strncpy (gmain.update_host, parameters, EEPROM_MAX_HOSTNAME_LEN - 1);
-            write_update_host_to_eeprom ();
+            write_update_host_to_eep ();
             debug_log_printf ("cmd: set update host = '%s'\r\n", parameters);
             break;
         }
@@ -1512,7 +1806,7 @@ schedule_esp8266_string_variable (char * parameters)
         case UPDATE_PATH_VAR:
         {
             strncpy (gmain.update_path, parameters, EEPROM_MAX_UPDATE_PATH_LEN - 1);
-            write_update_path_to_eeprom ();
+            write_update_path_to_eep ();
             debug_log_printf ("cmd: set update path = '%s'\r\n", parameters);
             break;
         }
@@ -1603,13 +1897,13 @@ schedule_esp8266_display_variable (char * parameters)
 
     switch (cmd_code)
     {
-        case 'N':                                       // DN: Display mode Name
+        case 'N':                                                       // DN: Display mode Name
         {
             debug_log_printf ("cmd: set display_mode_name[%d] = '%s', but it's readonly\r\n", var_idx, parameters);
             break;
         }
 
-        case 'C':                                       // DC: Display Color
+        case 'C':                                                       // DC: Display Color
         {
             DSP_COLORS rgb;
 
@@ -1909,7 +2203,7 @@ schedule_esp8266_night_tables (char * parameters)
 
     night_time[var_idx].minutes = minutes;
     night_time[var_idx].flags = flags;
-    night_write_data_to_eeprom ();
+    night_write_data_to_eep ();
     debug_log_printf ("cmd: set night_time[%d]: minutes = %d, flags = 0x%02x\r\n", var_idx, minutes, flags);
 }
 
@@ -1933,7 +2227,7 @@ schedule_esp8266_ambilight_night_tables (char * parameters)
 
     ambilight_night_time[var_idx].minutes = minutes;
     ambilight_night_time[var_idx].flags = flags;
-    night_write_data_to_eeprom ();
+    night_write_data_to_eep ();
     debug_log_printf ("cmd: set ambilight night_time[%d]: minutes = %d, flags = 0x%02x\r\n", var_idx, minutes, flags);
 }
 
@@ -1957,7 +2251,7 @@ schedule_esp8266_alarm_tables (char * parameters)
 
     alarm_time[var_idx].minutes = minutes;
     alarm_time[var_idx].flags = flags;
-    alarm_write_data_to_eeprom ();
+    alarm_write_data_to_eep ();
     debug_log_printf ("cmd: set alarm_time[%d]: minutes = %d, flags = 0x%02x\r\n", var_idx, minutes, flags);
 }
 
@@ -2257,8 +2551,22 @@ schedule_esp8266_messages (void)
         case ESP8266_TABM:
         {
             tables_tabm (esp8266.u.tabm);
+
+#if DSP_USE_TFTLED_RGB == 1
+            if (tables.complete)
+            {
+                tftled_layout (0);                                                      // start transfer of led layout
+            }
+#endif
             break;
         }
+#if DSP_USE_TFTLED_RGB == 1
+        case ESP8266_DISP:
+        {
+            tftled_layout_get_line (esp8266.u.disp);
+            break;
+        }
+#endif
         case ESP8266_OK:
         {
             var_send_busy = 0;
@@ -2341,14 +2649,20 @@ main (void)
 #endif
 
     gmain.hardware_configuration = 0;
-#if defined (STM32F103)
-    gmain.hardware_configuration |= HW_STM32_F103;
+#if defined (STM32F103C8)
+    gmain.hardware_configuration |= HW_STM32_F103C8;
 #elif defined (STM32F401RE)
-    gmain.hardware_configuration |= HW_STM32_F401;
+    gmain.hardware_configuration |= HW_STM32_F401RE;
+#elif defined (STM32F401CC)
+    gmain.hardware_configuration |= HW_STM32_F401CC;
+#elif defined (STM32F411CE)
+    gmain.hardware_configuration |= HW_STM32_F411CE;
 #elif defined (STM32F411RE)
-    gmain.hardware_configuration |= HW_STM32_F411;
+    gmain.hardware_configuration |= HW_STM32_F411RE;
 #elif defined (STM32F446RE)
-    gmain.hardware_configuration |= HW_STM32_F446;
+    gmain.hardware_configuration |= HW_STM32_F446RE;
+#elif defined (STM32F407VE)
+    gmain.hardware_configuration |= HW_STM32_F407VE;
 #else
 # error unknown STM32 hardware
 #endif
@@ -2369,8 +2683,16 @@ main (void)
     gmain.hardware_configuration |= HW_LED_SK6812_RGB_LED;
 #elif DSP_USE_SK6812_RGBW == 1
     gmain.hardware_configuration |= HW_LED_SK6812_RGBW_LED;
+#elif DSP_USE_TFTLED_RGB == 1
+    gmain.hardware_configuration |= HW_LED_TFTLED_RGB_LED;
 #else
 # error unknown LED type
+#endif
+
+#if HSE_VALUE == 25000000
+    gmain.hardware_configuration |= HW_OSC_FREQUENCY_25MHZ;
+#else
+    gmain.hardware_configuration |= HW_OSC_FREQUENCY_8MHZ;
 #endif
 
     strcpy (gmain.update_host, DEFAULT_UPDATE_HOST);
@@ -2400,6 +2722,11 @@ main (void)
     log_flush ();
     button_init ();                                                         // initialize GPIO for user button
 
+#if DSP_USE_TFTLED_RGB
+    log_message ("tftled_init...");
+    tftled_init ();
+#endif
+
     if (button_pressed ())                                                  // set ESP8266 into flash mode
     {
         board_led_on ();
@@ -2417,17 +2744,44 @@ main (void)
     log_flush ();
     log_message (VERSION);
 
-#if defined (STM32F103)
-    log_message ("Hardware: STM32F103");
-#elif defined (STM32F401RE)
-    log_message ("Hardware: STM32F401RE");
-#elif defined (STM32F411RE)
-    log_message ("Hardware: STM32F411RE");
-#elif defined (STM32F446RE)
-    log_message ("Hardware: STM32F446RE");
+#if defined (BLUEPILL_BOARD)
+#  if defined (STM32F103C8)
+    log_message ("Hardware: STM32F103 BluePill");
+#  else
+#    error unknown STM32 hardware
+#  endif
+
+#elif defined (NUCLEO_BOARD)
+#  if defined (STM32F401RE)
+    log_message ("Hardware: STM32F401RE Nucleo");
+#  elif defined (STM32F411RE)
+    log_message ("Hardware: STM32F411RE Nucleo");
+#  elif defined (STM32F446RE)
+    log_message ("Hardware: STM32F446RE Nucleo");
+#  else
+#    error unknown STM32 hardware
+#  endif
+
+#elif defined (BLACKPILL_BOARD)
+#  if defined (STM32F401CC)
+    log_message ("Hardware: STM32F401CC BlackPill");
+#  elif defined (STM32F411CE)
+    log_message ("Hardware: STM32F411CE BlackPill");
+#  else
+#    error unknown STM32 hardware
+#  endif
+
+#elif defined (BLACK_BOARD)
+#  if defined (STM32F407VE)
+    log_message ("Hardware: STM32F407VE Black");
+#  else
+#    error unknown STM32 hardware
+#  endif
+
 #else
-# error unknown STM32 hardware
+#  error unknown STM32 hardware
 #endif
+
     log_flush ();
 
 #if WCLOCK24H == 1
@@ -2447,13 +2801,24 @@ main (void)
     log_message ("LEDs: SK6812 RGB");
 #elif DSP_USE_SK6812_RGBW == 1
     log_message ("LEDs: SK6812 RGBW");
+#elif DSP_USE_TFTLED_RGB == 1
+    log_message ("LEDs: TFTLED RGB");
 #else
 # error unknown LED type
 #endif
+
+    RCC_ClocksTypeDef RCC_Clocks;
+    RCC_GetClocksFreq(&RCC_Clocks);
+
+    log_printf ("SYS:%lu H:%lu, P1:%lu, P2:%lu\r\n",
+                      RCC_Clocks.SYSCLK_Frequency,
+                      RCC_Clocks.HCLK_Frequency,   // AHB
+                      RCC_Clocks.PCLK1_Frequency,  // APB1
+                      RCC_Clocks.PCLK2_Frequency); // APB2
     log_flush ();
 
     rtc_init (clockspeed);                                                  // initialize I2C RTC
-    eeprom_init (clockspeed);                                               // initialize I2C EEPROM
+    eep_init (clockspeed);                                                  // initialize I2C EEPROM or SPI FLASH
 
     if (grtc.rtc_is_up)
     {
@@ -2464,22 +2829,22 @@ main (void)
         log_message ("rtc is offline");
     }
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        log_message ("eeprom is online");
+        log_message ("eeprom/flash is online");
     }
     else
     {
-        log_message ("eeprom is offline");
+        log_message ("eeprom/flash is offline");
     }
 
-    if (! grtc.rtc_is_up || ! eeprom_is_up)
+    if (! grtc.rtc_is_up || ! eep_is_up)
     {
         log_message ("trying to reduce I2C clock speed...");
         clockspeed /= 2;
 
         rtc_init (clockspeed);                                              // initialize I2C RTC again
-        eeprom_init (clockspeed);                                           // initialize I2C EEPROM again
+        eep_init (clockspeed);                                              // initialize I2C EEPROM again
 
         if (grtc.rtc_is_up)
         {
@@ -2490,7 +2855,7 @@ main (void)
             log_message ("rtc remains offline");
         }
 
-        if (eeprom_is_up)
+        if (eep_is_up)
         {
             log_message ("eeprom is now online");
         }
@@ -2500,13 +2865,29 @@ main (void)
         }
     }
 
+    if (grtc.rtc_is_up)
+    {
+        struct tm tm;
+
+        if (rtc_get_date_time (& tm))
+        {
+            uint32_t z = (tm.tm_sec + 60 * tm.tm_min + 3600 * tm.tm_hour) & 0xFFFF;
+            my_srand (z);
+        }
+    }
+
     display_init ();                                                        // initialize display
     overlay_init ();                                                        // initialize overlays
     night_init ();                                                          // initialize night time routines
 
-    read_configuration_from_eeprom ();                                      // read configuration from EEPROM
+    read_configuration_from_eep ();                                         // read configuration from EEPROM
     display_reset_led_states ();
-    upgrade_eeprom_version ();                                              // upgrade EEPROM to current version
+    upgrade_eep_version ();                                                 // upgrade EEPROM to current version
+    eep_flush (1);
+
+#if DSP_USE_TFTLED_RGB == 1
+    touch_init ();
+#endif
 
     ldr_init ();                                                            // initialize LDR (ADC)
     dcf77_init ();                                                          // initialize DCF77
@@ -2531,7 +2912,7 @@ main (void)
             debug_log_message ("calling IR learn function");
             if (remote_ir_learn ())                                         // learn IR commands
             {
-                remote_ir_write_codes_to_eeprom ();                         // if successful, save them in EEPROM
+                remote_ir_write_codes_to_eep ();                            // if successful, save them in EEPROM
             }
             break;                                                          // and break the loop
         }
@@ -2550,12 +2931,6 @@ main (void)
     {
         rtc_get_temperature_index ();
     }
-
-#if 0
-    nic_load ();
-    nic_main ();
-    nic_unload ();
-#endif
 
     if (grtc.rtc_is_up && rtc_get_date_time (&gmain.tm))
     {
@@ -2598,6 +2973,12 @@ main (void)
             }
         }
 
+        eep_flush (0);
+
+#if DSP_USE_TFTLED_RGB == 1
+        touch_check ();
+#endif
+
         if (status_led_cnt)
         {
             status_led_cnt--;
@@ -2610,7 +2991,11 @@ main (void)
 
         schedule_esp8266_messages ();
 
-        if (display.animation_stop_flag && ! display.do_display_icon && display.automatic_brightness && ldr_poll_brightness ())
+        if (display.animation_stop_flag &&                                                                  // no animation running
+            show_icon_stop_time == 0 &&                                                                     // no temperature display
+            ! display.do_display_icon &&                                                                    // no icon display
+            display.automatic_brightness &&                                                                 // automatic brightness
+            ldr_poll_brightness ())                                                                         // read LDR brightness
         {
             ldr_raw_value = ldr.ldr_raw_value;
 
@@ -2928,6 +3313,12 @@ main (void)
                     log_message ("overlay temperature");
                     break;
                 }
+                case OVERLAY_TYPE_TEMPERATURE_DIGITS:                                                       // temperature digits
+                {
+                    show_temperature_digits = 1;
+                    log_message ("overlay temperature digits");
+                    break;
+                }
                 case OVERLAY_TYPE_WEATHER_ICON:                                                             // weather icon
                 {
                     weather_query (WEATHER_QUERY_ID_ICON);
@@ -3023,6 +3414,21 @@ main (void)
                 show_icon_stop_time = 0xFFFFFFFF;                                       // flag: wait for end of animation
             }
         }
+        else if (show_temperature_digits)
+        {
+            show_temperature_digits = 0;
+
+            if (ds18xx_temperature_index != 0xFF)
+            {
+                display_temperature_digits (ds18xx_temperature_index);
+                show_icon_stop_time = 0xFFFFFFFF;                                       // flag: wait for end of animation
+            }
+            else if (rtc_temperature_index != 0xFF)
+            {
+                display_temperature_digits (rtc_temperature_index);
+                show_icon_stop_time = 0xFFFFFFFF;                                       // flag: wait for end of animation
+            }
+        }
 
         if (show_date)
         {
@@ -3043,7 +3449,6 @@ main (void)
                         sprintf (datebuf + datebuflen, "%02d", gmain.tm.tm_mday);
                         break;
                     case 'm':
-                        if (datebuflen < 16 - 2)
                         sprintf (datebuf + datebuflen, "%d", gmain.tm.tm_mon + 1);
                         break;
                     case 'M':

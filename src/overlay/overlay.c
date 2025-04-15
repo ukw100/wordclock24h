@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * overlay.c - handle overlays
  *
- * Copyright (c) 2017-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2017-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
  * (at your option) any later version.
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 #include "base.h"
 #include "log.h"
@@ -22,22 +22,22 @@ OVERLAY_GLOBALS  overlay;
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-overlay_read_config_from_eeprom (uint32_t eeprom_version)
+overlay_read_config_from_eep (uint32_t eep_version)
 {
     uint_fast8_t  idx;
     uint_fast8_t  rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
         rtc = 1;
 
-        if (eeprom_version >= EEPROM_VERSION_2_8)
+        if (eep_version >= EEPROM_VERSION_2_8)
         {
             uint8_t         overlay_buffer8[EEPROM_OVERLAY_ENTRY_SIZE];
             uint8_t         n_overlays8 = 0;
             uint_fast8_t    bidx;
 
-            eeprom_read (EEPROM_DATA_OFFSET_N_OVERLAYS,  &n_overlays8, EEPROM_DATA_SIZE_N_OVERLAYS);
+            eep_read (EEPROM_DATA_OFFSET_N_OVERLAYS,  &n_overlays8, EEPROM_DATA_SIZE_N_OVERLAYS);
 
             if (n_overlays8 >= MAX_OVERLAYS)
             {
@@ -48,7 +48,7 @@ overlay_read_config_from_eeprom (uint32_t eeprom_version)
 
             for (idx = 0; idx < overlay.n_overlays; idx++)
             {
-                eeprom_read (EEPROM_DATA_OFFSET_OVERLAY + idx * EEPROM_OVERLAY_ENTRY_SIZE, overlay_buffer8, EEPROM_OVERLAY_ENTRY_SIZE);
+                eep_read (EEPROM_DATA_OFFSET_OVERLAY + idx * EEPROM_OVERLAY_ENTRY_SIZE, overlay_buffer8, EEPROM_OVERLAY_ENTRY_SIZE);
 
                 bidx = 0;
                 overlay.overlays[idx].type = overlay_buffer8[bidx];
@@ -91,7 +91,7 @@ overlay_save_n_overlays (void)
 {
     uint8_t n_overlays8 = overlay.n_overlays;
 
-    eeprom_write (EEPROM_DATA_OFFSET_N_OVERLAYS,  &n_overlays8, EEPROM_DATA_SIZE_N_OVERLAYS);
+    eep_write (EEPROM_DATA_OFFSET_N_OVERLAYS,  &n_overlays8, EEPROM_DATA_SIZE_N_OVERLAYS);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ overlay_save_overlay (uint_fast8_t idx)
     overlay_buffer8[bidx] = overlay.overlays[idx].flags;
     bidx += OVERLAY_FLAGS_LEN;
 
-    eeprom_write (EEPROM_DATA_OFFSET_OVERLAY + idx * EEPROM_OVERLAY_ENTRY_SIZE, overlay_buffer8, EEPROM_OVERLAY_ENTRY_SIZE);
+    eep_write (EEPROM_DATA_OFFSET_OVERLAY + idx * EEPROM_OVERLAY_ENTRY_SIZE, overlay_buffer8, EEPROM_OVERLAY_ENTRY_SIZE);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -153,11 +153,11 @@ overlay_save_overlays (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-overlay_write_config_to_eeprom (void)
+overlay_write_config_to_eep (void)
 {
     uint_fast8_t            rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
         overlay_save_n_overlays ();
         overlay_save_overlays ();

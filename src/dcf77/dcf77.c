@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * dcf77.c - dcf77 routines
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,13 +12,23 @@
 #include <string.h>
 #include "wclock24h-config.h"
 #include "dcf77.h"
-#include "eeprom.h"
-#include "eeprom-data.h"
 #include "log.h"
 #include "board-led.h"
 #include "io.h"
 
-#if defined (STM32F4XX)                                     // STM32F4xx Nucleo Board: DATA=PC11 PON=PC12
+#if defined (BLACK_BOARD)                                   // STM32F407VE Black Board: DATA=PC2 PON=PC3
+
+#  define DCF77_DATA_PERIPH_CLOCK_CMD   RCC_AHB1PeriphClockCmd
+#  define DCF77_DATA_PERIPH             RCC_AHB1Periph_GPIOC
+#  define DCF77_DATA_PORT               GPIOC
+#  define DCF77_DATA_PIN                GPIO_Pin_2
+
+#  define DCF77_PON_PERIPH_CLOCK_CMD    RCC_AHB1PeriphClockCmd
+#  define DCF77_PON_PERIPH              RCC_AHB1Periph_GPIOC
+#  define DCF77_PON_PORT                GPIOC
+#  define DCF77_PON_PIN                 GPIO_Pin_3
+
+#elif defined (NUCLEO_BOARD)                                // STM32F4xx Nucleo Board: DATA=PC11 PON=PC12
 
 #  define DCF77_DATA_PERIPH_CLOCK_CMD   RCC_AHB1PeriphClockCmd
 #  define DCF77_DATA_PERIPH             RCC_AHB1Periph_GPIOC
@@ -30,7 +40,19 @@
 #  define DCF77_PON_PORT                GPIOC
 #  define DCF77_PON_PIN                 GPIO_Pin_12
 
-#elif defined (STM32F103)                                   // STM32F103 Mini Development Board: DATA=PB8 PON=PB9
+#elif defined (BLACKPILL_BOARD)                             // STM32F4x1 BlackPill Board: DATA=PB8 PON=PB9
+
+#  define DCF77_DATA_PERIPH_CLOCK_CMD   RCC_AHB1PeriphClockCmd
+#  define DCF77_DATA_PERIPH             RCC_AHB1Periph_GPIOB
+#  define DCF77_DATA_PORT               GPIOB
+#  define DCF77_DATA_PIN                GPIO_Pin_8
+
+#  define DCF77_PON_PERIPH_CLOCK_CMD    RCC_AHB1PeriphClockCmd
+#  define DCF77_PON_PERIPH              RCC_AHB1Periph_GPIOB
+#  define DCF77_PON_PORT                GPIOB
+#  define DCF77_PON_PIN                 GPIO_Pin_9
+
+#elif defined (BLUEPILL_BOARD)                              // STM32F103 BluePill Board: DATA=PB8 PON=PB9
 
 #  define DCF77_DATA_PERIPH_CLOCK_CMD   RCC_APB2PeriphClockCmd
 #  define DCF77_DATA_PERIPH             RCC_APB2Periph_GPIOB
@@ -48,7 +70,7 @@
 
 static uint_fast8_t                     time_is_valid = 0;
 
-#define STATE_PON                       0xFF                    // wait 1 sec, then set PON to GND (only for very old Pollin DCF1 versions)
+#define STATE_PON                       0xFF                // wait 1 sec, then set PON to GND (only for very old Pollin DCF1 versions)
 #define STATE_UNKNOWN                   0
 #define STATE_WAIT                      1
 #define STATE_0                         2
@@ -114,42 +136,15 @@ dcf77_pon_reset (void)
 void
 dcf77_init (void)
 {
-    GPIO_InitTypeDef gpio;
-
     // Initialize DATA pin:
-    GPIO_StructInit (&gpio);
     DCF77_DATA_PERIPH_CLOCK_CMD (DCF77_DATA_PERIPH, ENABLE);
-
-    gpio.GPIO_Pin   = DCF77_DATA_PIN;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-
-#if defined (STM32F10X)
-    gpio.GPIO_Mode  = GPIO_Mode_IN_FLOATING;     // use pin as input, no pullup
-#elif defined (STM32F4XX)
-    gpio.GPIO_Mode  = GPIO_Mode_IN;              // use pin as input, no pullup
-    gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;          // possible values: GPIO_PuPd__NOPULL  GPIO_PuPd__UP   GPIO_PuPd__DOWN
-#endif
-
-    GPIO_Init(DCF77_DATA_PORT, &gpio);
+    GPIO_SET_PIN_IN_NOPULL(DCF77_DATA_PORT, DCF77_DATA_PIN, GPIO_Speed_2MHz);
 
     // Initialize PON pin:
-    GPIO_StructInit (&gpio);
     DCF77_PON_PERIPH_CLOCK_CMD (DCF77_PON_PERIPH, ENABLE);
+    GPIO_SET_PIN_OUT_PP(DCF77_PON_PORT, DCF77_PON_PIN, GPIO_Speed_2MHz);
 
-    gpio.GPIO_Pin   = DCF77_PON_PIN;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-
-#if defined (STM32F10X)
-    gpio.GPIO_Mode  = GPIO_Mode_Out_PP;         // use pin as output, push-pull
-#elif defined (STM32F4XX)
-    gpio.GPIO_Mode  = GPIO_Mode_OUT;            // use pin as output
-    gpio.GPIO_OType = GPIO_OType_PP;            // push-pull
-    gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;         // no pullup/pulldown
-#endif
-
-    GPIO_Init(DCF77_PON_PORT, &gpio);
-
-    dcf77_pon_set ();                           // Pollin DCF modules want a pulse on PON
+    dcf77_pon_set ();                           // Pollin DCF module: pulse PON
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------

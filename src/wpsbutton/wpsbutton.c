@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * wpsbutton.c - read WPS button of STM32F4xx Nucleo and STM32F103
  *
- * Copyright (c) 2017-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2017-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10,21 +10,31 @@
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 #include "wpsbutton.h"
+#include "io.h"
 
-#if defined (STM32F4XX)                                                 // STM32F4xx Nucleo Board PC5
+#if defined (BLACK_BOARD)                                               // STM32F407VE Black Board PE3
+#define WPSBUTTON_PERIPH_CLOCK_CMD     RCC_AHB1PeriphClockCmd
+#define WPSBUTTON_PERIPH               RCC_AHB1Periph_GPIOE
+#define WPSBUTTON_PORT                 GPIOE                            // PE3
+#define WPSBUTTON_PIN                  GPIO_Pin_3
+
+#elif defined (NUCLEO_BOARD)                                            // STM32F4xx Nucleo Board PC5
 #define WPSBUTTON_PERIPH_CLOCK_CMD     RCC_AHB1PeriphClockCmd
 #define WPSBUTTON_PERIPH               RCC_AHB1Periph_GPIOC
 #define WPSBUTTON_PORT                 GPIOC                            // PC5
 #define WPSBUTTON_PIN                  GPIO_Pin_5
-#define WPSBUTTON_PRESSED              Bit_RESET                        // pressed if low
 
-#elif defined (STM32F103)                                               // STM32F103 Mini Development Board PA6
+#elif defined (BLACKPILL_BOARD)                                         // STM32F4x1 BlackPill Board PB5
+#define WPSBUTTON_PERIPH_CLOCK_CMD     RCC_AHB1PeriphClockCmd
+#define WPSBUTTON_PERIPH               RCC_AHB1Periph_GPIOA
+#define WPSBUTTON_PORT                 GPIOA                            // PA7
+#define WPSBUTTON_PIN                  GPIO_Pin_7
 
+#elif defined (BLUEPILL_BOARD)                                          // STM32F103 BluePill Board PA7
 #define WPSBUTTON_PERIPH_CLOCK_CMD     RCC_APB2PeriphClockCmd
 #define WPSBUTTON_PERIPH               RCC_APB2Periph_GPIOA
 #define WPSBUTTON_PORT                 GPIOA                            // PA7
 #define WPSBUTTON_PIN                  GPIO_Pin_7
-#define WPSBUTTON_PRESSED              Bit_RESET                        // pressed if low
 
 #else
 #error STM32 unknown
@@ -37,21 +47,8 @@
 void
 wpsbutton_init (void)
 {
-    GPIO_InitTypeDef gpio;
-
-    GPIO_StructInit (&gpio);
     WPSBUTTON_PERIPH_CLOCK_CMD (WPSBUTTON_PERIPH, ENABLE);
-
-    gpio.GPIO_Pin = WPSBUTTON_PIN;
-
-#if defined (STM32F10X)
-    gpio.GPIO_Mode = GPIO_Mode_IPU;                         // use pin as input with internal pull up
-#elif defined (STM32F4XX)
-    gpio.GPIO_Mode = GPIO_Mode_IN;                          // use pin as input with internal pull up
-    gpio.GPIO_PuPd = GPIO_PuPd_UP;
-#endif
-
-    GPIO_Init(WPSBUTTON_PORT, &gpio);
+    GPIO_SET_PIN_IN_UP(WPSBUTTON_PORT, WPSBUTTON_PIN, GPIO_Speed_2MHz);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -61,7 +58,7 @@ wpsbutton_init (void)
 uint_fast8_t
 wpsbutton_pressed (void)
 {
-    if (GPIO_ReadInputDataBit(WPSBUTTON_PORT, WPSBUTTON_PIN) == WPSBUTTON_PRESSED)
+    if (GPIO_GET_BIT(WPSBUTTON_PORT, WPSBUTTON_PIN) == Bit_RESET)
     {
         return 1;
     }

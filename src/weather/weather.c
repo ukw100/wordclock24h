@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * weather.c - functions using openweathermap.org
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
 #include "base.h"
 #include "weather.h"
 #include "esp8266.h"
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 
 /*--------------------------------------------------------------------------------------------------------------------------------------
@@ -27,15 +27,15 @@ WEATHER_GLOBALS   weather;
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-weather_read_config_from_eeprom (void)
+weather_read_config_from_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up &&
-        eeprom_read (EEPROM_DATA_OFFSET_WEATHER_APPID,  (uint8_t *) weather.appid,  EEPROM_DATA_SIZE_WEATHER_APPID) &&
-        eeprom_read (EEPROM_DATA_OFFSET_WEATHER_CITY,   (uint8_t *) weather.city,   EEPROM_DATA_SIZE_WEATHER_CITY) &&
-        eeprom_read (EEPROM_DATA_OFFSET_WEATHER_LON,    (uint8_t *) weather.lon,    EEPROM_DATA_SIZE_WEATHER_LON) &&
-        eeprom_read (EEPROM_DATA_OFFSET_WEATHER_LAT,    (uint8_t *) weather.lat,    EEPROM_DATA_SIZE_WEATHER_LAT))
+    if (eep_is_up &&
+        eep_read (EEPROM_DATA_OFFSET_WEATHER_APPID,  (uint8_t *) weather.appid,  EEPROM_DATA_SIZE_WEATHER_APPID) &&
+        eep_read (EEPROM_DATA_OFFSET_WEATHER_CITY,   (uint8_t *) weather.city,   EEPROM_DATA_SIZE_WEATHER_CITY) &&
+        eep_read (EEPROM_DATA_OFFSET_WEATHER_LON,    (uint8_t *) weather.lon,    EEPROM_DATA_SIZE_WEATHER_LON) &&
+        eep_read (EEPROM_DATA_OFFSET_WEATHER_LAT,    (uint8_t *) weather.lat,    EEPROM_DATA_SIZE_WEATHER_LAT))
     {
         if (*(unsigned char *) (weather.appid) == 0xFF || *(unsigned char *) (weather.city) == 0xFF ||
             *(unsigned char *) (weather.lon) == 0xFF || *(unsigned char *) (weather.lat) == 0xFF)
@@ -45,7 +45,7 @@ weather_read_config_from_eeprom (void)
             weather.lon[0] = '\0';
             weather.lat[0] = '\0';
 
-            weather_write_config_to_eeprom ();                          // repair uninitialized EEPROM range
+            weather_write_config_to_eep ();                          // repair uninitialized EEPROM range
         }
         rtc = 1;
     }
@@ -62,7 +62,7 @@ weather_save_appid (void)
 {
     uint_fast8_t    rtc;
 
-    rtc = eeprom_write (EEPROM_DATA_OFFSET_WEATHER_APPID, (uint8_t *) weather.appid, EEPROM_DATA_SIZE_WEATHER_APPID);
+    rtc = eep_write (EEPROM_DATA_OFFSET_WEATHER_APPID, (uint8_t *) weather.appid, EEPROM_DATA_SIZE_WEATHER_APPID);
 
     return rtc;
 }
@@ -76,7 +76,7 @@ weather_save_city (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up && eeprom_write (EEPROM_DATA_OFFSET_WEATHER_CITY, (uint8_t *) weather.city, EEPROM_DATA_SIZE_WEATHER_CITY))
+    if (eep_is_up && eep_write (EEPROM_DATA_OFFSET_WEATHER_CITY, (uint8_t *) weather.city, EEPROM_DATA_SIZE_WEATHER_CITY))
     {
         rtc = 1;
     }
@@ -93,8 +93,8 @@ weather_save_lon (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up &&
-        eeprom_write (EEPROM_DATA_OFFSET_WEATHER_LON, (uint8_t *) weather.lon, EEPROM_DATA_SIZE_WEATHER_LON))
+    if (eep_is_up &&
+        eep_write (EEPROM_DATA_OFFSET_WEATHER_LON, (uint8_t *) weather.lon, EEPROM_DATA_SIZE_WEATHER_LON))
     {
         rtc = 1;
     }
@@ -111,8 +111,8 @@ weather_save_lat (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up &&
-        eeprom_write (EEPROM_DATA_OFFSET_WEATHER_LAT, (uint8_t *) weather.lat, EEPROM_DATA_SIZE_WEATHER_LAT))
+    if (eep_is_up &&
+        eep_write (EEPROM_DATA_OFFSET_WEATHER_LAT, (uint8_t *) weather.lat, EEPROM_DATA_SIZE_WEATHER_LAT))
     {
         rtc = 1;
     }
@@ -125,7 +125,7 @@ weather_save_lat (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-weather_write_config_to_eeprom (void)
+weather_write_config_to_eep (void)
 {
     uint_fast8_t    rtc = 0;
 

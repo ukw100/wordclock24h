@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * base.h - declarations of base routines
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,4 +53,7 @@ extern uint_fast8_t     get_date_code (uint_fast16_t, int);
 uint_fast16_t           get_date_by_date_code (uint_fast8_t , int);
 extern uint16_t         htoi (char *, uint8_t);
 extern void             strsubst (char *, int, int);
+extern void             my_srand (unsigned int z);
+extern uint32_t         my_rand (void);
+extern struct tm *      my_gmtime (time_t * tvp);
 #endif

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * display-config.h - configuration of display driver
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,13 +21,18 @@
 #define APA102_RGB_LED              3                                   // use APA102 RGB  LEDs
 #define SK6812_RGB_LED              4                                   // use SK6812 RGB  LEDs
 #define SK6812_RGBW_LED             5                                   // use SK6812 RGBW LEDs
+#define TFTLED_RGB_LED              6                                   // use TFT RGB LED simulator
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * change here:
  *---------------------------------------------------------------------------------------------------------------------------------------------------
  */
 #ifndef DSP_USE_LED
-#define DSP_USE_LED                 WS2812_GRB_LED                      // set exactly one of the values above here, default is WS2812_GRB_LED
+#  if defined (BLACK_BOARD)
+#    define DSP_USE_LED                 TFTLED_RGB_LED                  // default for STM32F407 Black Board is TFTLED_RGB_LED
+#  else
+#    define DSP_USE_LED                 WS2812_GRB_LED                  // all other boards: default is WS2812_GRB_LED
+#  endif
 #endif
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -40,30 +45,48 @@
 #define DSP_USE_APA102              0
 #define DSP_USE_SK6812_RGB          0
 #define DSP_USE_SK6812_RGBW         0
+#define DSP_USE_TFTLED_RGB          0
+
 #elif DSP_USE_LED == WS2812_RGB_LED
 #define DSP_USE_WS2812_GRB          0
 #define DSP_USE_WS2812_RGB          1
 #define DSP_USE_APA102              0
 #define DSP_USE_SK6812_RGB          0
 #define DSP_USE_SK6812_RGBW         0
+#define DSP_USE_TFTLED_RGB          0
+
 #elif DSP_USE_LED == APA102_RGB_LED
 #define DSP_USE_WS2812_GRB          0
 #define DSP_USE_WS2812_RGB          0
 #define DSP_USE_APA102              1
 #define DSP_USE_SK6812_RGB          0
 #define DSP_USE_SK6812_RGBW         0
+#define DSP_USE_TFTLED_RGB          0
+
 #elif DSP_USE_LED == SK6812_RGB_LED
 #define DSP_USE_WS2812_GRB          0
 #define DSP_USE_WS2812_RGB          0
 #define DSP_USE_APA102              0
 #define DSP_USE_SK6812_RGB          1
 #define DSP_USE_SK6812_RGBW         0
+#define DSP_USE_TFTLED_RGB          0
+
 #elif DSP_USE_LED == SK6812_RGBW_LED
 #define DSP_USE_WS2812_GRB          0
 #define DSP_USE_WS2812_RGB          0
 #define DSP_USE_APA102              0
 #define DSP_USE_SK6812_RGB          0
 #define DSP_USE_SK6812_RGBW         1
+#define DSP_USE_TFTLED_RGB          0
+
+#elif DSP_USE_LED == TFTLED_RGB_LED
+#define DSP_USE_WS2812_GRB          0
+#define DSP_USE_WS2812_RGB          0
+#define DSP_USE_APA102              0
+#define DSP_USE_SK6812_RGB          0
+#define DSP_USE_SK6812_RGBW         0
+#define DSP_USE_TFTLED_RGB          1
+
 #else
 #error invalid LED type
 #endif

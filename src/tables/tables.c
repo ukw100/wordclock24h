@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * tables.c - wordclock layout tables
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 #include "tables.h"
 #include "base.h"
 #include "log.h"
+
+#define TABLES_VERSION_MAGIC    0xFF                    // Magic of version header
 
 TABLES_GLOBALS      tables;
 
@@ -86,10 +88,10 @@ tables_tabinfo (char * info)
 
         if (wp_count < WP_COUNT)
         {
-            tables.it_is[0]         = htoi (info, 2);
+            tables.version_magic    = htoi (info, 2);                                           // old: tables.it_is[0]
             info += 2;
 
-            tables.it_is[1]         = htoi (info, 2);
+            tables.version          = htoi (info, 2);                                           // old: tables.it_is[1]
             info += 2;
 
             tables.modes_count      = htoi (info, 2);
@@ -216,11 +218,27 @@ tables_tabh (char * tabh)
     char            buf[16];
     uint_fast8_t    idx;
     uint_fast8_t    k;
+    uint_fast8_t    h_offset = 0;
 
     idx = htoi (tabh, 2);
     tabh += 2;
 
-    for (k = 0; k < tables.max_hour_words; k++)
+    if (tables.version_magic != TABLES_VERSION_MAGIC)                                       // old tables version
+    {                                                                                       // insert IT and IS
+        if (tables.version_magic > 0)
+        {
+            tables.hours[idx][h_offset] = tables.version_magic;                             // old: tbl_it_is[0]
+            h_offset++;
+        }
+
+        if (tables.version > 0)
+        {
+            tables.hours[idx][h_offset] = tables.version;                                   // old: tbl_it_is[0]
+            h_offset++;
+        }
+    }
+
+    for (k = h_offset; k < tables.max_hour_words; k++)
     {
         tables.hours[idx][k] = htoi (tabh, 2);
         tabh += 2;
@@ -282,6 +300,12 @@ tables_tabm (char * tabm)
     }
     else
     {
+        if (tables.version_magic != TABLES_VERSION_MAGIC)                                           // old tables version
+        {
+            tables.illumination[tables.version_magic].len   |= ILLUMINATION_FLAG_IT_IS;             // convert to newer version
+            tables.illumination[tables.version].len         |= ILLUMINATION_FLAG_IT_IS;
+        }
+
         log_message ("tables complete");
         tables.complete = 1;
     }
@@ -292,7 +316,7 @@ tables_tabm (char * tabm)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-tables_fill_words (uint8_t * words, uint_fast8_t hh, uint_fast8_t mm, uint_fast8_t do_show_it_is)
+tables_fill_words (uint8_t * words, uint_fast8_t hh, uint_fast8_t mm)
 {
     uint_fast8_t            is_midnight = 0;
     const MINUTEDISPLAY *   tbl_minute;
@@ -303,15 +327,6 @@ tables_fill_words (uint8_t * words, uint_fast8_t hh, uint_fast8_t mm, uint_fast8
     {
         memset (words, 0, WP_COUNT);
         tbl_minute  = &(tables.minutes[mm]);
-
-        if (do_show_it_is)
-        {
-            if (tbl_minute->flags & MDF_IT_IS_1)
-            {
-                words[tables.it_is[0]] = 1;
-                words[tables.it_is[1]] = 1;
-            }
-        }
 
         for (idx = 0; idx < tables.max_minute_words && tbl_minute->word_idx[idx] != 0; idx++)
         {

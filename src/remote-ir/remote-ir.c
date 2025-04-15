@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * remote-ir.c - remote IR routines using IRMP
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
 #include "irmp.h"
 #include "remote-ir.h"
 #include "display.h"
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 #include "log.h"
 
@@ -141,19 +141,19 @@ remote_ir_learn (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-remote_ir_read_codes_from_eeprom (void)
+remote_ir_read_codes_from_eep (void)
 {
     uint8_t         packed_irmp_data[PACKED_IRMP_DATA_SIZE];
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
         uint_fast8_t    i;
         uint_fast16_t   start_addr = EEPROM_DATA_OFFSET_IRMP_DATA;
 
         for (i = 0; i < N_REMOTE_IR_CMDS; i++)
         {
-            rtc = eeprom_read (start_addr, (uint8_t *) &packed_irmp_data, PACKED_IRMP_DATA_SIZE);
+            rtc = eep_read (start_addr, (uint8_t *) &packed_irmp_data, PACKED_IRMP_DATA_SIZE);
 
             irmp_data_array[i].protocol = packed_irmp_data[0];
             irmp_data_array[i].address  = packed_irmp_data[1] | (packed_irmp_data[2] << 8);
@@ -171,12 +171,12 @@ remote_ir_read_codes_from_eeprom (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-remote_ir_write_codes_to_eeprom (void)
+remote_ir_write_codes_to_eep (void)
 {
     uint8_t         packed_irmp_data[PACKED_IRMP_DATA_SIZE];
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
         uint_fast8_t    i;
         uint_fast16_t   start_addr = EEPROM_DATA_OFFSET_IRMP_DATA;
@@ -189,7 +189,7 @@ remote_ir_write_codes_to_eeprom (void)
             packed_irmp_data[3]         = irmp_data_array[i].command & 0xFF;
             packed_irmp_data[4]         = irmp_data_array[i].command >> 8;
 
-            rtc = eeprom_write (start_addr, (uint8_t *) &packed_irmp_data, PACKED_IRMP_DATA_SIZE);
+            rtc = eep_write (start_addr, (uint8_t *) &packed_irmp_data, PACKED_IRMP_DATA_SIZE);
             start_addr += PACKED_IRMP_DATA_SIZE;
         }
     }

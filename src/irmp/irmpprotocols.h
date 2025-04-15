@@ -3,7 +3,7 @@
  *
  * DO NOT INCLUDE THIS FILE, WILL BE INCLUDED BY IRMP.H or IRSND.H!
  *
- * Copyright (c) 2013-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2013-2024 Frank Meyer - frank(at)uclock.de
  *
  * $Id: irmpprotocols.h,v 1.29 2015/01/19 10:54:37 fm Exp $
  *

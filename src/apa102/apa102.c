@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * apa102.c - APA102 driver
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * APA102 format : Start FRAME | LED1 | LED2 | LED3 | ... | LEDn | End Frame
  * Start frame:    32 x 0
@@ -31,7 +31,7 @@
  * SPI for data: DMA1, channel 5, SPI2
  *-----------------------------------------------------------------------------------------------------------------------------------------------
  */
-#if defined (STM32F4XX)
+#if defined (BLACK_BOARD) || defined (NUCLEO_BOARD) || defined (BLACKPILL_BOARD)            // STM32F4xx: SCK=PB13, MOSI=PB15
 // SPI device
 #  define APA102_SPI_DEVICE             SPI2                                                // SPI device
 #  define APA102_SPI_CLOCK_CMD          RCC_APB1PeriphClockCmd                              // APB1
@@ -57,7 +57,7 @@
 #  define APA102_DMA_CHANNEL_ISR        DMA1_Stream4_IRQHandler                             // DMA1 Stream 4 IRQ Handler
 #  define APA102_DMA_CHANNEL_IRQ_FLAG   DMA_IT_TCIF4                                        // transfer complete on Stream4
 
-#elif defined (STM32F10X)
+#elif defined (BLUEPILL_BOARD)                                                              // ATM32F103: SCK = PB13, MOSI=PB15
 
 // SPI device
 #  define APA102_SPI_DEVICE             SPI2                                                // SPI device
@@ -81,6 +81,8 @@
 #  define APA102_DMA_CHANNEL_ISR        DMA1_Channel5_IRQHandler                            // IRQ Handler
 #  define APA102_DMA_CHANNEL_IRQ_FLAG   DMA1_IT_TC5                                         // transfer complete on Channel5
 
+#else
+#error unknown STM32
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -299,7 +301,6 @@ apa102_set_all_leds (APA102_RGB * rgb, uint_fast16_t n_leds, uint_fast8_t refres
 void
 apa102_init (void)
 {
-    GPIO_InitTypeDef        gpio;
     NVIC_InitTypeDef        nvic;
 
     apa102_dma_status = 0;
@@ -308,30 +309,15 @@ apa102_init (void)
      * initialize gpio
      *-------------------------------------------------------------------------------------------------------------------------------------------
      */
-    GPIO_StructInit (&gpio);
     APA102_GPIO_CLOCK_CMD (APA102_GPIO_CLOCK, ENABLE);              // clock enable
 
-    gpio.GPIO_Pin     = APA102_GPIO_SCK_PIN | APA102_GPIO_MOSI_PIN;
-
 #if defined (STM32F4XX)
-
-    gpio.GPIO_Mode    = GPIO_Mode_AF;
-    gpio.GPIO_OType   = GPIO_OType_PP;                              // GPIO_OType_PP: PushPull, GPIO_OType_OD: Open Drain, needs extern PullUp
-    gpio.GPIO_PuPd    = GPIO_PuPd_NOPULL;
-    gpio.GPIO_Speed   = GPIO_Speed_100MHz;
-    GPIO_Init(APA102_GPIO_PORT, &gpio);
-    GPIO_RESET_BIT(APA102_GPIO_PORT, APA102_GPIO_SCK_PIN);          // set SCK to Low
     GPIO_PinAFConfig(APA102_GPIO_PORT, APA102_GPIO_SCK_SOURCE, APA102_SPI_AF);
     GPIO_PinAFConfig(APA102_GPIO_PORT, APA102_GPIO_MOSI_SOURCE, APA102_SPI_AF);
-
-#elif defined (STM32F10X)
-
-    gpio.GPIO_Mode    = GPIO_Mode_AF_PP;                            // GPIO_Mode_AF_PP: PushPull, GPIO_Mode_AF_OD: Open Drain, needs extern PullUp
-    gpio.GPIO_Speed   = GPIO_Speed_50MHz;
-    GPIO_Init(APA102_GPIO_PORT, &gpio);
-    GPIO_RESET_BIT(APA102_GPIO_PORT, APA102_GPIO_SCK_PIN);          // set SCK to Low
-
 #endif
+
+    GPIO_SET_PIN_AF_PP(APA102_GPIO_PORT, APA102_GPIO_SCK_PIN | APA102_GPIO_MOSI_PIN, GPIO_Speed_100MHz);
+    GPIO_RESET_BIT(APA102_GPIO_PORT, APA102_GPIO_SCK_PIN);          // set SCK to Low
 
     /*-------------------------------------------------------------------------------------------------------------------------------------------
      * initialize SPI

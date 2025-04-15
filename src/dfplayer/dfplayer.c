@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * dfplayer.c - DFPLAYER MINI routines
  *
- * Copyright (c) 2017-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2017-2024 Frank Meyer - frank(at)uclock.de
  *
  * ------------------------------------------------------------------------------------------------------------------
  *
@@ -100,7 +100,7 @@
 #include <stdlib.h>
 #include "log.h"
 #include "delay.h"
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 #include "dfplayer.h"
 
@@ -934,15 +934,15 @@ dfplayer_query_file_counts_in_folder (uint8_t folder)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-dfplayer_read_config_from_eeprom (uint32_t eeprom_version)
+dfplayer_read_config_from_eep (uint32_t eep_version)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
         rtc = 1;
 
-        if (eeprom_version >= EEPROM_VERSION_2_7)
+        if (eep_version >= EEPROM_VERSION_2_7)
         {
             uint8_t     volume_buf8[EEPROM_DATA_SIZE_DFPLAYER_VOLUME];
             uint8_t     silence_start_buf8[EEPROM_DATA_SIZE_DFPLAYER_SILENCE_START];
@@ -951,12 +951,12 @@ dfplayer_read_config_from_eeprom (uint32_t eeprom_version)
             uint8_t     bell_flags_buf8[EEPROM_DATA_SIZE_DFPLAYER_BELL_FLAGS];
             uint8_t     speak_cycle_buf8[EEPROM_DATA_SIZE_DFPLAYER_SPEAK_CYCLE];
 
-            eeprom_read (EEPROM_DATA_OFFSET_DFPLAYER_VOLUME,        volume_buf8,        EEPROM_DATA_SIZE_DFPLAYER_VOLUME);
-            eeprom_read (EEPROM_DATA_OFFSET_DFPLAYER_SILENCE_START, silence_start_buf8, EEPROM_DATA_SIZE_DFPLAYER_SILENCE_START);
-            eeprom_read (EEPROM_DATA_OFFSET_DFPLAYER_SILENCE_STOP,  silence_stop_buf8,  EEPROM_DATA_SIZE_DFPLAYER_SILENCE_STOP);
-            eeprom_read (EEPROM_DATA_OFFSET_DFPLAYER_MODE,          mode_buf8,          EEPROM_DATA_SIZE_DFPLAYER_MODE);
-            eeprom_read (EEPROM_DATA_OFFSET_DFPLAYER_BELL_FLAGS,    bell_flags_buf8,    EEPROM_DATA_SIZE_DFPLAYER_BELL_FLAGS);
-            eeprom_read (EEPROM_DATA_OFFSET_DFPLAYER_SPEAK_CYCLE,   speak_cycle_buf8,   EEPROM_DATA_SIZE_DFPLAYER_SPEAK_CYCLE);
+            eep_read (EEPROM_DATA_OFFSET_DFPLAYER_VOLUME,        volume_buf8,        EEPROM_DATA_SIZE_DFPLAYER_VOLUME);
+            eep_read (EEPROM_DATA_OFFSET_DFPLAYER_SILENCE_START, silence_start_buf8, EEPROM_DATA_SIZE_DFPLAYER_SILENCE_START);
+            eep_read (EEPROM_DATA_OFFSET_DFPLAYER_SILENCE_STOP,  silence_stop_buf8,  EEPROM_DATA_SIZE_DFPLAYER_SILENCE_STOP);
+            eep_read (EEPROM_DATA_OFFSET_DFPLAYER_MODE,          mode_buf8,          EEPROM_DATA_SIZE_DFPLAYER_MODE);
+            eep_read (EEPROM_DATA_OFFSET_DFPLAYER_BELL_FLAGS,    bell_flags_buf8,    EEPROM_DATA_SIZE_DFPLAYER_BELL_FLAGS);
+            eep_read (EEPROM_DATA_OFFSET_DFPLAYER_SPEAK_CYCLE,   speak_cycle_buf8,   EEPROM_DATA_SIZE_DFPLAYER_SPEAK_CYCLE);
 
             dfplayer.volume         = volume_buf8[0];
             dfplayer.silence_start  = silence_start_buf8[0] | (silence_start_buf8[1] << 8);
@@ -989,7 +989,7 @@ dfplayer_save_volume (void)
     uint8_t volume_buf8[EEPROM_DATA_SIZE_DFPLAYER_VOLUME];
 
     volume_buf8[0] = dfplayer.volume;
-    eeprom_write (EEPROM_DATA_OFFSET_DFPLAYER_VOLUME, volume_buf8, EEPROM_DATA_SIZE_DFPLAYER_VOLUME);
+    eep_write (EEPROM_DATA_OFFSET_DFPLAYER_VOLUME, volume_buf8, EEPROM_DATA_SIZE_DFPLAYER_VOLUME);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1003,7 +1003,7 @@ dfplayer_save_silence_start (void)
 
     silence_start_buf8[0] = dfplayer.silence_start & 0xFF;
     silence_start_buf8[1] = (dfplayer.silence_start >> 8) & 0xFF;
-    eeprom_write (EEPROM_DATA_OFFSET_DFPLAYER_SILENCE_START, silence_start_buf8, EEPROM_DATA_SIZE_DFPLAYER_SILENCE_START);
+    eep_write (EEPROM_DATA_OFFSET_DFPLAYER_SILENCE_START, silence_start_buf8, EEPROM_DATA_SIZE_DFPLAYER_SILENCE_START);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1017,7 +1017,7 @@ dfplayer_save_silence_stop (void)
 
     silence_stop_buf8[0] = dfplayer.silence_stop & 0xFF;
     silence_stop_buf8[1] = (dfplayer.silence_stop >> 8) & 0xFF;
-    eeprom_write (EEPROM_DATA_OFFSET_DFPLAYER_SILENCE_STOP, silence_stop_buf8, EEPROM_DATA_SIZE_DFPLAYER_SILENCE_STOP);
+    eep_write (EEPROM_DATA_OFFSET_DFPLAYER_SILENCE_STOP, silence_stop_buf8, EEPROM_DATA_SIZE_DFPLAYER_SILENCE_STOP);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1030,7 +1030,7 @@ dfplayer_save_mode (void)
     uint8_t buf8[EEPROM_DATA_SIZE_DFPLAYER_MODE];
 
     buf8[0] = dfplayer.mode;
-    eeprom_write (EEPROM_DATA_OFFSET_DFPLAYER_MODE, buf8, EEPROM_DATA_SIZE_DFPLAYER_MODE);
+    eep_write (EEPROM_DATA_OFFSET_DFPLAYER_MODE, buf8, EEPROM_DATA_SIZE_DFPLAYER_MODE);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1043,7 +1043,7 @@ dfplayer_save_bell_flags (void)
     uint8_t buf8[EEPROM_DATA_SIZE_DFPLAYER_BELL_FLAGS];
 
     buf8[0] = dfplayer.bell_flags;
-    eeprom_write (EEPROM_DATA_OFFSET_DFPLAYER_BELL_FLAGS, buf8, EEPROM_DATA_SIZE_DFPLAYER_BELL_FLAGS);
+    eep_write (EEPROM_DATA_OFFSET_DFPLAYER_BELL_FLAGS, buf8, EEPROM_DATA_SIZE_DFPLAYER_BELL_FLAGS);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1056,7 +1056,7 @@ dfplayer_save_speak_cycle (void)
     uint8_t buf8[EEPROM_DATA_SIZE_DFPLAYER_SPEAK_CYCLE];
 
     buf8[0] = dfplayer.speak_cycle;
-    eeprom_write (EEPROM_DATA_OFFSET_DFPLAYER_SPEAK_CYCLE, buf8, EEPROM_DATA_SIZE_DFPLAYER_SPEAK_CYCLE);
+    eep_write (EEPROM_DATA_OFFSET_DFPLAYER_SPEAK_CYCLE, buf8, EEPROM_DATA_SIZE_DFPLAYER_SPEAK_CYCLE);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1064,11 +1064,11 @@ dfplayer_save_speak_cycle (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-dfplayer_write_config_to_eeprom (void)
+dfplayer_write_config_to_eep (void)
 {
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
         dfplayer_save_volume ();
         dfplayer_save_silence_start ();

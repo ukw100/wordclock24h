@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * eeprom.c - EEPROM routines
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -9,6 +9,9 @@
  * (at your option) any later version.
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
+
+#if ! defined(BLACK_BOARD)                                      // flash only on STM32F407 Black Board, all other: EEPROM
+
 #include "eeprom.h"
 #include "i2c.h"
 
@@ -204,3 +207,5 @@ eeprom_write (uint_fast16_t start_addr, uint8_t * buffer, uint_fast16_t cnt)
     }
     return rtc;
 }
+
+#endif // BLACK_BOARD

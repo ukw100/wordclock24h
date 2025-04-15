@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * display.h - interface declaration of LED display routines
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,6 +79,7 @@ typedef struct                                                          // displ
 #define led_refresh         apa102_refresh
 #define led_set_led         apa102_set_led
 #define led_set_all_leds    apa102_set_all_leds
+
 #elif DSP_USE_WS2812_GRB == 1 || DSP_USE_WS2812_RGB == 1
 #include "ws2812.h"
 #define LED_RGB             WS2812_RGB
@@ -86,13 +87,25 @@ typedef struct                                                          // displ
 #define led_refresh         ws2812_refresh
 #define led_set_led         ws2812_set_led
 //#define led_set_all_leds    ws2812_set_all_leds
-#else
+
+#elif DSP_USE_SK6812_RGB == 1 || DSP_USE_SK6812_RGBW == 1
 #include "sk6812.h"
 #define LED_RGB             SK6812_RGBW
 #define led_init            sk6812_init
 #define led_refresh         sk6812_refresh
 #define led_set_led         sk6812_set_led
 #define led_set_all_leds    sk6812_set_all_leds
+
+#elif DSP_USE_TFTLED_RGB == 1
+#include "tftled.h"
+#define LED_RGB             TFTLED_RGB
+#define led_init            tftled_init
+#define led_refresh         tftled_refresh
+#define led_set_led         tftled_set_led
+#define led_set_all_leds    tftled_set_all_leds
+
+#else
+#error DSP_USE_xxx not defined
 #endif
 
 #if DSP_USE_SK6812_RGBW == 1
@@ -401,6 +414,7 @@ extern void             display_set_dimmed_display_led (uint_fast16_t, DSP_COLOR
 extern void             display_refresh_display_leds (void);
 extern void             display_reset_led_states (void);
 extern void             display_temperature (uint_fast8_t);
+extern void             display_temperature_digits (uint_fast8_t);
 extern void             display_fireworks (void);
 extern void             display_clock (uint_fast8_t, uint_fast8_t, uint_fast8_t);
 extern void             display_seconds (uint_fast8_t);
@@ -479,8 +493,8 @@ extern uint_fast8_t     display_ticker_active (void);
 extern void             display_get_icon (const char *, uint_fast8_t);
 extern void             display_get_weather_icon (const char *, uint_fast8_t);
 extern uint_fast8_t     display_read_icon (void);
-extern uint_fast8_t     display_read_config_from_eeprom (uint32_t);
-extern uint_fast8_t     display_write_config_to_eeprom (void);
+extern uint_fast8_t     display_read_config_from_eep (uint32_t);
+extern uint_fast8_t     display_write_config_to_eep (void);
 extern void             display_save_display_mode (void);
 extern void             display_init (void);
 

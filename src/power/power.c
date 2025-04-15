@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * power.c - power routines for LED stripes
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,74 @@
 #include "stm32f4xx.h"
 #endif
 #include "power.h"
+#include "display-config.h"
+#include "tft.h"
 #include "io.h"
 #include "log.h"
 
-#if defined (STM32F4XX)                                         // STM32F4xx Nucleo Board PC8
+POWER_GLOBALS power =
+{
+    0xFF                                                                            // power.is_on
+};
+
+
+#if DSP_USE_TFTLED_RGB                                                              // TFT & SSD1963 only for STM32F407
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------
+ * initialize Backlight
+ *-------------------------------------------------------------------------------------------------------------------------------------------
+ */
+void
+power_init (void)
+{
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------
+ * switch power on
+ *-------------------------------------------------------------------------------------------------------------------------------------------
+ */
+void
+power_on (void)
+{
+    if (power.is_on != 1)
+    {
+        tft_backlight_on ();
+        log_message ("switching power on");
+        power.is_on = 1;
+    }
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------
+ * switch power off
+ *-------------------------------------------------------------------------------------------------------------------------------------------
+ */
+void
+power_off (void)
+{
+    if (power.is_on != 0)
+    {
+        tft_backlight_off ();
+        log_message ("switching power off");
+        power.is_on = 0;
+    }
+}
+
+#else // ! DSP_USE_TFTLED_RGB
+
+#if defined (NUCLEO_BOARD)                                      // STM32F4xx Nucleo Board: PC8
 #define POWER_PERIPH_CLOCK_CMD  RCC_AHB1PeriphClockCmd
 #define POWER_PERIPH            RCC_AHB1Periph_GPIOC
 #define POWER_PORT              GPIOC
 #define POWER_PIN               GPIO_Pin_8
 
-#elif defined (STM32F103)
-#define POWER_PERIPH_CLOCK_CMD  RCC_APB2PeriphClockCmd          // STM32F103 PB0
+#elif defined (BLACKPILL_BOARD)                                 // STM32F4x1 BlackPill Board: PB0
+#define POWER_PERIPH_CLOCK_CMD  RCC_AHB1PeriphClockCmd
+#define POWER_PERIPH            RCC_AHB1Periph_GPIOB
+#define POWER_PORT              GPIOB
+#define POWER_PIN               GPIO_Pin_0
+
+#elif defined (BLUEPILL_BOARD)
+#define POWER_PERIPH_CLOCK_CMD  RCC_APB2PeriphClockCmd          // STM32F103 BluePill Board: PB0
 #define POWER_PERIPH            RCC_APB2Periph_GPIOB
 #define POWER_PORT              GPIOB
 #define POWER_PIN               GPIO_Pin_0
@@ -35,11 +92,6 @@
 #error STM32 unknown
 #endif
 
-POWER_GLOBALS                   power =
-{
-    0xFF                                                        // power.is_on
-};
-
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * initialize power port
  *-------------------------------------------------------------------------------------------------------------------------------------------
@@ -47,23 +99,8 @@ POWER_GLOBALS                   power =
 void
 power_init (void)
 {
-    GPIO_InitTypeDef gpio;
-
-    GPIO_StructInit (&gpio);
-    POWER_PERIPH_CLOCK_CMD (POWER_PERIPH, ENABLE);     // enable clock for power port
-
-    gpio.GPIO_Pin   = POWER_PIN;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-
-#if defined (STM32F10X)
-    gpio.GPIO_Mode  = GPIO_Mode_Out_PP;
-#elif defined (STM32F4XX)
-    gpio.GPIO_Mode  = GPIO_Mode_OUT;
-    gpio.GPIO_OType = GPIO_OType_PP;
-    gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-#endif
-
-    GPIO_Init(POWER_PORT, &gpio);
+    POWER_PERIPH_CLOCK_CMD (POWER_PERIPH, ENABLE);              // enable clock for power port
+    GPIO_SET_PIN_OUT_PP(POWER_PORT, POWER_PIN, GPIO_Speed_2MHz);
     log_message ("power_init() called");
 }
 
@@ -96,3 +133,5 @@ power_off (void)
         power.is_on = 0;
     }
 }
+
+#endif // DSP_USE_TFTLED_RGB

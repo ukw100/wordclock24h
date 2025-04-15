@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * vars.c - synchronisation of variables/parameters between STM32 and ESP8266
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 #include "vars.h"
 #include "display.h"
 #include "overlay.h"
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 #include "main.h"
 #include "power.h"
@@ -27,6 +27,7 @@
 #include "alarm.h"
 #include "weather.h"
 #include "dfplayer.h"
+#include "ssd1963.h"
 #include "delay.h"
 
 #include "log.h"
@@ -467,9 +468,9 @@ var_send_use_rgbw (void)
  *--------------------------------------------------------------------------------------------------------------------------------------
  */
 static void
-var_send_eeprom_is_up (void)
+var_send_eep_is_up (void)
 {
-    var_send_num_variable (EEPROM_IS_UP_NUM_VAR, eeprom_is_up);
+    var_send_num_variable (EEPROM_IS_UP_NUM_VAR, eep_is_up);
 }
 
 static void
@@ -641,9 +642,9 @@ var_send_version (void)
 }
 
 void
-var_send_eeprom_version (void)
+var_send_eep_version (void)
 {
-    var_send_str_variable (EEPROM_VERSION_STR_VAR, gmain.eeprom_version);
+    var_send_str_variable (EEPROM_VERSION_STR_VAR, gmain.eep_version);
 }
 
 static void
@@ -879,6 +880,14 @@ var_send_dfplayer_speak_cycle (void)
     var_send_num_variable (DFPLAYER_SPEAK_CYCLE_NUM_VAR, dfplayer.speak_cycle);
 }
 
+#if defined (BLACK_BOARD) // STM32F407
+void
+var_send_ssd1963_flags (void)
+{
+    var_send_num_variable (SSD1963_FLAGS_NUM_VAR, ssd1963.flags);
+}
+#endif
+
 /*--------------------------------------------------------------------------------------------------------------------------------------
  * send all variables to ESP8266
  *--------------------------------------------------------------------------------------------------------------------------------------
@@ -887,7 +896,7 @@ void
 var_send_all_variables (void)
 {
     var_send_use_rgbw ();
-    var_send_eeprom_is_up ();
+    var_send_eep_is_up ();
     var_send_hardware_configuration ();
     var_send_rtc_is_up ();
     var_send_display_power ();
@@ -914,7 +923,7 @@ var_send_all_variables (void)
     var_send_ticker_deceleration ();
     var_send_ticker_text ();
     var_send_version ();
-    var_send_eeprom_version ();
+    var_send_eep_version ();
     var_send_esp8266_version ();
     var_send_timeserver ();
     var_send_weather_appid ();
@@ -947,5 +956,8 @@ var_send_all_variables (void)
     var_send_dfplayer_bell_flags ();
     var_send_dfplayer_speak_cycle ();
     var_send_alarm_times ();
+#if defined (BLACK_BOARD) // STM32F407VE
+    var_send_ssd1963_flags ();
+#endif
 }
 

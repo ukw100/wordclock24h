@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * esp8266.c - ESP8266 WLAN routines
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ volatile uint_fast8_t                   esp8266_ten_ms_tick;            // shoul
 
 ESP8266_GLOBALS                         esp8266;
 
-#if defined (STM32F407VG)                                               // STM32F4 Discovery Board PD12
+#if defined (DISCO_BOARD)                                               // STM32F4 Discovery Board: RST=PC5 CH_PD=PC4 FLASH=PC3
 
 #define ESP8266_RST_PERIPH_CLOCK_CMD    RCC_AHB1PeriphClockCmd
 #define ESP8266_RST_PERIPH              RCC_AHB1Periph_GPIOC
@@ -51,7 +51,24 @@ ESP8266_GLOBALS                         esp8266;
 #define ESP8266_FLASH_PORT              GPIOC
 #define ESP8266_FLASH_PIN               GPIO_Pin_3
 
-#elif defined (STM32F4XX)                                               // STM32F4xx Nucleo Board
+#elif defined (BLACK_BOARD)                                             // STM32F407VE Black Board: RST=PA4 CH_PD=PA5 FLASH=PA8
+
+#define ESP8266_RST_PERIPH_CLOCK_CMD    RCC_AHB1PeriphClockCmd
+#define ESP8266_RST_PERIPH              RCC_AHB1Periph_GPIOA
+#define ESP8266_RST_PORT                GPIOA
+#define ESP8266_RST_PIN                 GPIO_Pin_4
+
+#define ESP8266_CH_PD_PERIPH_CLOCK_CMD  RCC_AHB1PeriphClockCmd
+#define ESP8266_CH_PD_PERIPH            RCC_AHB1Periph_GPIOA
+#define ESP8266_CH_PD_PORT              GPIOA
+#define ESP8266_CH_PD_PIN               GPIO_Pin_5
+
+#define ESP8266_FLASH_PERIPH_CLOCK_CMD  RCC_AHB1PeriphClockCmd
+#define ESP8266_FLASH_PERIPH            RCC_AHB1Periph_GPIOA
+#define ESP8266_FLASH_PORT              GPIOA
+#define ESP8266_FLASH_PIN               GPIO_Pin_8
+
+#elif defined (NUCLEO_BOARD)                                            // STM32F4xx Nucleo Board: RST=PA7 CH_PD=PA6 FLASH=PA4
 
 #define ESP8266_RST_PERIPH_CLOCK_CMD    RCC_AHB1PeriphClockCmd
 #define ESP8266_RST_PERIPH              RCC_AHB1Periph_GPIOA
@@ -68,7 +85,24 @@ ESP8266_GLOBALS                         esp8266;
 #define ESP8266_FLASH_PORT              GPIOA
 #define ESP8266_FLASH_PIN               GPIO_Pin_4
 
-#elif defined (STM32F103)
+#elif defined (BLACKPILL_BOARD)                                         // STM32F4x1 BlackPill Board: RST=PB10 CH_PD=PB3 FLASH=PA4
+
+#define ESP8266_RST_PERIPH_CLOCK_CMD    RCC_AHB1PeriphClockCmd
+#define ESP8266_RST_PERIPH              RCC_AHB1Periph_GPIOB
+#define ESP8266_RST_PORT                GPIOB
+#define ESP8266_RST_PIN                 GPIO_Pin_10
+
+#define ESP8266_CH_PD_PERIPH_CLOCK_CMD  RCC_AHB1PeriphClockCmd
+#define ESP8266_CH_PD_PERIPH            RCC_AHB1Periph_GPIOB
+#define ESP8266_CH_PD_PORT              GPIOB
+#define ESP8266_CH_PD_PIN               GPIO_Pin_3
+
+#define ESP8266_FLASH_PERIPH_CLOCK_CMD  RCC_AHB1PeriphClockCmd
+#define ESP8266_FLASH_PERIPH            RCC_AHB1Periph_GPIOA
+#define ESP8266_FLASH_PORT              GPIOA
+#define ESP8266_FLASH_PIN               GPIO_Pin_4
+
+#elif defined (BLUEPILL_BOARD)                                          // STM32F103 BluePill Board: RST=PA0 CH_PD=PA1 FLASH=PA4
 
 #define ESP8266_RST_PERIPH_CLOCK_CMD    RCC_APB2PeriphClockCmd
 #define ESP8266_RST_PERIPH              RCC_APB2Periph_GPIOA
@@ -106,54 +140,14 @@ ESP8266_GLOBALS                         esp8266;
 static void
 esp8266_gpio_init (void)
 {
-    GPIO_InitTypeDef gpio;
-
-    GPIO_StructInit (&gpio);
-
     ESP8266_RST_PERIPH_CLOCK_CMD (ESP8266_RST_PERIPH, ENABLE);      // enable clock for ESP8266 RST
-
-    gpio.GPIO_Pin   = ESP8266_RST_PIN;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-
-#if defined (STM32F10X)
-    gpio.GPIO_Mode  = GPIO_Mode_Out_PP;
-#elif defined (STM32F4XX)
-    gpio.GPIO_Mode  = GPIO_Mode_OUT;
-    gpio.GPIO_OType = GPIO_OType_PP;
-    gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-#endif
-
-    GPIO_Init(ESP8266_RST_PORT, &gpio);
+    GPIO_SET_PIN_OUT_PP (ESP8266_RST_PORT, ESP8266_RST_PIN, GPIO_Speed_2MHz);
 
     ESP8266_RST_PERIPH_CLOCK_CMD (ESP8266_CH_PD_PERIPH, ENABLE);    // enable clock for ESP8266 CH_PD
-
-    gpio.GPIO_Pin   = ESP8266_CH_PD_PIN;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-
-#if defined (STM32F10X)
-    gpio.GPIO_Mode  = GPIO_Mode_Out_PP;
-#elif defined (STM32F4XX)
-    gpio.GPIO_Mode  = GPIO_Mode_OUT;
-    gpio.GPIO_OType = GPIO_OType_PP;
-    gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-#endif
-
-    GPIO_Init(ESP8266_CH_PD_PORT, &gpio);
+    GPIO_SET_PIN_OUT_PP (ESP8266_CH_PD_PORT, ESP8266_CH_PD_PIN, GPIO_Speed_2MHz);
 
     ESP8266_RST_PERIPH_CLOCK_CMD (ESP8266_FLASH_PERIPH, ENABLE);    // enable clock for ESP8266 FLASH
-
-    gpio.GPIO_Pin   = ESP8266_FLASH_PIN;
-    gpio.GPIO_Speed = GPIO_Speed_2MHz;
-
-#if defined (STM32F10X)
-    gpio.GPIO_Mode  = GPIO_Mode_Out_PP;
-#elif defined (STM32F4XX)
-    gpio.GPIO_Mode  = GPIO_Mode_OUT;
-    gpio.GPIO_OType = GPIO_OType_PP;
-    gpio.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-#endif
-
-    GPIO_Init(ESP8266_FLASH_PORT, &gpio);
+    GPIO_SET_PIN_OUT_PP (ESP8266_FLASH_PORT, ESP8266_FLASH_PIN, GPIO_Speed_2MHz);
 
     GPIO_SET_BIT(ESP8266_RST_PORT,   ESP8266_RST_PIN);
     GPIO_SET_BIT(ESP8266_CH_PD_PORT, ESP8266_CH_PD_PIN);
@@ -246,7 +240,7 @@ esp8266_get_message (void)
                     }
                     else if (! strncmp (answer, "TAB", 3))                                  // TABxxx: keep silent
                     {
-                        if (! strcmp (answer, "TABLES"))                                    // TABINFO
+                        if (! strcmp (answer, "TABLES"))                                    // TABLES
                         {
                             rtc = ESP8266_TABLES;
                             break;
@@ -314,6 +308,12 @@ esp8266_get_message (void)
                         else if (! strncmp (answer, "- ", 2))
                         {
                             rtc = ESP8266_DEBUGMSG;
+                            break;
+                        }
+                        else if (! strncmp (answer, "DISP ", 5))
+                        {
+                            strncpy (esp8266.u.disp, answer + 5, ESP8266_DISP_LEN);
+                            rtc = ESP8266_DISP;
                             break;
                         }
                         else if (! strncmp (answer, "IPADDRESS ", 10))

@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * tempsensor.c - temperature sensor routines
  *
- * Copyright (c) 2015-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
 
 #include "ds18xx.h"
 #include "tempsensor.h"
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 
 TEMP_GLOBALS    gtemp =
@@ -69,16 +69,16 @@ temp_read_temp_index (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-temp_read_config_from_eeprom (uint32_t eeprom_version)
+temp_read_config_from_eep (uint32_t eep_version)
 {
     uint_fast8_t            rtc = 0;
     uint8_t                 temp_correction8;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (eeprom_version >= EEPROM_VERSION_2_1)
+        if (eep_version >= EEPROM_VERSION_2_1)
         {
-            rtc = eeprom_read (EEPROM_DATA_OFFSET_DS18XX_TEMP_CORR, &temp_correction8, EEPROM_DATA_SIZE_DS18XX_TEMP_CORR);
+            rtc = eep_read (EEPROM_DATA_OFFSET_DS18XX_TEMP_CORR, &temp_correction8, EEPROM_DATA_SIZE_DS18XX_TEMP_CORR);
 
             if (temp_correction8 > 10)
             {
@@ -102,16 +102,16 @@ temp_read_config_from_eeprom (uint32_t eeprom_version)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-temp_write_config_to_eeprom (void)
+temp_write_config_to_eep (void)
 {
     uint_fast8_t            rtc = 0;
     uint8_t                 temp_correction8;
 
     temp_correction8    = gtemp.correction;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (eeprom_write (EEPROM_DATA_OFFSET_DS18XX_TEMP_CORR, &temp_correction8, EEPROM_DATA_SIZE_DS18XX_TEMP_CORR))
+        if (eep_write (EEPROM_DATA_OFFSET_DS18XX_TEMP_CORR, &temp_correction8, EEPROM_DATA_SIZE_DS18XX_TEMP_CORR))
         {
             rtc = 1;
         }
@@ -138,7 +138,7 @@ uint_fast8_t
 temp_set_temp_correction (uint_fast8_t new_temp_correction)
 {
     gtemp.correction = new_temp_correction;
-    temp_write_config_to_eeprom ();
+    temp_write_config_to_eep ();
     return gtemp.correction;
 }
 

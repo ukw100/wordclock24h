@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * rtc.c - DS3231 & DS1307 RTC routines
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  */
 #include "rtc.h"
 #include "i2c.h"
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 
 #define DS1307_OR_DS3231_ADDR   0xD0                            // I2C address << 1
@@ -252,16 +252,16 @@ rtc_get_date_time (struct tm * tmp)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-rtc_read_config_from_eeprom (uint32_t eeprom_version)
+rtc_read_config_from_eep (uint32_t eep_version)
 {
     uint_fast8_t            rtc = 0;
     uint8_t                 rtc_temp_correction8;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (eeprom_version >= EEPROM_VERSION_2_1)
+        if (eep_version >= EEPROM_VERSION_2_1)
         {
-            rtc = eeprom_read (EEPROM_DATA_OFFSET_RTC_TEMP_CORR, &rtc_temp_correction8, EEPROM_DATA_SIZE_RTC_TEMP_CORR);
+            rtc = eep_read (EEPROM_DATA_OFFSET_RTC_TEMP_CORR, &rtc_temp_correction8, EEPROM_DATA_SIZE_RTC_TEMP_CORR);
 
             if (rtc_temp_correction8 > 10)
             {
@@ -285,16 +285,16 @@ rtc_read_config_from_eeprom (uint32_t eeprom_version)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-rtc_write_config_to_eeprom (void)
+rtc_write_config_to_eep (void)
 {
     uint_fast8_t            rtc = 0;
     uint8_t                 rtc_temp_correction8;
 
     rtc_temp_correction8    = grtc.rtc_temp_correction;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (eeprom_write (EEPROM_DATA_OFFSET_RTC_TEMP_CORR, &rtc_temp_correction8, EEPROM_DATA_SIZE_RTC_TEMP_CORR))
+        if (eep_write (EEPROM_DATA_OFFSET_RTC_TEMP_CORR, &rtc_temp_correction8, EEPROM_DATA_SIZE_RTC_TEMP_CORR))
         {
             rtc = 1;
         }
@@ -321,7 +321,7 @@ uint_fast8_t
 rtc_set_temp_correction (uint_fast8_t new_rtc_temp_correction)
 {
     grtc.rtc_temp_correction = new_rtc_temp_correction;
-    rtc_write_config_to_eeprom ();
+    rtc_write_config_to_eep ();
     return grtc.rtc_temp_correction;
 }
 

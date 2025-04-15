@@ -3,10 +3,7 @@
  *
  * DO NOT INCLUDE THIS FILE, WILL BE INCLUDED BY IRMP.H!
  *
- * Copyright (c) 2009-2018 Frank Meyer - frank(at)fli4l.de
- * Extensions for PIC 12F1820 W.Strobl 2014-07-20
- *
- * $Id: irmpconfig.h,v 1.123 2015/01/19 10:54:37 fm Exp $
+ * Copyright (c) 2009-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,15 +120,26 @@
  *---------------------------------------------------------------------------------------------------------------------------------------------------
  */
 #elif defined (ARM_STM32)                                               // STM32
-#if defined (STM32F407VG)                                               // STM32F4 Discovery Board: we use C14
+#if defined (DISCO_BOARD)                                               // STM32F4 Discovery Board: we use C14
 #  define IRMP_PORT_LETTER                      C
 #  define IRMP_BIT_NUMBER                       14
-#elif defined (STM32F4XX)                                               // STM32F4xx Nucleo Board: we use C10
+
+#elif defined (BLACK_BOARD)                                             // STM32F407VE Black Board: we use C1
+#  define IRMP_PORT_LETTER                      C
+#  define IRMP_BIT_NUMBER                       1
+
+#elif defined (NUCLEO_BOARD)                                            // STM32F4xx Nucleo Board: we use C10
 #  define IRMP_PORT_LETTER                      C
 #  define IRMP_BIT_NUMBER                       10
-#elif defined (STM32F103)                                               // STM32F103 Mini Development Board: we use B3
+
+#elif defined (BLACKPILL_BOARD)                                         // STM32F4xx BlackPill Board: we use B4
+#  define IRMP_PORT_LETTER                      B
+#  define IRMP_BIT_NUMBER                       4
+
+#elif defined (BLUEPILL_BOARD)                                          // STM32F103 Mini Development Board: we use B3
 #  define IRMP_PORT_LETTER                      B
 #  define IRMP_BIT_NUMBER                       3
+
 #else
 #  error unknown STM32
 #endif

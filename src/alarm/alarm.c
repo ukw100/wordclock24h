@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * alarm.c - alarm time routines
  *
- * Copyright (c) 2017-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2017-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 #include "alarm.h"
 #include "log.h"
@@ -27,7 +27,7 @@ ALARM_TIME              alarm_time[MAX_ALARM_TIMES];
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-alarm_read_data_from_eeprom (uint32_t eeprom_version)
+alarm_read_data_from_eep (uint32_t eep_version)
 {
     unsigned char   alarm_time_buf[EEPROM_DATA_SIZE_ALARM_TIME];
     uint_fast8_t    i;
@@ -35,11 +35,11 @@ alarm_read_data_from_eeprom (uint32_t eeprom_version)
     uint_fast8_t    reinit = 0;
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (eeprom_version >= EEPROM_VERSION_2_7)
+        if (eep_version >= EEPROM_VERSION_2_7)
         {
-            if (eeprom_read (EEPROM_DATA_OFFSET_ALARM_TIME, alarm_time_buf, EEPROM_DATA_SIZE_ALARM_TIME))
+            if (eep_read (EEPROM_DATA_OFFSET_ALARM_TIME, alarm_time_buf, EEPROM_DATA_SIZE_ALARM_TIME))
             {
                 for (offset = 0, i = 0; i < MAX_ALARM_TIMES; i++)
                 {
@@ -60,7 +60,7 @@ alarm_read_data_from_eeprom (uint32_t eeprom_version)
 
             if (reinit)
             {
-                alarm_write_data_to_eeprom ();
+                alarm_write_data_to_eep ();
             }
         }
     }
@@ -73,14 +73,14 @@ alarm_read_data_from_eeprom (uint32_t eeprom_version)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-alarm_write_data_to_eeprom (void)
+alarm_write_data_to_eep (void)
 {
     unsigned char   alarm_time_buf[EEPROM_DATA_SIZE_ALARM_TIME];
     uint_fast8_t    i;
     uint_fast8_t    offset;
     uint_fast8_t    rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
         for (offset = 0, i = 0; i < MAX_ALARM_TIMES; i++)
         {
@@ -89,7 +89,7 @@ alarm_write_data_to_eeprom (void)
             alarm_time_buf[offset++] = alarm_time[i].minutes % 60;                      // mm
         }
 
-        if (eeprom_write (EEPROM_DATA_OFFSET_ALARM_TIME, alarm_time_buf, EEPROM_DATA_SIZE_ALARM_TIME))
+        if (eep_write (EEPROM_DATA_OFFSET_ALARM_TIME, alarm_time_buf, EEPROM_DATA_SIZE_ALARM_TIME))
         {
             rtc = 1;
         }

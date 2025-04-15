@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * tables.h - wordclock layout tables
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 #define WP_COUNT                128                     // max. number of words on display
 
-#define MAX_HOUR_WORDS          4                       // max number of words to display one hour, "e.g. five o'clock" (no end token)
+#define MAX_HOUR_WORDS          6                       // max number of words to display one hour, e.g. "it is five o'clock" (no end token)
 #define MAX_MINUTE_WORDS        7                       // how many words for minute display (no end token)
 
 #define WP_IF_HOUR_IS_0         0xFE                    // alternate word in hours_table if hour is 0
@@ -38,6 +38,11 @@
 #define MDF_HOUR_OFFSET_0       0x00                    // no offset
 #define MDF_HOUR_OFFSET_1       0x02                    // offset of 1 hour
 #define MDF_HOUR_OFFSET_2       0x04                    // offset of 2 hours
+
+#define ILLUMINATION_LEN_MASK   0x1F                    // 5 bits for length of word (0..31), rest used as flags
+#define ILLUMINATION_FLAG_IT_IS 0x80                    // flag: word is member of "IT IS"
+#define ILLUMINATION_FLAG_AM    0x40                    // flag: word is "AM"
+#define ILLUMINATION_FLAG_PM    0x20                    // flag: word is "PM"
 
 typedef struct
 {
@@ -54,6 +59,8 @@ typedef struct
 
 typedef struct
 {
+    uint_fast8_t            version_magic;                                                  // 0xFF: new table format
+    uint_fast8_t            version;
     uint_fast8_t            modes_count;
     uint_fast8_t            hour_modes_count;
     uint_fast8_t            hour_count;
@@ -62,7 +69,6 @@ typedef struct
     uint_fast8_t            minute_count;
     uint_fast8_t            max_minute_words;
 
-    uint8_t                 it_is[2];
     uint8_t                 hours[HOUR_COUNT][MAX_HOUR_WORDS];
     MINUTEDISPLAY           minutes[MINUTE_COUNT];
 #if WCLOCK24H == 1
@@ -84,6 +90,6 @@ extern void                 tables_tabt (char *);
 #endif
 extern void                 tables_tabh (char *);
 extern void                 tables_tabm (char *);
-extern uint_fast8_t         tables_fill_words (uint8_t *, uint_fast8_t, uint_fast8_t, uint_fast8_t);
+extern uint_fast8_t         tables_fill_words (uint8_t *, uint_fast8_t, uint_fast8_t);
 
 #endif // TABLES_H

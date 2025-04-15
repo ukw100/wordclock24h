@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * ldr.c - ldr functions
  *
- * Copyright (c) 2016-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
 #include "adc.h"
 #include "ldr.h"
 #include "delay.h"
-#include "eeprom.h"
+#include "eep.h"
 #include "eeprom-data.h"
 
 #define MAX_LDR_BRIGHTNESS                      31                                          // maximal possible brightness value
@@ -95,16 +95,16 @@ ldr_poll_brightness  (void)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 void
-ldr_read_config_from_eeprom (uint32_t eeprom_version)
+ldr_read_config_from_eep (uint32_t eep_version)
 {
     uint_fast8_t    values_changed = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (eeprom_version >= EEPROM_VERSION_2_1)
+        if (eep_version >= EEPROM_VERSION_2_1)
         {
-            eeprom_read (EEPROM_DATA_OFFSET_LDR_MIN_VALUE, (uint8_t *) &ldr.ldr_min_value, EEPROM_DATA_SIZE_LDR_MIN_VALUE);
-            eeprom_read (EEPROM_DATA_OFFSET_LDR_MAX_VALUE, (uint8_t *) &ldr.ldr_max_value, EEPROM_DATA_SIZE_LDR_MAX_VALUE);
+            eep_read (EEPROM_DATA_OFFSET_LDR_MIN_VALUE, (uint8_t *) &ldr.ldr_min_value, EEPROM_DATA_SIZE_LDR_MIN_VALUE);
+            eep_read (EEPROM_DATA_OFFSET_LDR_MAX_VALUE, (uint8_t *) &ldr.ldr_max_value, EEPROM_DATA_SIZE_LDR_MAX_VALUE);
 
             if (ldr.ldr_min_value > MAX_VALUE)                                              // e.g. 0xFFFF
             {
@@ -127,7 +127,7 @@ ldr_read_config_from_eeprom (uint32_t eeprom_version)
 
             if (values_changed)                                                             // any values corrected?
             {
-                ldr_write_config_to_eeprom ();                                              // yes, save them
+                ldr_write_config_to_eep ();                                                 // yes, save them
             }
         }
     }
@@ -138,14 +138,14 @@ ldr_read_config_from_eeprom (uint32_t eeprom_version)
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 uint_fast8_t
-ldr_write_config_to_eeprom (void)
+ldr_write_config_to_eep (void)
 {
     uint_fast8_t            rtc = 0;
 
-    if (eeprom_is_up)
+    if (eep_is_up)
     {
-        if (eeprom_write (EEPROM_DATA_OFFSET_LDR_MIN_VALUE, (uint8_t *) &ldr.ldr_min_value, EEPROM_DATA_SIZE_LDR_MIN_VALUE) &&
-            eeprom_write (EEPROM_DATA_OFFSET_LDR_MAX_VALUE, (uint8_t *) &ldr.ldr_max_value, EEPROM_DATA_SIZE_LDR_MAX_VALUE))
+        if (eep_write (EEPROM_DATA_OFFSET_LDR_MIN_VALUE, (uint8_t *) &ldr.ldr_min_value, EEPROM_DATA_SIZE_LDR_MIN_VALUE) &&
+            eep_write (EEPROM_DATA_OFFSET_LDR_MAX_VALUE, (uint8_t *) &ldr.ldr_max_value, EEPROM_DATA_SIZE_LDR_MAX_VALUE))
         {
             rtc = 1;
         }
@@ -180,7 +180,7 @@ ldr_set_min_value (void)
     if (cnt < 10)
     {
         ldr.ldr_min_value = adc_value;
-        ldr_write_config_to_eeprom ();
+        ldr_write_config_to_eep ();
     }
 
     return ldr.ldr_min_value;
@@ -212,7 +212,7 @@ ldr_set_max_value (void)
     if (cnt < 10)
     {
         ldr.ldr_max_value = adc_value;
-        ldr_write_config_to_eeprom ();
+        ldr_write_config_to_eep ();
     }
 
     return ldr.ldr_max_value;

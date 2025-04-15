@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * delay.c - delay functions
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,11 +41,11 @@ delay_usec (uint32_t usec)
 {
     if (resolution == DELAY_RESOLUTION_1_US)
     {
-        delay_counter = usec;
+        delay_counter = usec + 1;                                                // +1: next tick can occur within 0..1 usec
     }
     else
     {
-        delay_counter = usec / resolution;
+        delay_counter = usec / resolution + 1;                                   // see above
     }
 
     while (delay_counter != 0)

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * i2c.h - declarations of I2C routines
  *
- * Copyright (c) 2014-2018 Frank Meyer - frank(at)fli4l.de
+ * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,11 @@
 #  include "stm32f10x_gpio.h"
 #  include "stm32f10x_rcc.h"
 #  include "stm32f10x_i2c.h"
-#define I2C_CHANNEL     I2C1
 #elif defined (STM32F4XX)
 #  include "stm32f4xx.h"
 #  include "stm32f4xx_gpio.h"
 #  include "stm32f4xx_rcc.h"
 #  include "stm32f4xx_i2c.h"
-#define I2C_CHANNEL     I2C3
 #endif
 
 #define I2C_OK                  (0)
