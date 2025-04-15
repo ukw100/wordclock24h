@@ -2,21 +2,27 @@
   ******************************************************************************
   * @file    stm32f4xx_rtc.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    30-September-2011
+  * @version V1.8.0
+  * @date    04-November-2016
   * @brief   This file contains all the functions prototypes for the RTC firmware
   *          library.
   ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ****************************************************************************** 
   */
 
@@ -443,7 +449,7 @@ typedef struct
   */ 
 #define RTC_SmoothCalibPeriod_32sec   ((uint32_t)0x00000000) /*!<  if RTCCLK = 32768 Hz, Smooth calibation
                                                              period is 32s,  else 2exp20 RTCCLK seconds */
-#define RTC_SmoothCalibPeriod_16sec   ((uint32_t)0x00002000) /*!<  if RTCCLK = 32768 Hz, Smooth calibation 
+#define RTC_SmoothCalibPeriod_16sec   ((uint32_t)0x00002000) /*!<  if RTCCLK = 32768 Hz, Smooth calibration 
                                                              period is 16s, else 2exp19 RTCCLK seconds */
 #define RTC_SmoothCalibPeriod_8sec    ((uint32_t)0x00004000) /*!<  if RTCCLK = 32768 Hz, Smooth calibation 
                                                              period is 8s, else 2exp18 RTCCLK seconds */
@@ -521,7 +527,7 @@ typedef struct
 #define RTC_TamperFilter_4Sample   ((uint32_t)0x00001000) /*!< Tamper is activated after 4 
                                                           consecutive samples at the active level */
 #define RTC_TamperFilter_8Sample   ((uint32_t)0x00001800) /*!< Tamper is activated after 8 
-                                                          consecutive samples at the active leve. */
+                                                          consecutive samples at the active level. */
 #define IS_RTC_TAMPER_FILTER(FILTER) (((FILTER) == RTC_TamperFilter_Disable) || \
                                       ((FILTER) == RTC_TamperFilter_2Sample) || \
                                       ((FILTER) == RTC_TamperFilter_4Sample) || \
@@ -585,8 +591,9 @@ typedef struct
 /** @defgroup RTC_Tamper_Pins_Definitions 
   * @{
   */ 
-#define RTC_Tamper_1                    RTC_TAFCR_TAMP1E
-#define IS_RTC_TAMPER(TAMPER) (((TAMPER) == RTC_Tamper_1))
+#define RTC_Tamper_1 RTC_TAFCR_TAMP1E
+#define RTC_Tamper_2 RTC_TAFCR_TAMP2E
+#define IS_RTC_TAMPER(TAMPER) (((TAMPER) == RTC_Tamper_1) || ((TAMPER) == RTC_Tamper_2))
 
 /**
   * @}
@@ -595,10 +602,13 @@ typedef struct
 /** @defgroup RTC_Tamper_Pin_Selection 
   * @{
   */ 
-#define RTC_TamperPin_PC13                 ((uint32_t)0x00000000)
-#define RTC_TamperPin_PI8                  ((uint32_t)0x00010000)
-#define IS_RTC_TAMPER_PIN(PIN) (((PIN) == RTC_TamperPin_PC13) || \
-                                ((PIN) == RTC_TamperPin_PI8))
+#define RTC_TamperPin_Default       ((uint32_t)0x00000000)
+#define RTC_TamperPin_Pos1          ((uint32_t)0x00010000)
+#define IS_RTC_TAMPER_PIN(PIN)      (((PIN) == RTC_TamperPin_Default) || \
+                                    ((PIN) == RTC_TamperPin_Pos1))
+/* Legacy Defines */
+#define RTC_TamperPin_PC13           RTC_TamperPin_Default
+#define RTC_TamperPin_PI8            RTC_TamperPin_Pos1
 /**
   * @}
   */ 
@@ -610,6 +620,7 @@ typedef struct
 #define RTC_TimeStampPin_PI8               ((uint32_t)0x00020000)
 #define IS_RTC_TIMESTAMP_PIN(PIN) (((PIN) == RTC_TimeStampPin_PC13) || \
                                    ((PIN) == RTC_TimeStampPin_PI8))
+
 /**
   * @}
   */ 
@@ -710,6 +721,7 @@ typedef struct
   */ 
 #define RTC_FLAG_RECALPF                  ((uint32_t)0x00010000)
 #define RTC_FLAG_TAMP1F                   ((uint32_t)0x00002000)
+#define RTC_FLAG_TAMP2F                   ((uint32_t)0x00004000) 
 #define RTC_FLAG_TSOVF                    ((uint32_t)0x00001000)
 #define RTC_FLAG_TSF                      ((uint32_t)0x00000800)
 #define RTC_FLAG_WUTF                     ((uint32_t)0x00000400)
@@ -728,7 +740,7 @@ typedef struct
                                ((FLAG) == RTC_FLAG_RSF) || ((FLAG) == RTC_FLAG_WUTWF) || \
                                ((FLAG) == RTC_FLAG_ALRBWF) || ((FLAG) == RTC_FLAG_ALRAWF) || \
                                ((FLAG) == RTC_FLAG_TAMP1F) || ((FLAG) == RTC_FLAG_RECALPF) || \
-                                ((FLAG) == RTC_FLAG_SHPF))
+                                ((FLAG) == RTC_FLAG_TAMP2F) ||((FLAG) == RTC_FLAG_SHPF))
 #define IS_RTC_CLEAR_FLAG(FLAG) (((FLAG) != (uint32_t)RESET) && (((FLAG) & 0xFFFF00DF) == (uint32_t)RESET))
 /**
   * @}
@@ -743,12 +755,13 @@ typedef struct
 #define RTC_IT_ALRA                       ((uint32_t)0x00001000)
 #define RTC_IT_TAMP                       ((uint32_t)0x00000004) /* Used only to Enable the Tamper Interrupt */
 #define RTC_IT_TAMP1                      ((uint32_t)0x00020000)
+#define RTC_IT_TAMP2                      ((uint32_t)0x00040000)
 
 #define IS_RTC_CONFIG_IT(IT) (((IT) != (uint32_t)RESET) && (((IT) & 0xFFFF0FFB) == (uint32_t)RESET))
 #define IS_RTC_GET_IT(IT) (((IT) == RTC_IT_TS) || ((IT) == RTC_IT_WUT) || \
                            ((IT) == RTC_IT_ALRB) || ((IT) == RTC_IT_ALRA) || \
-                           ((IT) == RTC_IT_TAMP1))
-#define IS_RTC_CLEAR_IT(IT) (((IT) != (uint32_t)RESET) && (((IT) & 0xFFFD0FFF) == (uint32_t)RESET))
+                           ((IT) == RTC_IT_TAMP1) || ((IT) == RTC_IT_TAMP2))
+#define IS_RTC_CLEAR_IT(IT) (((IT) != (uint32_t)RESET) && (((IT) & 0xFFF90FFF) == (uint32_t)RESET))
 
 /**
   * @}
@@ -872,4 +885,4 @@ void RTC_ClearITPendingBit(uint32_t RTC_IT);
   * @}
   */ 
 
-/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
