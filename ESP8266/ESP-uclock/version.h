@@ -1,7 +1,7 @@
  /*----------------------------------------------------------------------------------------------------------------------------------------
  * version.h - Firmware version
  *
- * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2016-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,6 +12,6 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define ESP_VERSION                "3.1.0"
+#define ESP_VERSION                "3.1.2"
 
 #endif

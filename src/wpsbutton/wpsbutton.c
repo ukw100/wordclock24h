@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * wpsbutton.c - read WPS button of STM32F4xx Nucleo and STM32F103
  *
- * Copyright (c) 2017-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2017-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------------------
  * weather.cpp - weather stuff
  *
- * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclockfli4l.de
+ * Copyright (c) 2016-2025 Frank Meyer - frank(at)uclockfli4l.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

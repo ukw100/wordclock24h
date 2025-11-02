@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * timeserver.c - timeserver routines
  *
- * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2014-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ timeserver_read_data_from_eep (void)
                  timeserver.timezone = -timeserver.timezone;
              }
 
-             if (tz[0] & 0x01)
+             if (tz[0] & 0x02)
              {
                  timeserver.observe_summertime = 1;
              }
@@ -94,6 +94,7 @@ timeserver_read_data_from_eep (void)
     {
         strncpy ((char *) timeserver.timeserver, NET_TIME_HOST, MAX_IPADDR_LEN);
         timeserver.timezone = NET_TIME_GMT_OFFSET;
+        timeserver.observe_summertime = 1;
     }
 
     return rtc;

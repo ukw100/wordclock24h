@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * uart-driver.h - UART driver routines for STM32F4XX or STM32F10X
  *
- * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2015-2025 Frank Meyer - frank(at)uclock.de
  *
  * example of usage:
  *

@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------------------
  * http.cpp - http server
  *
- * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2016-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -669,7 +669,7 @@ input_column (const char * id, const char * desc, int value, int maxlength, int 
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static void
-select_field (const char * id, const char ** text, int selected_value, int max_values, int autosubmit)
+select_field (const char * id, const char ** text, int selected_value, int min_value, int max_value, int autosubmit)
 {
     char    buf[16];
     int     i;
@@ -688,7 +688,7 @@ select_field (const char * id, const char ** text, int selected_value, int max_v
         http_send_FS ("\">");
     }
 
-    for (i = 0; i < max_values; i++)
+    for (i = min_value; i < max_value; i++)
     {
         sprintf (buf, "%d", i);
         http_send_FS ("<option value=\"");
@@ -713,10 +713,10 @@ select_field (const char * id, const char ** text, int selected_value, int max_v
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static void
-select_column (const char * id, const char ** text, int selected_value, int max_values, int autosubmit)
+select_column (const char * id, const char ** text, int selected_value, int min_value, int max_value, int autosubmit)
 {
     begin_column ();
-    select_field (id, text, selected_value, max_values, autosubmit);
+    select_field (id, text, selected_value, min_value, max_value, autosubmit);
     end_column ();
 }
 
@@ -942,11 +942,11 @@ table_row_checkbox (const char * page, const char * text, const char * id, const
  *-------------------------------------------------------------------------------------------------------------------------------------------
  */
 static void
-table_row_select (const char * page, const char * text1, const char * id, const char ** text2, int selected_value, int max_values, int autosubmit)
+table_row_select (const char * page, const char * text1, const char * id, const char ** text2, int selected_value, int min_value, int max_value, int autosubmit)
 {
     begin_table_row_form (page);
     text_column (text1);
-    select_column (id, text2, selected_value, max_values, autosubmit);
+    select_column (id, text2, selected_value, min_value, max_value, autosubmit);
     save_column (id);
     end_table_row_form ();
 }
@@ -1443,7 +1443,7 @@ http_network (void)
     const char *                message = (const char *) 0;
     const char *                alert_message = (const char *) 0;
     const char *                esp_firmware_version;
-    char                        timezone_str[MAX_TIMEZONE_LEN+1];
+    char                        timezone_str[16]; // MAX_TIMEZONE_LEN too small
     int                         networks;
     int                         idx;
     uint_fast16_t               utz;
@@ -1559,7 +1559,7 @@ http_network (void)
         {
             tz = atoi (http_get_param ("timezone"));
 
-            if (http_get_checkbox_param ("observe_summertime"))
+            if (get_numvar (TIMEZONE_NUM_VAR) & 0x200)
             {
                 observe_summertime = 1;
             }
@@ -1586,6 +1586,24 @@ http_network (void)
             set_numvar (TIMEZONE_NUM_VAR, utz);
             message = "Timezone successfully changed.";
         }
+        else if (! strcmp (action, "saveobserve_summertime"))
+        {
+            utz = get_numvar (TIMEZONE_NUM_VAR);
+
+            observe_summertime = http_get_checkbox_param ("observe_summertime");
+
+            if (observe_summertime)
+            {
+                utz |= 0x200;
+            }
+            else
+            {
+                utz &= ~0x200;
+            }
+
+            set_numvar (TIMEZONE_NUM_VAR, utz);
+            message = "Summertime observation successfully changed.";
+        }
         else if (! strcmp (action, "nettime"))
         {
             message = "Getting net time";
@@ -1603,7 +1621,14 @@ http_network (void)
         }
     }
 
-    sprintf (timezone_str, "%d", tz);
+    if (tz >= 0)
+    {
+        sprintf (timezone_str, "+%d", tz);
+    }
+    else
+    {
+        sprintf (timezone_str, "%d", tz);
+    }
 
     http_header ("Network", (const char *) NULL, (const char *) NULL);
     begin_box ("Network");
@@ -1669,7 +1694,7 @@ http_network (void)
     table_header (header_cols2, NETWORK_HEADER_COLS2);
     sv = get_strvar (TIMESERVER_STR_VAR);
     table_row_input (thispage, 3, "Time server", "timeserver", sv->str, MAX_IP_LEN);
-    table_row_input (thispage, 3, "Time zone (GMT +)", "timezone", timezone_str, MAX_TIMEZONE_LEN);
+    table_row_input (thispage, 3, "Time zone (GMT +/-)", "timezone", timezone_str, MAX_TIMEZONE_LEN);
     table_row_checkbox (thispage, "Summertime", "observe_summertime", "Observe summertime", observe_summertime);
     table_trailer ();
 
@@ -2406,7 +2431,7 @@ http_display (void)
     table_header (header_cols, DISPLAY_HEADER_COLS);
 
     table_row_checkbox (thispage, "ES IST", "itis", "Permanent display of \"ES IST\"", permanent_display_of_it_is);
-    table_row_select (thispage, "Display Mode", "displaymode", display_mode_names, display_mode, display_modes_count, 0);
+    table_row_select (thispage, "Display Mode", "displaymode", display_mode_names, display_mode, 0, display_modes_count, 0);
 
     if (! auto_brightness_active)
     {
@@ -2605,8 +2630,8 @@ http_animations (void)
     begin_box ("Animations");
 
     table_header (header_cols, ANIMATION_HEADER_COLS);
-    table_row_select (thispage, "Animation", "animation", animation_mode_names, animation_mode, max_display_animation_variables, 0);
-    table_row_select (thispage, "Color Animation", "coloranimation", color_animation_mode_names, color_animation_mode, MAX_COLOR_ANIMATION_VARIABLES, 0);
+    table_row_select (thispage, "Animation", "animation", animation_mode_names, animation_mode, 0, max_display_animation_variables, 0);
+    table_row_select (thispage, "Color Animation", "coloranimation", color_animation_mode_names, color_animation_mode, 0, MAX_COLOR_ANIMATION_VARIABLES, 0);
     table_trailer ();
 
     table_header (dec_cols, ANIMATION_DECELERATION_HEADER_COLS);
@@ -2848,7 +2873,7 @@ http_overlays (void)
             begin_table_row_form (thispage);
 
             checkbox_column ("oact", "", (overlays[idx].flags & OVERLAY_FLAG_ACTIVE) ? 1 : 0);
-            select_column ("otype", overlay_types, overlays[idx].type, N_OVERLAY_TYPES, 1);
+            select_column ("otype", overlay_types, overlays[idx].type, 0, N_OVERLAY_TYPES, 1);
 
             if (overlays[idx].type == OVERLAY_TYPE_ICON)
             {
@@ -2905,7 +2930,7 @@ http_overlays (void)
                  text_column ("");
             }
 
-            select_column ("odc", date_codes, overlays[idx].date_code, N_DATE_CODES, 1);
+            select_column ("odc", date_codes, overlays[idx].date_code, 0, N_DATE_CODES, 1);
 
             text_column (hidden);     // "or"
 
@@ -2956,7 +2981,7 @@ http_overlays (void)
         begin_form (thispage);
         http_send_FS ("<table><tr>");
         text_column ("New overlay:");
-        select_column ("otype", overlay_types, OVERLAY_TYPE_NONE, N_OVERLAY_TYPES, 0);
+        select_column ("otype", overlay_types, OVERLAY_TYPE_NONE, 0, N_OVERLAY_TYPES, 0);
         save_column (id);
         http_send_FS ("</tr></table>");
         end_form ();
@@ -3282,7 +3307,7 @@ http_ambilight (void)
         table_row_sliders (thispage, "Marker Colors", "mcolors", n_colors, marker_ids, desc, rgbw_marker_buf, minval, maxval);
     }
 
-    table_row_select (thispage, "Ambilight Mode", "ambimode", ambilight_mode_names, ambilight_mode, MAX_AMBILIGHT_MODE_VARIABLES, 0);
+    table_row_select (thispage, "Ambilight Mode", "ambimode", ambilight_mode_names, ambilight_mode, 0, MAX_AMBILIGHT_MODE_VARIABLES, 0);
     table_trailer ();
 
     table_header (ambimode_dec_cols, AMBILIGHT_MODE_DECELERATION_HEADER_COLS);
@@ -3364,10 +3389,10 @@ table_row_timers (const char * page, uint_fast8_t is_ambilight, int idx)
         checkbox_column (on_id, "", (nt->flags & NIGHT_TIME_FLAG_SWITCH_ON) ? 1 : 0);
 
         sprintf (day_id, "f%d", idx);
-        select_column (day_id, wdays_en, (nt->flags & NIGHT_TIME_FROM_DAY_MASK) >> 3, 7, 0);
+        select_column (day_id, wdays_en, (nt->flags & NIGHT_TIME_FROM_DAY_MASK) >> 3, 0, 7, 0);
 
         sprintf (day_id, "t%d", idx);
-        select_column (day_id, wdays_en, (nt->flags & NIGHT_TIME_TO_DAY_MASK), 7, 0);
+        select_column (day_id, wdays_en, (nt->flags & NIGHT_TIME_TO_DAY_MASK), 0, 7, 0);
 
         input_column (hour_id, "",  hour_buf, 2, 2);
         input_column (min_id, "",  minute_buf, 2, 2);
@@ -3511,10 +3536,10 @@ table_row_alarm_timers (const char * page, int idx)
         checkbox_column (act_id, "", (at->flags & ALARM_TIME_FLAG_ACTIVE) ? 1 : 0);
 
         sprintf (day_id, "f%d", idx);
-        select_column (day_id, wdays_en, (at->flags & ALARM_TIME_FROM_DAY_MASK) >> 3, 7, 0);
+        select_column (day_id, wdays_en, (at->flags & ALARM_TIME_FROM_DAY_MASK) >> 3, 0, 7, 0);
 
         sprintf (day_id, "t%d", idx);
-        select_column (day_id, wdays_en, (at->flags & ALARM_TIME_TO_DAY_MASK), 7, 0);
+        select_column (day_id, wdays_en, (at->flags & ALARM_TIME_TO_DAY_MASK), 0, 7, 0);
 
         input_column (hour_id, "",  hour_buf, 2, 2);
         input_column (min_id, "",  minute_buf, 2, 2);
@@ -3697,7 +3722,7 @@ http_dfplayer (void)
     sprintf (valbuf, "%d", volume);
     sprintf (maxbuf, "%d", DFPLAYER_MAX_VOLUME);
     table_row_slider (thispage, txtbuf, "volume", valbuf, "0", maxbuf);
-    table_row_select (thispage, "Mode", "mode", dfplayer_mode_names, dfplayer_mode, max_dfplayer_modes, 0);
+    table_row_select (thispage, "Mode", "mode", dfplayer_mode_names, dfplayer_mode, 0, max_dfplayer_modes, 0);
 
     switch (dfplayer_mode)
     {

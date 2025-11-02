@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * ws2812.c - WS2812 driver
  *
- * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2014-2025 Frank Meyer - frank(at)uclock.de
  *
  * Timings:
  *          WS2812         WS2812B         WS2812S          WS2813              Common symmetric(!) values

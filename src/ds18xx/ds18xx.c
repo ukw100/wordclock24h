@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * ds18xx.c - DS18xx routines
  *
- * Copyright (c) 2015-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2015-2025 Frank Meyer - frank(at)uclock.de
  *
  * This library supports the following temperature sensors:
  *

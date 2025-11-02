@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------------------
  * ntp.cpp - NTP functions
  *
- * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2016-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,9 +116,10 @@ ntp_get_time (char * timeserver_str)
     }
 }
 
-void ntp_get_time (void)
+void
+ntp_get_time (void)
 {
-    IPAddress timeserver (129, 6, 15, 28);                      // time.nist.gov NTP server
+    IPAddress timeserver (129, 6, 15, 28);                      // time-a-g.nist.gov NTP server
 
     ntp_get_time (timeserver);
 }

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * main.c - main routines of wclock24h
  *
- * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2014-2025 Frank Meyer - frank(at)uclock.de
  *
  *  System Clocks configured on STM32F103 BluePill board:
  *
@@ -2649,51 +2649,10 @@ main (void)
 #endif
 
     gmain.hardware_configuration = 0;
-#if defined (STM32F103C8)
-    gmain.hardware_configuration |= HW_STM32_F103C8;
-#elif defined (STM32F401RE)
-    gmain.hardware_configuration |= HW_STM32_F401RE;
-#elif defined (STM32F401CC)
-    gmain.hardware_configuration |= HW_STM32_F401CC;
-#elif defined (STM32F411CE)
-    gmain.hardware_configuration |= HW_STM32_F411CE;
-#elif defined (STM32F411RE)
-    gmain.hardware_configuration |= HW_STM32_F411RE;
-#elif defined (STM32F446RE)
-    gmain.hardware_configuration |= HW_STM32_F446RE;
-#elif defined (STM32F407VE)
-    gmain.hardware_configuration |= HW_STM32_F407VE;
-#else
-# error unknown STM32 hardware
-#endif
-
-#if WCLOCK24H == 1
-    gmain.hardware_configuration |= HW_WC_24H;
-#else
-    gmain.hardware_configuration |= HW_WC_12H;
-#endif
-
-#if DSP_USE_WS2812_GRB == 1
-    gmain.hardware_configuration |= HW_LED_WS2812_GRB_LED;
-#elif DSP_USE_WS2812_RGB == 1
-    gmain.hardware_configuration |= HW_LED_WS2812_RGB_LED;
-#elif DSP_USE_APA102 == 1
-    gmain.hardware_configuration |= HW_LED_APA102_RGB_LED;
-#elif DSP_USE_SK6812_RGB == 1
-    gmain.hardware_configuration |= HW_LED_SK6812_RGB_LED;
-#elif DSP_USE_SK6812_RGBW == 1
-    gmain.hardware_configuration |= HW_LED_SK6812_RGBW_LED;
-#elif DSP_USE_TFTLED_RGB == 1
-    gmain.hardware_configuration |= HW_LED_TFTLED_RGB_LED;
-#else
-# error unknown LED type
-#endif
-
-#if HSE_VALUE == 25000000
-    gmain.hardware_configuration |= HW_OSC_FREQUENCY_25MHZ;
-#else
-    gmain.hardware_configuration |= HW_OSC_FREQUENCY_8MHZ;
-#endif
+    gmain.hardware_configuration |= HW_STM32_CONFIGURATION;
+    gmain.hardware_configuration |= HW_CLOCK_CONFIGURATION;
+    gmain.hardware_configuration |= HW_DISPLAY_CONFIGURATION;
+    gmain.hardware_configuration |= HW_OSC_CONFIGURATION;
 
     strcpy (gmain.update_host, DEFAULT_UPDATE_HOST);
     strcpy (gmain.update_path, DEFAULT_UPDATE_PATH);

@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * apa102.c - APA102 driver
  *
- * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2016-2025 Frank Meyer - frank(at)uclock.de
  *
  * APA102 format : Start FRAME | LED1 | LED2 | LED3 | ... | LEDn | End Frame
  * Start frame:    32 x 0

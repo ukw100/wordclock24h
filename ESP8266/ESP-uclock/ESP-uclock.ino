@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------------------
- * ESP-WordClock.ino - some ESP8266 network routines with communication interface via UART to WordClock (STM32)
+ * ESP-uclock.ino - some ESP8266 network routines with communication interface via UART to WordClock (STM32)
  *
- * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2016-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -9,8 +9,13 @@
  * (at your option) any later version.
  *
  * Arduino Settings ("Werkzeuge"):
- *     Board:                   ESPino (ESP12 Module)
- * 
+ *     Board:                   Generic ESP8266 Module
+ *     Upload Speed:            115200
+ *     CPU-Frequency:           80 MHz
+ *     Crystal Frqquency:       26 MHz
+ *     Flash Frequency:         40 MHz
+ *     Flash Mode:              DOUT
+ *
  * Commands:
  *    cap apname,key            - connect to AP
  *    ap apname,key             - start local AP

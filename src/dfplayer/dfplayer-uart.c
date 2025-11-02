@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * dfplayer-uart.c - definitions of (soft-)uart driver routines
  *
- * Copyright (c) 2018-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2018-2025 Frank Meyer - frank(at)uclock.de
  *
  * Possible UARTs of STM32F10x:
  *           ALTERNATE=0    ALTERNATE=1    ALTERNATE=2

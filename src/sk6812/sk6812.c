@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * sk6812.c - SK6812 RGBW driver
  *
- * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2016-2025 Frank Meyer - frank(at)uclock.de
  *
  * Timings:
  *          SK6812

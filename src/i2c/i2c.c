@@ -10,7 +10,7 @@
  *  | SDA  | I2C3  PC9        | I2C1  PB9     | I2C1  PB7     |
  *  +------+------------------+---------------+---------------+
  *
- * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2014-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

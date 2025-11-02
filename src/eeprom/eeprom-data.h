@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * eeprom-data.h - data structure of EEPROM
  *
- * Copyright (c) 2014-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2014-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,7 +113,7 @@
 #define EEPROM_MAX_HOSTNAME_LEN                     64                      // max length of hostname + '\0'
 #define EEPROM_MAX_UPDATE_PATH_LEN                  64                      // max length of update path + '\0'
 #define EEPROM_DATE_TICKER_FORMAT_LEN               DATE_TICKER_FORMAT_LEN  // max length of date ticker path + '\0'
-#define EEPROM_MAX_TIMEZONE_LEN                      2                      // max length of timezone: one byte for +/-, one byte for hour offset
+#define EEPROM_MAX_TIMEZONE_LEN                     2                       // max length of timezone: one byte daylight saving mode, one for +/-, one byte for hour offset
 #define EEPROM_MAX_NIGHT_TIME_LEN                   (MAX_NIGHT_TIMES * 3)   // length of night times: 1 byte flags, 2 bytes minute
 #define EEPROM_MAX_ALARM_TIME_LEN                   (MAX_ALARM_TIMES * 3)   // length of alarm times: 1 byte flags, 2 bytes minute
 #define EEPROM_OVERLAY_ENTRY_SIZE                   (OVERLAY_ENTRY_SIZE)

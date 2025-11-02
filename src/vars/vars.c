@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * vars.c - synchronisation of variables/parameters between STM32 and ESP8266
  *
- * Copyright (c) 2016-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2016-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -588,6 +588,11 @@ var_send_timezone (void)
     else
     {
         tz = timeserver.timezone;
+    }
+
+    if (timeserver.observe_summertime)
+    {
+        tz |= 0x200;
     }
 
     var_send_num_variable (TIMEZONE_NUM_VAR, tz);

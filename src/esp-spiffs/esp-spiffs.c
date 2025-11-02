@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * esp-spiffs.c - access SPIFFS filesystem of ESP8266
  *
- * Copyright (c) 2017-2024 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2017-2025 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
