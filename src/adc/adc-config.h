@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * adc-config.h - adc pin configuration
  *
- * Copyright (c) 2015-2025 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2015-2026 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@
 #define ADC_ADC_CLOCK       RCC_APB2Periph_ADC1
 #define ADC_GPIO_CLOCK_CMD  RCC_AHB1PeriphClockCmd
 #define ADC_GPIO_CLOCK      RCC_AHB1Periph_GPIOA
-#define ADC_CHANNEL         ADC_Channel_15
+#define ADC_CHANNEL         ADC_Channel_5
 
 #elif defined (BLUEPILL_BOARD)                          // STM32F103 BluePill Board: PA5
 

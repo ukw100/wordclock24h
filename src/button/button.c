@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * button.c - read user button of STM32F4 Discovery / STM32F4xx Nucleo / STM32F103
  *
- * Copyright (c) 2014-2025 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2014-2026 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

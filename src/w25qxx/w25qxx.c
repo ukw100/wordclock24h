@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------------------
  * wq25xx.c - W25Qxx driver
  *
- * Copyright (c) 2018-2025 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2018-2026 Frank Meyer - frank(at)uclock.de
  *
  * STM32F407VET6 Black Board:
  *

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * log-uart.c - definitions of uart driver routines
  *
- * Copyright (c) 2015-2025 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2015-2026 Frank Meyer - frank(at)uclock.de
  *
  * Possible UARTs of STM32F10x:
  *           ALTERNATE=0    ALTERNATE=1    ALTERNATE=2

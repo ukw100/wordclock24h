@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * main.c - main routines of wclock24h
  *
- * Copyright (c) 2014-2025 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2014-2026 Frank Meyer - frank(at)uclock.de
  *
  *  System Clocks configured on STM32F103 BluePill board:
  *
@@ -137,7 +137,7 @@
  *    | ESP8266 GPIO4         | GPIO      GPIO4=BOOT0            | GPIO      GPIO4=BOOT0            | GPIO      GPIO4=BOOT0            |                               |
  *    | DCF77                 | GPIO      DATA=PC11 PON=PC12     | GPIO      DATA=PB8  PON=PB9      | GPIO      DATA=PB8  PON=PB9      |                               |
  *    | I2C DS3231 & EEPROM   | I2C3      SCL=PA8 SDA=PC9        | I2C1      SCL=PB6 SDA=PB7        | I2C1      SCL=PB6 SDA=PB7        |                               |
- *    | LDR                   | ADC       ADC1_IN14=PC4          | ADC       ADC12_IN5=PA5          | ADC       ADC12_IN5=PA5          |                               |
+ *    | LDR                   | ADC       ADC1_IN14=PC4          | ADC       ADC1_IN5=PA5           | ADC       ADC1_IN5=PA5           |                               |
  *    | WS2812 / SK6812       | TIM3/DMA1 PC6                    | TIM3/DMA1 PB1                    | TIM1/DMA1 PA8                    |                               |
  *    | APA102                | SPI2/DMA1 SCK=PB13 MOSI=PB15     | SPI2/DMA1 SCK=PB13 MOSI=PB15     | SPI2/DMA1 SCK=PB13 MOSI=PB15     |                               |
  *    | Power switch          | GPIO      PC8                    | GPIO      PB0                    | GPIO      PB0                    |                               |

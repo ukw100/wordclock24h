@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------
  * main.h - some global definitions/declarations
  *
- * Copyright (c) 2014-2025 Frank Meyer - frank(at)uclock.de
+ * Copyright (c) 2014-2026 Frank Meyer - frank(at)uclock.de
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #include <time.h>
 #include "eeprom-data.h"
 
-#define VERSION                     "3.1.2"
+#define VERSION                     "3.1.3"
 
 #define MAX_EEPROM_VERSION_LEN      4
 
@@ -43,15 +43,15 @@
 #define HW_CLOCK_RESERVED_6         (0x06 << 3)                         // 6: Reserved
 #define HW_CLOCK_RESERVED_7         (0x07 << 3)                         // 7: Reserved
 
-#define HW_DISPLAY_MASK                 (0x07 << 6)                         // 3 bits for LED type mask
-#define HW_DISPLAY_WS2812_GRB_LED       (0x00 << 6)                         // 0: WS2812 GRB
-#define HW_DISPLAY_WS2812_RGB_LED       (0x01 << 6)                         // 1: WS2812 RGB
-#define HW_DISPLAY_APA102_RGB_LED       (0x02 << 6)                         // 2: APA102 RGB
-#define HW_DISPLAY_SK6812_RGB_LED       (0x03 << 6)                         // 3: SK6812 RGB
-#define HW_DISPLAY_SK6812_RGBW_LED      (0x04 << 6)                         // 4: SK6812 RGBW
-#define HW_DISPLAY_TFTLED_RGB_LED       (0x05 << 6)                         // 5: TFTLED RGB
-#define HW_DISPLAY_RESERVED_6           (0x06 << 6)                         // 6: Reserved
-#define HW_DISPLAY_RESERVED_7           (0x07 << 6)                         // 7: Reserved
+#define HW_DISPLAY_MASK             (0x07 << 6)                         // 3 bits for LED type mask
+#define HW_DISPLAY_WS2812_GRB_LED   (0x00 << 6)                         // 0: WS2812 GRB
+#define HW_DISPLAY_WS2812_RGB_LED   (0x01 << 6)                         // 1: WS2812 RGB
+#define HW_DISPLAY_APA102_RGB_LED   (0x02 << 6)                         // 2: APA102 RGB
+#define HW_DISPLAY_SK6812_RGB_LED   (0x03 << 6)                         // 3: SK6812 RGB
+#define HW_DISPLAY_SK6812_RGBW_LED  (0x04 << 6)                         // 4: SK6812 RGBW
+#define HW_DISPLAY_TFTLED_RGB_LED   (0x05 << 6)                         // 5: TFTLED RGB
+#define HW_DISPLAY_RESERVED_6       (0x06 << 6)                         // 6: Reserved
+#define HW_DISPLAY_RESERVED_7       (0x07 << 6)                         // 7: Reserved
 
 #define HW_OSC_FREQUENCY_MASK       (0x07 << 9)                         // 3 bits for OSC frequency mask
 #define HW_OSC_FREQUENCY_8MHZ       (0x00 << 9)                         // 0: standard oscillator frequency 8MHz
