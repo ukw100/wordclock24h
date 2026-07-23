@@ -143,6 +143,8 @@ static volatile DMA_BUFFER_TYPE     dma_buf[DMA_BUF_LEN];                       
 #  define SK6812_TIM_AF                 GPIO_AF_TIM3
 #  define SK6812_TIM_CCR_REG            TIM3->CCR1
 #  define SK6812_TIM_DMA_TRG            TIM_DMA_CC1
+#  define SK6812_TIM_OCINIT              TIM_OC1Init
+#  define SK6812_TIM_OCPRELOADCONFIG     TIM_OC1PreloadConfig
 // GPIO:
 #  define SK6812_GPIO_CLOCK_CMD         RCC_AHB1PeriphClockCmd
 #  define SK6812_GPIO_CLOCK             RCC_AHB1Periph_GPIOC
@@ -195,6 +197,8 @@ static volatile DMA_BUFFER_TYPE     dma_buf[DMA_BUF_LEN];                       
 #  define SK6812_TIM_AF                 GPIO_AF_TIM1
 #  define SK6812_TIM_CCR_REG            TIM1->CCR1
 #  define SK6812_TIM_DMA_TRG            TIM_DMA_CC1
+#  define SK6812_TIM_OCINIT              TIM_OC1Init
+#  define SK6812_TIM_OCPRELOADCONFIG     TIM_OC1PreloadConfig
 // GPIO:
 #  define SK6812_GPIO_CLOCK_CMD         RCC_APB2PeriphClockCmd
 #  define SK6812_GPIO_CLOCK             RCC_APB2Periph_GPIOA
@@ -512,7 +516,6 @@ sk6812_set_all_leds (SK6812_RGBW * rgbw, uint_fast16_t n_leds, uint_fast8_t refr
 void
 sk6812_init (void)
 {
-    GPIO_InitTypeDef        gpio;
     TIM_TimeBaseInitTypeDef tb;
     TIM_OCInitTypeDef       toc;
     NVIC_InitTypeDef        nvic;
@@ -573,8 +576,8 @@ sk6812_init (void)
     toc.TIM_Pulse           = 0;
     toc.TIM_OCPolarity      = TIM_OCPolarity_High;
 
-    TIM_OC1Init(SK6812_TIM, &toc);
-    TIM_OC1PreloadConfig (SK6812_TIM, TIM_OCPreload_Enable);    // fm: necessary on STM32F1xx?
+    SK6812_TIM_OCINIT(SK6812_TIM, &toc);
+    SK6812_TIM_OCPRELOADCONFIG (SK6812_TIM, TIM_OCPreload_Enable);    // fm: necessary on STM32F1xx?
     TIM_ARRPreloadConfig (SK6812_TIM, ENABLE);                  // timer enable, fm: necessary on STM32F1xx?
     TIM_CtrlPWMOutputs(SK6812_TIM, ENABLE);
     TIM_DMACmd (SK6812_TIM, SK6812_TIM_DMA_TRG, ENABLE);
